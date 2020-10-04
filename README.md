@@ -54,3 +54,4 @@ Feel free to correct and/or add onto these git instructions/advice!
 
 United Coders GitHub Contributors (Enter Name Here):
 Sidney Jackson
+Cheryl Limer
