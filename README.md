@@ -56,5 +56,4 @@ United Coders GitHub Contributors (Enter Name Here):
 Sidney Jackson
 Cheryl Limer
 Kathryn Crisafulli
-Kathryn Crisafulli (2nd try)
-Kathryn Crisafulli (3rd try)
+Kathryn Crisafulli (branch)
