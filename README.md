@@ -4,19 +4,21 @@
 
 ### Start Server
 Open a terminal
+```
 cd /UnitedCoders
 run "npm start"
+```
 the server will be running on localhost:3000
 
 
 ### Start Clients
 Open a new terminal
+```
 cd /UnitedCoders/frontend
 node client.js <username>
+```
 
-
-
- Test
+## GitHub Documentation
 GitHub Installation & Cloning:
 
 (0) Check whether you have Git installed by opening your temrinal and entering "git --version". 
