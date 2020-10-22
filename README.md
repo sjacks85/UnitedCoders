@@ -1,4 +1,21 @@
 # UnitedCoders
+
+## Running Demo
+
+### Start Server
+Open a terminal
+cd /UnitedCoders
+run "npm start"
+the server will be running on localhost:3000
+
+
+### Start Clients
+Open a new terminal
+cd /UnitedCoders/frontend
+node client.js <username>
+
+
+
  Test
 GitHub Installation & Cloning:
 
