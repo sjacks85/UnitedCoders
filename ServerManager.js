@@ -4,15 +4,30 @@ var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
+var Communication = require('./Communication.js');
+var turn_man = require('./TurnManager.js');
+var suggestion_manager = require('./SuggestionManager.js');
+
 var CARDS = require('./game_data/cards.json');
 var envelope;
 
-var clients = [];
-var currClient;
-var askedClientIndex = 0;
+var players = [];
+var currPlayer;
+var askedPlayerIndex = 0;
 var currSuggestion;
 
 
+/*
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+})
+
+
+app.listen(3000, () => {
+})*/
+
+
+/*
 io.on('connection', function (socket) {
 
   // If a client joins then add them to the list of clients
@@ -74,20 +89,38 @@ io.on('connection', function (socket) {
     }
   });
 });
+*/
 
+function registerPlayer(playerObj) {
+    players.push(playerObj);
 
-function startGame() {
-  //Run initial setup and kickoff game
-  console.log("Starting Game")
-  assignCards();
-  nextTurn();
+    // if enough players have joined then start the game
+    if (players.length >= 3) {
+        startGame();
+    }
 }
 
+function startGame() {
+    //Run initial setup and kickoff game
+    console.log("Starting Game")
+    assignCards();
+
+    //for loop through players
+    //call turn manager
+    //while no one has won
+    while (true) {
+        for (var i = 0; i < players.length; i++) {
+            turn_man.startTurn(players[i].id);
+        }
+    }
+    
+    nextTurn();
+}
 
 function nextTurn() {
-  currClient = clients.shift();
-  currClient.socket.emit("turn", "Your turn " + currClient.username);
-  clients.push(currClient);
+    currPlayer = players.shift();
+    communication.send(currPlayer.id, "turn", "Your turn " + currPlayer.username);
+    players.push(currPlayer);
 }
 
 
@@ -114,7 +147,7 @@ function assignCards() {
   console.log("Envelope Cards:", envelope);
 
   //Assign cards to players
-  for (var i = 0; i < clients.length; i++) {
+  for (var i = 0; i < players.length; i++) {
     if (suspects.length > 0) {
       var suspect = randomSelection(suspects);
       suspects.splice(suspects.indexOf(suspect), 1);
@@ -132,9 +165,9 @@ function assignCards() {
       "suspect": suspect,
       "weapon": weapon,
       "room": room
-    }
+      }
 
-    clients[i].socket.emit("assignCards", cards);
+      communication.send(players[i].id, "assignCards", cards);
   }
 }
 
@@ -144,7 +177,10 @@ function randomSelection(cards) {
 
 
 http.listen(3000, () => {
-  console.log('listening on http://localhost:3000');
+    console.log('listening on http://localhost:3000');
+    var communication = new Communication(io, registerPlayer, suggestion_manager.handleSuggestion, []);
+    communication.startListening();
+    //communication.startListening(io, registerPlayer);
 });
 
 module.exports = app;
