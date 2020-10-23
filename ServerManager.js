@@ -16,11 +16,10 @@ var TurnManager = require('./TurnManager.js');
 
 var CARDS = require('./game_data/cards.json');
 var envelope;
-
 var clients = [];
 
 io.on('connection', function (socket) {
-  
+
   // If a client joins then add them to the list of clients
   socket.on('join', function (username) {
     console.log(username, "joined")
@@ -33,10 +32,10 @@ io.on('connection', function (socket) {
 
 
     // if enough players have joined then start the game
-    if (clients.length >= 1) {
+    if (clients.length >= 2) {
       console.log("Starting Game");
-      assignCards();
-    
+      // assignCards();
+
 
       var turnManager = new TurnManager(socket, clients);
       turnManager.startGame();
@@ -48,13 +47,20 @@ io.on('connection', function (socket) {
       //STOP LISTENING FOR NEW CONNECTIONS
       // io.close(); ?
     }
+
+    
   });
 
 
-  // handle client disconnect
-  socket.on('end', function () {
-    console.log("Client disconnected...");
-  });
+    // handle client disconnect
+    socket.on('end', function () {
+      console.log("Client disconnected...");
+    });
+  
+    socket.on("pong", message => {
+      console.log(message);
+    });
+  
 
   // handle the event sent with socket.send()
   socket.on('message', data => {
@@ -108,7 +114,7 @@ function assignCards() {
       "room": room
     }
 
-    clients[i].socket.emit("assignCards", cards);
+    // clients[i].socket.emit("assignCards", cards);
   }
 }
 

@@ -17,6 +17,7 @@ var url = "http://localhost:3000";
 var socket = io.connect(url);
 
 socket.on('connect', function () {
+    console.log("Connected")
     socket.emit('join', username);
 });
 
@@ -33,10 +34,16 @@ socket.on('suggestion', data => {
                     "room": room
                 };
 
-                sendSuggestion(suggestion);
+                socket.emit('suggestion', suggestion);
             });
         });
     });
+});
+
+
+socket.on("ping", message => {
+    console.log(message);
+    socket.emit("pong", "pong");
 });
 
 
@@ -57,7 +64,7 @@ socket.on('disprove', suggestion => {
 
 socket.on("disprove server response", (response) => {
     console.log(response)
-})
+});
 
 
 rl.on("close", function () {
@@ -66,10 +73,6 @@ rl.on("close", function () {
 
 
 
-function sendSuggestion(suggestion) {
-    console.log("Sending suggestion")
-    socket.emit('suggestion', suggestion);
-}
 
 
 

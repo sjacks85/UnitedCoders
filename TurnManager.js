@@ -1,6 +1,7 @@
 
 var SuggestionManager = require('./SuggestionManager.js');
-var AccusationManager = require('./AccusationManager.js');
+// var AccusationManager = require('./AccusationManager.js');
+const { resolve } = require('path');
 
 class TurnManager {
 
@@ -11,27 +12,31 @@ class TurnManager {
         this.suggestionManager = new SuggestionManager(socket, players);
     }
 
-    // run through turns
-    // call suugesstion manager
-    startGame() {
+    async startGame() {
         // while (true) {
-        //     for (var i = 0; i < this.players.length; i++) {
-        //         this.newTurn(this.players[i]);
-        //     }
+            // for (var i = 0; i < this.players.length; i++) {
+            //     await this.newTurn(this.players[i]);
+            // }
+
+            // await this.newTurn(currPlayer);
+            // this.players.push(currPlayer)
         // }
-        
-        this.newTurn(this.players[0]);
+
+        //just do one turn for now
+        // var currPlayer = this.players[0];
+        var currPlayer = this.players[1]; //ISSUE: Works fin with the last client in the list but not for any before??, the server doesn't get the suggestion response from the client
+        await this.newTurn(currPlayer);
+       
     }
 
     newTurn(player) {
-        // this.suggestionManager.hello();
-
-        // this.suggestionManager.suggest(player);
-        this.suggestionManager.promptSuggestion(player);
-
-        // var currClient = this.clients.shift();
-        // currClient.socket.emit("turn", "Your turn " + currClient.username);
-        // this.clients.push(currClient);
+        return new Promise((resolve) => {
+            this.suggestionManager.suggest(player).then(done => {
+                console.log("Movement?");
+                console.log('Accusation?');
+                resolve(done)
+            });
+        })
     }
 
 }
