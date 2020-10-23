@@ -1,74 +1,65 @@
 
-module.exports = {
-    startSuggestion: (player_id) => {
-
-    }
-}
-
 class SuggestionManager {
 
-
-    constructor(communication, turnOrder) {
-        this.mCommunication = communication;
-        communication.setSuggestionCallback(handleSuggestion);
-        this.mTurnOrder = turnOrder;
+    constructor(socket, players) {
+        this.socket = socket;
+        this.players = players;
     }
 
-    startSuggestion(playerId) {
-        return new Promise((resolve, reject) => {
-           
-            //send suggestion prompt
-            //create prompt
-            this.mCommunication.send(currPlayer.id, "turn", "Your turn " + currPlayer.username);
+    suggest(player) {
+        this.promptSuggestion(player).then((suggestion) => {
+            console.log(suggestion);
+        });
 
-            function handleSuggestion(suggestion) {
-                resolve();
-                console.log(suggestion);
+        // this.promptSuggestion(player).then(suggestion => {
+        //iterate through each player
+        //iterate through this.players starting at index
+        console.log('Suggestion:', suggestion);
 
-                /*
-                var player_id = suggestion.player_id;
-                var player_index;
+        let playerIndex = 0;
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i] === player) {
+                playerIndex = i;
+            }
+        }
 
-                for (var i = 0; i < this.mTurnOrder; i++) {
-                    if (this.mTurnOrder[i] == player_id) {
-                        player_index = i;
-                    }
-                }
+        for (var i = 0; i < this.players.length; i++) {
+            var player = (i + playerIndex) % this.players.length;
+            this.askDisprove(player, suggestion);
+        }
+    }
 
-                var disprove = false;
-                var counter = 1;
-                while (!disprove || counter < this.mTurnOrder.length) {
+    promptSuggestion(player) {
+        return new Promise((resolve) => {
 
-                    //create the disprove json message
-                    communication.send("Do you have?", suggestion);
-                }*/
+            const handler = (suggestion) => {
+                console.log('Suggestion:', suggestion);
+                resolve(suggestion);
+                return;
             }
 
-            //socket.once('suggestion', handleSuggestion);
+            player.socket.emit("suggestion", "Your turn " + player.username);
+            this.socket.on('suggestion', handler);
         });
     }
 
-    handleSuggestion(suggestion) {
-        console.log(suggestion);
+    askDisprove(player, suggestion) {
+        return new Promise((resolve) => {
 
-        var player_id = suggestion.player_id;
-        var player_index;
-
-        for (var i = 0; i < this.mTurnOrder; i++) {
-            if (this.mTurnOrder[i] == player_id) {
-                player_index = i;
+            const handler = function (data) {
+                console.log("Player disprove respones:", data);
+                player.socket.emit("disprove server response", player.username + " has the card: " + data);
+                resolve(data);
+                return;
             }
-        }
 
-        var disprove = false;
-        var counter = 1;
-        while (!disprove || counter < this.mTurnOrder.length) {
+            player.socket.emit('disprove', suggestion);
+            this.socket.once('disprove', handler);
+        });
 
-            //create the disprove json message
-            communication.send("Do you have?", suggestion);
-        }
     }
 
 }
+
 
 module.exports = SuggestionManager;

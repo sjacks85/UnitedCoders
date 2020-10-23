@@ -1,8 +1,17 @@
-function startMovement(player_id)
-{
-    //get movement options
-    //provide movement options to user
-    //get movement
-    //update position
-    //return location
-}
+class MovementManager {
+
+    constructor(socket) {
+      this.socket = socket;
+    }
+
+
+    hello() {
+      console.log("HELLO");
+    }
+    // Method
+    getSocket() {
+      return this.socket;
+    }
+  }
+
+  module.exports = MovementManager;

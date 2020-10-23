@@ -1,35 +1,26 @@
+// Separate backend into subsystems
+// need functionality for accusation and movement
+
+// This should set up initial game and handle clients joining
+// Communication utility??
+// initialize each of the managers and route traffic that way?
 
 
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-var Communication = require('./Communication.js');
-var turn_man = require('./TurnManager.js');
-var suggestion_manager = require('./SuggestionManager.js');
+
+var TurnManager = require('./TurnManager.js');
+
 
 var CARDS = require('./game_data/cards.json');
 var envelope;
 
-var players = [];
-var currPlayer;
-var askedPlayerIndex = 0;
-var currSuggestion;
+var clients = [];
 
-
-/*
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-
-
-app.listen(3000, () => {
-})*/
-
-
-/*
 io.on('connection', function (socket) {
-
+  
   // If a client joins then add them to the list of clients
   socket.on('join', function (username) {
     console.log(username, "joined")
@@ -42,9 +33,16 @@ io.on('connection', function (socket) {
 
 
     // if enough players have joined then start the game
-    if (clients.length >= 3) {
-      startGame();
+    if (clients.length >= 1) {
+      console.log("Starting Game");
+      assignCards();
+    
+
+      var turnManager = new TurnManager(socket, clients);
+      turnManager.startGame();
+
     }
+
 
     if (clients.length > 6) {
       //STOP LISTENING FOR NEW CONNECTIONS
@@ -63,65 +61,8 @@ io.on('connection', function (socket) {
     console.log(data);
   });
 
-
-  // handle socket.emit() suggestion
-  socket.on('suggestion', suggestion => {
-    console.log(suggestion);
-    currSuggestion = suggestion;
-
-    clients[askedClientIndex].socket.emit("Do you have?", currSuggestion);
-  });
-
-
-  socket.on("I have", (card) => {
-    if (card.toUpperCase() === "NO" && (askedClientIndex + 2) < clients.length) {
-      //ask next client
-      askedClientIndex++;
-      clients[askedClientIndex].socket.emit("Do you have?", currSuggestion);
-
-    } else if (card.toUpperCase() === "NO") {
-      askedClientIndex = 0;
-      currClient.socket.emit("Has your card", "No player has your card");
-      nextTurn();
-    } else {
-      currClient.socket.emit("Has your card", clients[askedClientIndex].username + " has the card: " + card); //send client which has the card
-      nextTurn();
-    }
-  });
 });
-*/
 
-function registerPlayer(playerObj) {
-    players.push(playerObj);
-
-    // if enough players have joined then start the game
-    if (players.length >= 3) {
-        startGame();
-    }
-}
-
-function startGame() {
-    //Run initial setup and kickoff game
-    console.log("Starting Game")
-    assignCards();
-
-    //for loop through players
-    //call turn manager
-    //while no one has won
-    while (true) {
-        for (var i = 0; i < players.length; i++) {
-            turn_man.startTurn(players[i].id);
-        }
-    }
-    
-    nextTurn();
-}
-
-function nextTurn() {
-    currPlayer = players.shift();
-    communication.send(currPlayer.id, "turn", "Your turn " + currPlayer.username);
-    players.push(currPlayer);
-}
 
 
 
@@ -147,7 +88,7 @@ function assignCards() {
   console.log("Envelope Cards:", envelope);
 
   //Assign cards to players
-  for (var i = 0; i < players.length; i++) {
+  for (var i = 0; i < clients.length; i++) {
     if (suspects.length > 0) {
       var suspect = randomSelection(suspects);
       suspects.splice(suspects.indexOf(suspect), 1);
@@ -165,9 +106,9 @@ function assignCards() {
       "suspect": suspect,
       "weapon": weapon,
       "room": room
-      }
+    }
 
-      communication.send(players[i].id, "assignCards", cards);
+    clients[i].socket.emit("assignCards", cards);
   }
 }
 
@@ -177,10 +118,7 @@ function randomSelection(cards) {
 
 
 http.listen(3000, () => {
-    console.log('listening on http://localhost:3000');
-    var communication = new Communication(io, registerPlayer, suggestion_manager.handleSuggestion, []);
-    communication.startListening();
-    //communication.startListening(io, registerPlayer);
+  console.log('listening on http://localhost:3000');
 });
 
 module.exports = app;

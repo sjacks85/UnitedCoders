@@ -20,7 +20,7 @@ socket.on('connect', function () {
     socket.emit('join', username);
 });
 
-socket.on('turn', data => {
+socket.on('suggestion', data => {
     console.log(data);
 
     rl.question('Suspect: ', (suspect) => {
@@ -41,19 +41,21 @@ socket.on('turn', data => {
 
 
 
+
 socket.on('assignCards', data => {
     cards = data;
     console.log("Cards:", cards);
 });
 
 
-socket.on('Do you have?', suggestion => {
+socket.on('disprove', suggestion => {
     rl.question('do you have any of these cards?: ' + JSON.stringify(suggestion) + '\n', (card) => {
-        socket.emit('I have', card);
+        socket.emit('disprove', card);
     });
 });
 
-socket.on("Has your card", (response) => {
+
+socket.on("disprove server response", (response) => {
     console.log(response)
 })
 
