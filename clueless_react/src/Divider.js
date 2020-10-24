@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from "react";
 import './Divider.css';
 import UserInput from './UserInput';
 import Message from './Message';
+import Cards from './Cards';
+import Log from './Log';
+import { addLog } from './Log';
+import NumberList from './NumberList'
+import MessageBoard from "./MessageBoard";
 
+  let array = [];
   function Stubbed_Messages() {
-
-    let array = [];
 
     array.unshift({ type: 'broadcast', message: 'Plum turn'})
     array.unshift({ type: 'broadcast', message: 'Plum move = hallway'})
@@ -25,16 +29,42 @@ import Message from './Message';
     );
   }
 
+//   <div class="float-child">
+//   <div class="green">
+//     <h4>Message Board (new messages at top)</h4>
+//     {/* LOAD OR UNLOAD THE CLIENT */}
+//   <button onClick={() => setLoadClient(prevState => !prevState)}>
+//     STOP CLIENT
+//   </button>
+//   {/* SOCKET IO CLIENT*/}
+//   {loadClient ? <Message /> : null}
+//     <p>----------</p>
+//     <Log />
+//   </div>
+// </div>
+
+// Last Message <br></br>
+// ---------------
+// <Message />
+
+// <NumberList numbers={numbers} />
+const numbers = [1, 2, 3, 4, 5];
+
 function Divider() {
+
   return (
     <div class="float-container">
 
     <div class="float-child">
       <div class="green">
-        <h4>Message Board (new messages at top)</h4>
-        <Message />
-        <p>----------</p>
-        <Stubbed_Messages />
+       <p>Cards <br></br>
+       -----------
+       <Cards />
+       <br></br>
+        Message Board <br></br>
+          ---------------
+       <MessageBoard />
+       </p>
       </div>
     </div>
 
@@ -46,9 +76,11 @@ function Divider() {
       Characters: plum, scarlet, mustard, white, green, peacock<br></br>
       Rooms: study, hall, lounge, dinning, billiard, library, conservatory, ballroom, kitchen<br></br>
       Weapons: candlestick, revolver, knife, pipe, rope, wrench<br></br>
-      Movement: hallway, room, secret<br></br>
+      <br></br>
+      Movement: yes/no, [hallway, room, secret]<br></br>
       Suggestion: character, room, weapon<br></br>
-      Accusation: character, room, weapon<br></br>
+      Accusation: yes/no, [character, room, weapon]<br></br>
+      Disprove: yes/no, card<br></br>
         </p>
        <h4>User Input</h4>
       <UserInput />
