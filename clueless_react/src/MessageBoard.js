@@ -1,6 +1,6 @@
 import React from "react";
 import { subscribeToTimer, subscribeToMessage, subscribeToArray, subscribeToCards, subscribeToTurn,
-  subscribeToMovement, subscribeToSuggestion, subscribeToDisprove, subscribeToAccusation } from './Api';
+  subscribeToMovement, subscribeToSuggestion, subscribeToDisprove, subscribeToAccusation, subscribeToGame } from './Api';
 
 
 // class MessageBoard extends React.Component {
@@ -35,6 +35,8 @@ class MessageBoard extends React.Component {
       this.updateArray('Cards info: ' + JSON.stringify(elem)));
     subscribeToTurn((err, elem) =>
       this.updateArray('Turn request:' + elem));
+    subscribeToGame((err, elem) =>
+      this.updateArray('Game message: ' + JSON.stringify(elem)));
     subscribeToMovement((err, elem) =>
       this.updateArray('Movement request: ' + elem))
     subscribeToSuggestion((err, elem) =>

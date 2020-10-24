@@ -20,6 +20,9 @@ function subscribeToCards(cb) {
 function subscribeToTurn(cb) {
   socket.on('turn', message => cb(null, message));
 }
+function subscribeToGame(cb) {
+  socket.on('game', message => cb(null, message));
+}
 function subscribeToMovement(cb) {
   socket.on('movement', message => cb(null, message));
 }
@@ -35,4 +38,4 @@ function subscribeToAccusation(cb) {
 }
 
 export { subscribeToTimer, subscribeToMessage, subscribeToArray, subscribeToCards, subscribeToTurn,
-  subscribeToMovement, subscribeToSuggestion, subscribeToDisprove, subscribeToAccusation };
+  subscribeToMovement, subscribeToSuggestion, subscribeToDisprove, subscribeToAccusation, subscribeToGame};

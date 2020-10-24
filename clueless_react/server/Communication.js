@@ -83,6 +83,9 @@ module.exports = Communication;
 var clients = [];
 var handleSuggestion;
 
+//KPC - Quick fix to avoid re-adding existing players, instead react client will rejoin when reloaded
+var usernames = [];
+
 module.exports = {
 
     startListening: (io, client_callback) => {
@@ -97,6 +100,9 @@ module.exports = {
                     }
                 }*/
                 //if (!exists) {
+                if (usernames.includes(username)) {
+                    //console.log(username, "already exists")
+                } else {
                     console.log(username, "joined")
 
                     new_player_id = clients.length + 1;
@@ -106,6 +112,7 @@ module.exports = {
                         "socket": socket
                     };
                     clients.push(clientObj);
+                    usernames.push(username);
 
                     playerObj = {
                         "username": username,
@@ -113,7 +120,7 @@ module.exports = {
                     };
 
                     client_callback(playerObj);
-				//}
+                }   
                 //do we ever stop listening, or do we always listen but server manager tells us 'no' if too many?
             });
 
@@ -178,7 +185,9 @@ module.exports = {
         {
             //if it is a broadcast message or if this is the targeted player, send the message
             if (player_id == 0 || clients[i].id == player_id) {
-                clients[i].socket.emit(full_message);
+
+                //KPC - Changed to emit to game, so client will always look for socket.on("game")
+                clients[i].socket.emit("game", full_message);
                 if (callback) {
                     clients[i].socket.on(type, callback);
 				}
