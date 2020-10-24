@@ -77,36 +77,43 @@ class Communication {
 module.exports = Communication;
 */
 
+
+//NOTE this apparently needs to be like this and not a class in order to use callbacks, *think* because of scope
+//issue, but I'm not totally positive.
 var clients = [];
 var handleSuggestion;
 
 module.exports = {
-    /*
-    setSuggestionCallback: (callback) => {
-        handleSuggestion = callback;
-    },*/
 
     startListening: (io, client_callback) => {
         io.on('connection', function (socket) {
             // If a client joins then add them to the list of clients
             socket.on('join', function (username) {
-                console.log(username, "joined")
+                /*need to fix this
+                var exists = false;
+                for (var i = 0; i < clients.length; i++) {
+                    if (clients[i].id == player_id) {
+                        exists = true;
+                    }
+                }*/
+                //if (!exists) {
+                    console.log(username, "joined")
 
-                new_player_id = clients.length + 1;
+                    new_player_id = clients.length + 1;
 
-                clientObj = {
-                    "id": new_player_id,
-                    "socket": socket
-                };
-                clients.push(clientObj);
+                    clientObj = {
+                        "id": new_player_id,
+                        "socket": socket
+                    };
+                    clients.push(clientObj);
 
-                playerObj = {
-                    "username": username,
-                    "id": new_player_id
-                };
+                    playerObj = {
+                        "username": username,
+                        "id": new_player_id
+                    };
 
-                client_callback(playerObj);
-
+                    client_callback(playerObj);
+				//}
                 //do we ever stop listening, or do we always listen but server manager tells us 'no' if too many?
             });
 
@@ -153,22 +160,32 @@ module.exports = {
     },
 
     send: (player_id, type, message, callback) => {
-        //attach header
+
+        /* TODO - we should clean up message type so it's not hardcoded in managers
+         * I *think* the mapping should only be here? but not sure how best to pass
+         * that info into here. 
+         * 
+         * */
+        var full_message = {
+            "game_id": 0,
+            "player_id": player_id,
+            "message_type": type,
+            "message": message,
+        }
+
         //send over socket
-        //there's got to be a more elegant way to do this
         for (var i = 0; i < clients.length; i++)
         {
-            if (clients[i].id == player_id) {
-                clients[i].socket.emit(type, message);
+            //if it is a broadcast message or if this is the targeted player, send the message
+            if (player_id == 0 || clients[i].id == player_id) {
+                clients[i].socket.emit(full_message);
                 if (callback) {
                     clients[i].socket.on(type, callback);
 				}
 			}
         }
 
-    },
-
- 
+    }
 }
 
 

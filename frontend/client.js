@@ -62,6 +62,28 @@ socket.on('disprove', suggestion => {
     });
 });
 
+socket.on('movement', move => {
+    console.log(move);
+
+    rl.question('New Location: ', (new_room) => {
+        var movement = {
+            "movement": new_room
+        };
+        socket.emit('movement', movement);
+    });
+});
+
+socket.on('accusation', accusation => {
+    console.log(accusation);
+
+    rl.question('Accuse?: ', (accuse_res) => {
+        var accuse = {
+            "accuse": accuse_res
+        };
+        socket.emit('accusation', accuse);
+    });
+});
+
 
 socket.on("disprove server response", (response) => {
     console.log(response)

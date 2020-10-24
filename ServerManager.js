@@ -172,15 +172,24 @@ function assignCards() {
     if (rooms.length > 0) {
       var room = randomSelection(rooms);
       rooms.splice(rooms.indexOf(room), 1);
-    }
-
-    var cards = {
-      "suspect": suspect,
-      "weapon": weapon,
-      "room": room
       }
+      /*
+      var cards = {
+          "suspect": suspect,
+          "weapon": weapon,
+          "room": room
+      }*/
 
-      Communication.send(players[i].id, "assignCards", cards);
+      var setup_message = {
+          "username": players[i].username,
+          "player_id": players[i].id,
+          //right now everyone is playing as the card they get
+          "character": suspect,
+          "cards": [suspect, weapon, room]
+      };
+
+      //broadcast these, have clients look for matching username to get player id for future
+      Communication.send(0, 11, setup_message);
   }
 }
 

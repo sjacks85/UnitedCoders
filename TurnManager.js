@@ -1,41 +1,40 @@
+var MovementManager = require('./MovementManager.js');
 var SuggestionManager = require('./SuggestionManager.js');
-// var AccusationManager = require('./AccusationManager.js');
+var AccusationManager = require('./AccusationManager.js');
 const { resolve } = require('path');
 
 class TurnManager {
 
     constructor(communication, players) {
         this.communication = communication;
-        //this.socket = socket;
         this.players = players;
 
+        this.movementManager = new MovementManager(communication);
         this.suggestionManager = new SuggestionManager(communication, players);
+        this.accusationManager = new AccusationManager(communication);
     }
 
     async startGame() {
-        // while (true) {
-        // for (var i = 0; i < this.players.length; i++) {
-        //     await this.newTurn(this.players[i]);
-        // }
-
-        // await this.newTurn(currPlayer);
-        // this.players.push(currPlayer)
-        // }
-
-        //just do one turn for now
-         var currPlayer = this.players[0];
-        //var currPlayer = this.players[1]; //ISSUE: Works fin with the last client in the list but not for any before??, the server doesn't get the suggestion response from the client
-        await this.newTurn(currPlayer);
-
+        while (true) {
+            for (var i = 0; i < this.players.length; i++) {
+                await this.newTurn(this.players[i]);
+            }
+        }
     }
 
     newTurn(player) {
         return new Promise((resolve) => {
-            this.suggestionManager.suggest(player).then(done => {
-                console.log("end of suggestion")
-                //console.log("Movement?");
-                //console.log('Accusation?');
-                resolve(done)
+            this.movementManager.move(player).then(move_done => {
+                console.log('movement done');
+                this.suggestionManager.suggest(player).then(suggest_done => {
+                    console.log("end of suggestion")
+                    this.accusationManager.accuse(player).then(accuse_done => {
+                        console.log("end of accusation")
+                        resolve(accuse_done);
+                        resolve(suggest_done);
+                        resolve(move_done);
+                    });
+                });
             });
         })
     }
