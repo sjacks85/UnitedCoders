@@ -1,4 +1,5 @@
 
+
 var io = require('socket.io-client');
 const readline = require("readline");
 const rl = readline.createInterface({
@@ -17,10 +18,11 @@ var url = "http://localhost:3000";
 var socket = io.connect(url);
 
 socket.on('connect', function () {
+    console.log("Connected")
     socket.emit('join', username);
 });
 
-socket.on('turn', data => {
+socket.on('suggestion', data => {
     console.log(data);
 
     rl.question('Suspect: ', (suspect) => {
@@ -33,11 +35,18 @@ socket.on('turn', data => {
                     "room": room
                 };
 
-                sendSuggestion(suggestion);
+                socket.emit('suggestion', suggestion);
             });
         });
     });
 });
+
+
+socket.on("ping", message => {
+    console.log(message);
+    socket.emit("pong", "pong");
+});
+
 
 
 
@@ -47,27 +56,18 @@ socket.on('assignCards', data => {
 });
 
 
-socket.on('Do you have?', suggestion => {
+socket.on('disprove', suggestion => {
     rl.question('do you have any of these cards?: ' + JSON.stringify(suggestion) + '\n', (card) => {
-        socket.emit('I have', card);
+        socket.emit('disprove', card);
     });
 });
 
-socket.on("Has your card", (response) => {
+
+socket.on("disprove server response", (response) => {
     console.log(response)
-})
+});
 
 
 rl.on("close", function () {
     process.exit(0);
 });
-
-
-
-function sendSuggestion(suggestion) {
-    console.log("Sending suggestion")
-    socket.emit('suggestion', suggestion);
-}
-
-
-

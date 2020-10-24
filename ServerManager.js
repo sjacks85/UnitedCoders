@@ -5,7 +5,8 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
 var Communication = require('./Communication.js');
-var turn_man = require('./TurnManager.js');
+
+var TurnManager = require('./TurnManager.js');
 var suggestion_manager = require('./SuggestionManager.js');
 
 var CARDS = require('./game_data/cards.json');
@@ -16,7 +17,16 @@ var currPlayer;
 var askedPlayerIndex = 0;
 var currSuggestion;
 
+function registerPlayer(playerObj) {
+    players.push(playerObj);
 
+    // if enough players have joined then start the game
+    if (players.length >= 3) {
+        startGame();
+    }
+}
+
+//var communication = new Communication(io, registerPlayer);
 /*
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -90,7 +100,7 @@ io.on('connection', function (socket) {
   });
 });
 */
-
+/*
 function registerPlayer(playerObj) {
     players.push(playerObj);
 
@@ -98,12 +108,15 @@ function registerPlayer(playerObj) {
     if (players.length >= 3) {
         startGame();
     }
-}
+}*/
 
 function startGame() {
     //Run initial setup and kickoff game
     console.log("Starting Game")
     assignCards();
+    var turnManager = new TurnManager(Communication, players);
+    turnManager.startGame();
+    /*
 
     //for loop through players
     //call turn manager
@@ -114,12 +127,12 @@ function startGame() {
         }
     }
     
-    nextTurn();
+    nextTurn();*/
 }
 
 function nextTurn() {
     currPlayer = players.shift();
-    communication.send(currPlayer.id, "turn", "Your turn " + currPlayer.username);
+    Communication.send(currPlayer.id, "turn", "Your turn " + currPlayer.username);
     players.push(currPlayer);
 }
 
@@ -167,7 +180,7 @@ function assignCards() {
       "room": room
       }
 
-      communication.send(players[i].id, "assignCards", cards);
+      Communication.send(players[i].id, "assignCards", cards);
   }
 }
 
@@ -178,9 +191,7 @@ function randomSelection(cards) {
 
 http.listen(3000, () => {
     console.log('listening on http://localhost:3000');
-    var communication = new Communication(io, registerPlayer, suggestion_manager.handleSuggestion, []);
-    communication.startListening();
-    //communication.startListening(io, registerPlayer);
+    Communication.startListening(io, registerPlayer);
 });
 
 module.exports = app;

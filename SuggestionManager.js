@@ -1,4 +1,106 @@
+class SuggestionManager {
 
+    suggestionHandler = (suggestion) => {
+        resolve(suggestion);
+        // return;
+    }
+
+    constructor(communication, players) {
+        //this.socket = socket;
+        this.communication = communication;
+        this.players = players;
+        this.suggestingPlayer;
+        //communication.setSuggestHandler(suggestionHandler);
+    }
+
+    suggest(player) {
+
+        this.suggestingPlayer = player;
+        return new Promise((resolve) => {
+            this.promptSuggestion(player).then((suggestion) => {
+                resolve(suggestion);
+                //this.communication.send(player.id, "disprove server response", player.username + " has the card: " + data);
+            });
+
+
+
+            //iterate through each player
+            //iterate through this.players starting at index
+
+            // let playerIndex = 0;
+            // for (var i = 0; i < this.players.length; i++) {
+            //     if (this.players[i] === player) {
+            //         playerIndex = i;
+            //     }
+            // }
+
+            // for (var i = 0; i < this.players.length; i++) {
+            //     var player = (i + playerIndex) % this.players.length;
+            //     this.askDisprove(player, suggestion);
+            // }
+
+        });
+
+    }
+
+    promptSuggestion(player) {
+        return new Promise((resolve) => {
+
+            
+            const handler = (suggestion) => {
+
+                console.log('Suggestion:', suggestion);
+                this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
+                    resolve(done);
+                    resolve(suggestion);
+                });
+
+
+                //resolve(suggestion);
+                // return;
+            }
+
+            this.communication.send(player.id, "suggestion", "Your turn " + player.username, handler);
+        });
+    }
+
+    askDisprove(player, suggestion) {
+        return new Promise((resolve) => {
+
+            const handler = (data) => {
+                console.log("Player disprove respones:", data);
+                this.communication.send(this.suggestingPlayer.id, "disprove server response", player.username + " has the card: " + data);
+                resolve(data);
+                // return;
+            }
+
+            this.communication.send(player.id, "disprove", suggestion, handler);
+
+        });
+
+    }
+
+    getNextPlayer(currPlayer) {
+        var currPlayerIndex = 0;
+        for (var i = 0; i < this.players.length; i++) {
+            if (currPlayer.id == this.players[i].id) {
+                currPlayerIndex = i;
+            }
+        }
+
+        var nextPlayerIndex = currPlayerIndex + 1;
+        if (nextPlayerIndex == this.players.length) {
+            nextPlayerIndex = 0;
+        }
+        console.log(nextPlayerIndex)
+        return this.players[nextPlayerIndex];
+    }
+}
+
+
+module.exports = SuggestionManager;
+
+/*
 module.exports = {
     startSuggestion: (player_id) => {
 
@@ -41,7 +143,7 @@ class SuggestionManager {
 
                     //create the disprove json message
                     communication.send("Do you have?", suggestion);
-                }*/
+                }
             }
 
             //socket.once('suggestion', handleSuggestion);
@@ -72,3 +174,4 @@ class SuggestionManager {
 }
 
 module.exports = SuggestionManager;
+*/
