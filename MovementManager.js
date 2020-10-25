@@ -36,12 +36,15 @@ class MovementManager {
                 "valid_locations": []
             };
 
+            // KPC = Added count to make movement_id unqiue
+            var count = 1;
             for (var i = 0; i < 5; i++) {
                 for (var j = 0; j < 5; j++) {
                     var move_option = {
-                        "movement_id": i,
+                        "movement_id": count,
                         "location": [i, j]
                     };
+                    count = count + 1;
                     move_request.valid_locations.push(move_option);
                 }
             }

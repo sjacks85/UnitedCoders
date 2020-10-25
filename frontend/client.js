@@ -22,6 +22,75 @@ socket.on('connect', function () {
     socket.emit('join', username);
 });
 
+
+socket.on('game', full_message => {
+    type = full_message.message_type;
+    message = full_message.message;
+    if (type == 11) {
+        console.log("Cards:", message);
+    }
+    if (type == 21) {
+        console.log(message.broadcast_message);
+    }
+    if (type == 22) {
+        console.log("player " + message.moved_character + " moved to " + message.new_character_location);
+    }
+    if (type == 31) {
+        console.log(message);
+
+        rl.question('New Location: ', (new_room) => {
+            var movement = {
+                "movement_made": true,
+                "new_location": [0, 1]
+            };
+            socket.emit(41, movement);
+        });
+    }
+    if (type == 32) {
+        console.log(message);
+
+        rl.question('Suspect: ', (suspect) => {
+            rl.question('Weapon: ', (weapon) => {
+                rl.question('Room: ', (room) => {
+
+                    var suggestion = {
+                        "suggested_character": suspect,
+                        "suggested_weapon": weapon,
+                        "suggested_room": room
+                    };
+
+                    socket.emit(42, suggestion);
+                });
+            });
+        });
+    }
+    if (type == 33) {
+        rl.question('do you have any of these cards?: ' + JSON.stringify(message) + '\n', (card) => {
+            var disprove = {
+                "can_disprove": true,
+                "disprove_card": card
+            };
+            socket.emit(43, disprove);
+        });
+    }
+    if (type == 34) {
+        console.log(message);
+
+        rl.question('Accuse?: ', (accuse_res) => {
+            var accuse = {
+                "accused_room": accuse_res,
+                "accused_character": accuse_res,
+                "accused_weapon": accuse_res
+            };
+            socket.emit(44, accuse);
+        });
+    }
+    if (type == 51) {
+        console.log("another player has " + message.disprove_card)
+    }
+
+});
+
 socket.on('suggestion', data => {
     console.log(data);
 
@@ -50,9 +119,8 @@ socket.on("ping", message => {
 
 
 
-socket.on('assignCards', data => {
-    cards = data;
-    console.log("Cards:", cards);
+socket.on(11, data => {
+    console.log("Cards:", data.message);
 });
 
 
@@ -62,14 +130,15 @@ socket.on('disprove', suggestion => {
     });
 });
 
-socket.on('movement', move => {
+socket.on(31, move => {
     console.log(move);
 
     rl.question('New Location: ', (new_room) => {
         var movement = {
-            "movement": new_room
+            "movement_made": true,
+            "new_location": [0,1]
         };
-        socket.emit('movement', movement);
+        socket.emit(41, movement);
     });
 });
 
@@ -84,6 +153,10 @@ socket.on('accusation', accusation => {
     });
 });
 
+socket.on(21, broadcast => {
+    console.log(broadcast);
+});
+
 
 socket.on("disprove server response", (response) => {
     console.log(response)
@@ -93,3 +166,13 @@ socket.on("disprove server response", (response) => {
 rl.on("close", function () {
     process.exit(0);
 });
+
+function addHeader(type, message){
+    var full_message = {
+        "game_id": 0,
+        "player_id": 0,
+        "message_type": type,
+        "message": message
+    }
+    return full_message;
+}
