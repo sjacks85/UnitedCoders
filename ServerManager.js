@@ -95,7 +95,7 @@ function assignCards() {
           // "character":"Mrs. White","cards":["Mrs. White","Wrench","Billiards Room"]}}
           "player_id": players[i].id,
           //right now everyone is playing as the card they get
-          "character": suspect,
+          "character": hard_code_cards[i].suspect,
           //"cards": [suspect, weapon, room],
           "cards": hard_code_cards[i]
       };
