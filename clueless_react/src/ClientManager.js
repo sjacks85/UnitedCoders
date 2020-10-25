@@ -68,24 +68,27 @@ function makeMovement(move, room) {
     console.log("makeMovement: " + JSON.stringify(movement));
     //socket.emit('movement', movement);
     //socket.emit('game', movement);
-    socket.emit(31, movement)
+    socket.emit(41, movement)
 }
 
-function makeSuggestion(person, weapon) {
+function makeSuggestion(room, person, weapon) {
 
         // “suggested_character”:
         // “suggested_weapon”:
         // }
         // suggested_character (String) - The name of the character that was suggested.
         // suggested_weapon (String) - The name ID if the weapon that was suggested.
+
+        //KPC - Added room for skeletal
         
     var suggestion = {
+        "suggested_room": room,
         "suggested_character": person,
-        "suggestied_weapon": weapon
+        "suggested_weapon": weapon
     };
     console.log('suggestion request: ' + person + weapon)
     console.log("makeSuggestion: " + JSON.stringify(suggestion));
-    socket.emit(32, suggestion);
+    socket.emit(42, suggestion);
 }
 
 function makeDisprove(disprove, card) {
@@ -99,15 +102,16 @@ function makeDisprove(disprove, card) {
     // disprove_card (String) - The card used to disprove the suggestion; only populated if can_disprove is true.
     
     var disprove = {
-        "disprove" : disprove,
-        "card" : card
+        "suggestion_id" : 0,
+        "can_disprove" : disprove,
+        "disprove_card" : card
     }
     console.log('disprove request: ' + disprove + card)
     console.log("makeDisprove: " + JSON.stringify(disprove));
-    socket.emit(33, disprove);
+    socket.emit(43, disprove);
 }
 
-function makeAccusation(accuse, person, room, weapon) {
+function makeAccusation(accuse, room, person, weapon) {
 
         // “accused_room”:
         // “accused_character”:
@@ -118,14 +122,13 @@ function makeAccusation(accuse, person, room, weapon) {
         // accused_weapon (String) - The name ID if the weapon that was accused.
         
     var accusation = {
-        "accusation": accuse,
-        "suspect": person,
-        "weapon": weapon,
-        "room": room
+        "accused_room": room,
+        "accused_character": person,
+        "accused_weapon": weapon
     };
     console.log('accusation request: ' + accuse + person + weapon + room)
     console.log("makeAccusation: " + JSON.stringify(accusation));
-    socket.emit(34, accusation);
+    socket.emit(44, accusation);
 }
 
 export { startClient, makeMovement, makeSuggestion, makeDisprove, makeAccusation };

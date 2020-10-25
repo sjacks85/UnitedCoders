@@ -7,6 +7,7 @@ class UserInput extends React.Component {
     this.state = {
       value: "",
       response: "",
+      inputs: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -69,6 +70,7 @@ class UserInput extends React.Component {
     // Can place fetch in each block specific to the player action.
     if (parsedPlayerInput[0] === "Movement:") {
       //alert("Player Moved to the " + parsedPlayerInput[1]);
+      this.setState({ inputs : [playerInput, ...this.state.inputs]})
       makeMovement(parsedPlayerInput[1], parsedPlayerInput[2])
     } else if (parsedPlayerInput[0] === "Suggestion:") {
       // alert(
@@ -80,7 +82,8 @@ class UserInput extends React.Component {
       //     parsedPlayerInput[3] +
       //     "!"
       // );
-      makeSuggestion(parsedPlayerInput[1], parsedPlayerInput[2])
+      this.setState({ inputs : [playerInput, ...this.state.inputs]})
+      makeSuggestion(parsedPlayerInput[1], parsedPlayerInput[2], parsedPlayerInput[3])
     } else if (parsedPlayerInput[0] === "Accusation:") {
       // alert(
       //   "Player accused " +
@@ -91,6 +94,7 @@ class UserInput extends React.Component {
       //     parsedPlayerInput[3] +
       //     "!"
       // );
+      this.setState({ inputs : [playerInput, ...this.state.inputs]})
       makeAccusation(parsedPlayerInput[1], parsedPlayerInput[2], parsedPlayerInput[3], parsedPlayerInput[4])
     } else if (parsedPlayerInput[0] === "Disprove:") {
       // alert(
@@ -98,11 +102,14 @@ class UserInput extends React.Component {
       //     parsedPlayerInput[1] + 
       //     "!"
       // );
+      this.setState({ inputs : [playerInput, ...this.state.inputs]})
       makeDisprove(parsedPlayerInput[1], parsedPlayerInput[2])
     } else {
       alert("This move isn't recognized.");
     }
   }
+
+  // <div>Last Action Taken = {this.state.response}</div>
 
   render() {
     return (
@@ -117,7 +124,14 @@ class UserInput extends React.Component {
           <input type="submit" value="Submit" />
         </form>
         <p> </p>
-        <div>Last Action Taken = {this.state.response}</div>
+        <div>
+        <h4>Previous Inputs</h4>
+        <ul>
+        {this.state.inputs.map(elem => (
+          <li>{elem}</li>
+        ))}
+        </ul>
+        </div>
       </React.Fragment>
     );
   }

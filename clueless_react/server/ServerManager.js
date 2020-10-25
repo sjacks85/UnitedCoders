@@ -86,8 +86,8 @@ function randomSelection(cards) {
 }
 
 
-http.listen(3000, () => {
-    console.log('listening on http://localhost:3000');
+http.listen(5000, () => {
+    console.log('listening on http://localhost:5000');
     Communication.startListening(io, registerPlayer);
 });
 

@@ -38,15 +38,15 @@ class App extends React.Component {
 
 render() {
   const greeting = 'Welcome to React';
+  //<Greeting greeting={greeting} />
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>PORT={window.location.port}</p>
-        <img src="game_board_small.png" />
         <p></p>
+        <img src="game_board_small.png" />
+        <p>Player ID = {window.location.port}</p>
       </header>
-      <Greeting greeting={greeting} />
        <Divider greeting={greeting} actions={this.state.actions} />
     </div>
   );
