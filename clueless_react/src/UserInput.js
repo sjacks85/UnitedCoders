@@ -80,7 +80,7 @@ class UserInput extends React.Component {
       //     parsedPlayerInput[3] +
       //     "!"
       // );
-      makeSuggestion(parsedPlayerInput[1], parsedPlayerInput[2], parsedPlayerInput[3])
+      makeSuggestion(parsedPlayerInput[1], parsedPlayerInput[2])
     } else if (parsedPlayerInput[0] === "Accusation:") {
       // alert(
       //   "Player accused " +

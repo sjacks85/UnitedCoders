@@ -51,10 +51,10 @@ class Divider extends React.Component {
         Rooms: study, hall, lounge, dinning, billiard, library, conservatory, ballroom, kitchen<br></br>
         Weapons: candlestick, revolver, knife, pipe, rope, wrench<br></br>
         <br></br>
-        Movement: yes/no, [hallway, room, secret]<br></br>
-        Suggestion: character, room, weapon<br></br>
-        Accusation: yes/no, [character, room, weapon]<br></br>
-        Disprove: yes/no, card<br></br>
+        Movement: true/false, [hallway, room, secret]<br></br>
+        Suggestion: character, weapon<br></br>
+        Accusation: true/false, [character, room, weapon]<br></br>
+        Disprove: true/false, card<br></br>
           </p>
          <h4>User Input</h4>
         <UserInput />

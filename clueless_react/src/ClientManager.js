@@ -80,8 +80,8 @@ function makeSuggestion(person, weapon) {
         // suggested_weapon (String) - The name ID if the weapon that was suggested.
         
     var suggestion = {
-        "suspect": person,
-        "weapon": weapon
+        "suggested_character": person,
+        "suggestied_weapon": weapon
     };
     console.log('suggestion request: ' + person + weapon)
     console.log("makeSuggestion: " + JSON.stringify(suggestion));
