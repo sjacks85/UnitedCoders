@@ -46,7 +46,7 @@ class MovementManager {
                 }
             }
 
-            this.communication.send(player.id, 31, move_request, handler);
+            this.communication.send(player.id, 31, move_request, handler, 41);
         });
     }
 }

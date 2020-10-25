@@ -159,7 +159,7 @@ module.exports = {
         });
     },
 
-    send: (player_id, type, message, callback) => {
+    send: (player_id, type, message, callback, return_type=0) => {
 
         /* TODO - we should clean up message type so it's not hardcoded in managers
          * I *think* the mapping should only be here? but not sure how best to pass
@@ -178,9 +178,10 @@ module.exports = {
         {
             //if it is a broadcast message or if this is the targeted player, send the message
             if (player_id == 0 || clients[i].id == player_id) {
-                clients[i].socket.emit(full_message);
+
+                clients[i].socket.emit("game", full_message);
                 if (callback) {
-                    clients[i].socket.on(type, callback);
+                    clients[i].socket.on(return_type, callback);
 				}
 			}
         }

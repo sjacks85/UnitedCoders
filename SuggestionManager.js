@@ -48,7 +48,7 @@ class SuggestionManager {
                     "broadcast_message": suggestion_string
                 };
 
-                this.communication.send(0, 21, broadcast, handler);
+                this.communication.send(0, 21, broadcast);
 
                 this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
                     resolve(done);
@@ -63,7 +63,7 @@ class SuggestionManager {
                 "suggested_room":""
             };
 
-            this.communication.send(player.id, 32, suggest_request, handler);
+            this.communication.send(player.id, 32, suggest_request, handler, 42);
         });
     }
 
@@ -94,7 +94,7 @@ class SuggestionManager {
                 "suggested_weapon": suggestion.suggested_weapon
             };
 
-            this.communication.send(player.id, 33, disprove_request, handler);
+            this.communication.send(player.id, 33, disprove_request, handler, 43);
 
         });
 

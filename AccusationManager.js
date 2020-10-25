@@ -51,7 +51,7 @@ class AccusationManager {
                 "accusation":""
             };
 
-            this.communication.send(player.id, 34, accusation_request, handler);
+            this.communication.send(player.id, 34, accusation_request, handler, 44);
         });
     }
 }
