@@ -45,7 +45,7 @@ render() {
       <header className="App-header">
         <p></p>
         <img src="game_board_small.png" />
-        <p>Player ID = {window.location.port}</p>
+        <p>Username = {window.location.port}</p>
       </header>
        <Divider greeting={greeting} actions={this.state.actions} />
     </div>

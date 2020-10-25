@@ -4,6 +4,7 @@ import UserInput from './UserInput';
 import Message from './Message';
 import Greeting from './Greeting';
 import Cards from './Cards';
+import Players from './Players';
 import Turn from './Turn';
 import Log from './Log';
 import { addLog } from './Log';
@@ -34,7 +35,7 @@ class Divider extends React.Component {
         <div class="green">
          <h4>Players</h4>
          <p>
-         <Cards actions={this.props.actions}/>
+         <Players actions={this.props.actions}/>
          </p>
          <h4>Turn</h4>
          <p>
@@ -53,10 +54,10 @@ class Divider extends React.Component {
          Rooms : study, hall, lounge, dinning, billiard, library, conservatory, ballroom, kitchen<br></br>
          Weapons : candlestick, revolver, knife, pipe, rope, wrench<br></br>
          <br></br>
-         Movement : true/false, [hallway, room, secret]<br></br>
-         Suggestion : room, character, weapon<br></br>
-         Accusation : true/false, room, character, weapon<br></br>
-         Disprove : true/false, card<br></br>
+         Movement : true/false [hallway, room, secret]<br></br>
+         Suggestion : room character weapon<br></br>
+         Accusation : true/false room character weapon<br></br>
+         Disprove : true/false card<br></br>
          <br></br>
         <UserInput />
         </div>

@@ -33,6 +33,9 @@ class UserInput extends React.Component {
     alert("User Input: " + this.state.value);
     console.log("User Input: " + this.state.value);
     this.parseMessage(this.state.value);
+    this.setState({
+      value: ""
+    });
     event.preventDefault();
   }
 

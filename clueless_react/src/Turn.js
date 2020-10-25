@@ -69,6 +69,8 @@ class Turn extends React.Component {
       return 'Accusation'
     } else if ( first.message_type == 61 ) {
       return 'End of Game'
+    } else {
+      return 'Other Players Turn'
     }
   }
 
