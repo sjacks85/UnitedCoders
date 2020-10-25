@@ -25,40 +25,45 @@ import { subscribeToTimer, subscribeToMessage, subscribeToArray, subscribeToCard
 // }
 // }
 
-// export default MessageBoard;
+    // subscribeToCards((err, elem) =>
+    //   this.updateArray('Cards info: ' + JSON.stringify(elem)));
+    // subscribeToTurn((err, elem) =>
+    //   this.updateArray('Turn request:' + elem));
+    // subscribeToGame((err, elem) =>
+    //   this.updateArray('Game message: ' + JSON.stringify(elem)));
+    // subscribeToMovement((err, elem) =>
+    //   this.updateArray('Movement request: ' + elem))
+    // subscribeToSuggestion((err, elem) =>
+    //   this.updateArray('Suggestion request: ' + elem))
+    // subscribeToDisprove((err, elem) =>
+    //   this.updateArray('Disprove request: ' + JSON.stringify(elem)))
+    // subscribeToAccusation((err, elem) =>
+    //   this.updateArray('Accustation request: ' + elem))
+
 
 class MessageBoard extends React.Component {
 
   constructor(props) {
     super(props);
-    subscribeToCards((err, elem) =>
-      this.updateArray('Cards info: ' + JSON.stringify(elem)));
-    subscribeToTurn((err, elem) =>
-      this.updateArray('Turn request:' + elem));
-    subscribeToGame((err, elem) =>
-      this.updateArray('Game message: ' + JSON.stringify(elem)));
-    subscribeToMovement((err, elem) =>
-      this.updateArray('Movement request: ' + elem))
-    subscribeToSuggestion((err, elem) =>
-      this.updateArray('Suggestion request: ' + elem))
-    subscribeToDisprove((err, elem) =>
-      this.updateArray('Disprove request: ' + JSON.stringify(elem)))
-    subscribeToAccusation((err, elem) =>
-      this.updateArray('Accustation request: ' + elem))
+    this.state = {
+      actions: this.props.actions
+    };
   }
   state = {
-    array: []
+    actions: []
   };
 
-  updateArray(elem) {
-    this.setState({ array : [elem, ...this.state.array] })
-  }
+  // updateArray(elem) {
+  //   this.setState({ actions : [elem, ...this.state.actions] })
+  // }
 
 render() {
+  //console.log('MessageState:' + this.state.actions)
+  //console.log('MessageProps:' + this.props.actions)
   return (
         <ul>
-        {this.state.array.map(elem => (
-          <li>{elem}</li>
+        {this.props.actions.map(elem => (
+          <li>{JSON.stringify(elem)}</li>
         ))}
         </ul>
   );

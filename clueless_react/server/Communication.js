@@ -106,6 +106,7 @@ module.exports = {
                     console.log(username, "joined")
 
                     new_player_id = clients.length + 1;
+                    console.log(new_player_id, " new plater id")
 
                     clientObj = {
                         "id": new_player_id,
@@ -185,10 +186,12 @@ module.exports = {
         {
             //if it is a broadcast message or if this is the targeted player, send the message
             if (player_id == 0 || clients[i].id == player_id) {
+                console.log("Sending game message to client " + clients[i].id + ":" + JSON.stringify(full_message))
 
                 //KPC - Changed to emit to game, so client will always look for socket.on("game")
                 clients[i].socket.emit("game", full_message);
                 if (callback) {
+                    console.log("Message has callback " + type)
                     clients[i].socket.on(type, callback);
 				}
 			}

@@ -1,35 +1,77 @@
 import React, { useEffect, useState } from "react";
 import { socket } from './ClientManager.js'
 
-var array = [];
+class Cards extends React.Component {
 
-export default function Cards() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      actions: this.props.actions
+    };
+  }
+  state = {
+    actions: []
+  };
 
-  const [cards, setCards] = useState();
-  const [assigned, assignedCards] = useState(false);
+  // updateArray(elem) {
+  //   this.setState({ actions : [elem, ...this.state.actions] })
+  // }
 
-  useEffect(() => {
-    socket.on('assignCards', data => {
-      if ( assigned ) {
-        //alert("UNDEFINED")
-      } else {
-        setCards(data)
-        assignedCards(true)
-        console.log("Cards:", cards);
-        console.log("Assigned:", assigned);
-       //alert("Cards:" + JSON.stringify(cards))
+  checkNested(obj /*, level1, level2, ... levelN*/ ) {
+    let args = Array.prototype.slice.call(arguments, 1);
+    for (var i = 0; i < args.length; i++) {
+      if (!obj || !obj.hasOwnProperty(args[i])) {
+        return false;
       }
-   });
-  }, []);
+      obj = obj[args[i]];
+    }
+    return true;
+  }
+  //this.checkNested(element, 'cards')
 
+render() {
+  const temp = this.props.actions.filter(element => element.message_type == 11 && element.player_id == 0 )
   return (
-    <div>
-      <p>
-        {JSON.stringify(cards)}
-      </p>
-    </div>
+            <ul>
+            {temp.map(elem => (
+              <li>{JSON.stringify(elem.message.player_id) + JSON.stringify(elem.message.character) 
+                + JSON.stringify(elem.message.cards) }</li>
+            ))}
+            </ul>
   );
 }
+}
+
+export default Cards;
+
+// export default function Cards() {
+
+//   const [cards, setCards] = useState();
+//   const [assigned, assignedCards] = useState(false);
+
+//   useEffect(() => {
+//     socket.on('assignCards', data => {
+//       if ( assigned ) {
+//         //alert("UNDEFINED")
+//       } else {
+//         setCards(data)
+//         assignedCards(true)
+//         console.log("Cards:", cards);
+//         console.log("Assigned:", assigned);
+//        //alert("Cards:" + JSON.stringify(cards))
+//       }
+//    });
+//   }, []);
+
+//   return (
+//     <div>
+//       <p>
+//         {JSON.stringify(cards)}
+//       </p>
+//     </div>
+    
+//   );
+// }
 
 // class Message extends Component {
 //   constructor(){

@@ -182,6 +182,9 @@ function assignCards() {
 
       var setup_message = {
           "username": players[i].username,
+           // KPC: Is player id supposed to be 0?
+           // {"game_id":0,"player_id":0,"message_type":11,"message":{"username":"3002","player_id":3,
+           // "character":"Mrs. White","cards":["Mrs. White","Wrench","Billiards Room"]}}
           "player_id": players[i].id,
           //right now everyone is playing as the card they get
           "character": suspect,

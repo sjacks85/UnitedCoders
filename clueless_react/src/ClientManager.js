@@ -61,15 +61,17 @@ function makeMovement(move, room) {
         // new_location (int) - The unique ID of the chosen movement option. 
         
     var movement = {
-        "movement" : move,
-        "room": room
+        "movement_made" : move,
+        "movement_id": 1, //KPC - Hardcoded
     };
-        
+    console.log('movement request: ' + move + room)    
     console.log("makeMovement: " + JSON.stringify(movement));
-    socket.emit('movement', movement);
+    //socket.emit('movement', movement);
+    //socket.emit('game', movement);
+    socket.emit(31, movement)
 }
 
-function makeSuggestion(person, room, weapon) {
+function makeSuggestion(person, weapon) {
 
         // “suggested_character”:
         // “suggested_weapon”:
@@ -79,11 +81,11 @@ function makeSuggestion(person, room, weapon) {
         
     var suggestion = {
         "suspect": person,
-        "weapon": weapon,
-        "room": room
+        "weapon": weapon
     };
+    console.log('suggestion request: ' + person + weapon)
     console.log("makeSuggestion: " + JSON.stringify(suggestion));
-    socket.emit('suggestion', suggestion);
+    socket.emit(32, suggestion);
 }
 
 function makeDisprove(disprove, card) {
@@ -100,8 +102,9 @@ function makeDisprove(disprove, card) {
         "disprove" : disprove,
         "card" : card
     }
+    console.log('disprove request: ' + disprove + card)
     console.log("makeDisprove: " + JSON.stringify(disprove));
-    socket.emit('I have', card);
+    socket.emit(33, disprove);
 }
 
 function makeAccusation(accuse, person, room, weapon) {
@@ -120,8 +123,9 @@ function makeAccusation(accuse, person, room, weapon) {
         "weapon": weapon,
         "room": room
     };
+    console.log('accusation request: ' + accuse + person + weapon + room)
     console.log("makeAccusation: " + JSON.stringify(accusation));
-    socket.emit('accusation', accusation);
+    socket.emit(34, accusation);
 }
 
 export { startClient, makeMovement, makeSuggestion, makeDisprove, makeAccusation };
