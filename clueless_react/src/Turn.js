@@ -42,7 +42,7 @@ class Turn extends React.Component {
     console.log('Turn First' + JSON.stringify(first));
     if (first != undefined) {
       console.log('Turn return true')
-      return first.message_type == 31 || first.message_type == 32 || first.message_type == 33 || first.message_type == 34;
+      return first.message_type == 31 || first.message_type == 32 || first.message_type == 33 || first.message_type == 34 || first.message_type == 61;
     }
     console.log('Turn return false')
     return false;
@@ -53,10 +53,13 @@ class Turn extends React.Component {
     // console.log("Turn: " + first.message_type == 31)
     // console.log("Turn: " + array[0].message_type == 31)
   }
+  //<p>{turn ? this.displayTurn(this.props.actions) : 'Other Players Turn'}</p>
 
   displayTurn(array) {
     const first = array[0];
-    if ( first.message_type == 31 ) {
+    if (first == undefined) {
+      return ''
+    } else if ( first.message_type == 31 ) {
       return 'Movement'
     } else if ( first.message_type == 32 ) {
       return 'Suggestion'
@@ -64,6 +67,8 @@ class Turn extends React.Component {
       return 'Disprove'
     } else if ( first.message_type == 34 ) {
       return 'Accusation'
+    } else if ( first.message_type == 61 ) {
+      return 'End of Game'
     }
   }
 
@@ -73,7 +78,7 @@ render() {
   var turn = this.findTurn(this.props.actions);
 
   return (
-          <p>{turn ? this.displayTurn(this.props.actions) : 'Other Players Turn'}</p>
+          <p>{this.displayTurn(this.props.actions)}</p>
   );
 }
 }
