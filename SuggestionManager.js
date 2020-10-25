@@ -9,6 +9,7 @@ class SuggestionManager {
 
     suggest(player) {
 
+        console.log('\n\t---SuggestionManager starts suggestion logic---');
         this.suggestingPlayer = player;
         return new Promise((resolve) => {
             this.promptSuggestion(player).then((suggestion) => {
@@ -73,7 +74,8 @@ class SuggestionManager {
             const handler = (data) => {
                 var disprove_result = {
                     "is_disproved": data.can_disprove,
-                    "disprove_card": data.disprove_card
+                    "disprove_card": data.disprove_card,
+                    "disproving_player": player.username
                 };
 
                 this.communication.send(this.suggestingPlayer.id, 51, disprove_result);

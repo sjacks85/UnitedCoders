@@ -68,21 +68,24 @@ module.exports = {
             "message": message,
         }
 
+        console.log("\t\t---Communication Utility sends---");
+
         //send over socket
         for (var i = 0; i < clients.length; i++)
         {
             //if it is a broadcast message or if this is the targeted player, send the message
             if (player_id == 0 || clients[i].id == player_id) {
-
                 console.log("Sending game message to client " + clients[i].id + ":" + JSON.stringify(full_message))
 
                 clients[i].socket.emit("game", full_message);
                 if (callback) {
-                    console.log("Message has callback " + return_type)
+                    //console.log("Message has callback " + return_type)
                     clients[i].socket.on(return_type, callback);
 				}
 			}
         }
+
+        console.log("\t\t---Communication Utility done---");
 
     }
 }

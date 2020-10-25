@@ -5,6 +5,7 @@ class MovementManager {
     }
 
     move(player) {
+        console.log('\n\t---MovementManager starts movement logic---');
         return new Promise((resolve) => {
             this.promptMove(player).then((movement) => {
                 resolve(movement);
