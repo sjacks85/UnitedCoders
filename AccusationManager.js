@@ -17,6 +17,7 @@ class AccusationManager {
     promptAccusation(player) {
         return new Promise((resolve) => {
             const handler = (accusation) => {
+                console.log(accusation)
                 if (accusation.accuse_made) {
                     //broadcast accusation
                     var accusation_string = "Player " + player.username + " has made an accusation of suspect: " + accusation.accused_character +
