@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>UNITED CODERS!  CLUE-LESS PROJECT</title>
+    <script  type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script  type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/maphilight/1.4.0/jquery.maphilight.js"></script>
+    <style>
+        .overlay {
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background-color:grey;
+            opacity: .9;
+            z-index: 1000;
+        }
+        .overlay2 {
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background-color:grey;
+            opacity: .9;
+            z-index: 950;
+            display: none;
+            vertical-align:middle; text-align:center
+        }
+        .ajax-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -32px; /* -1 * image width / 2 */
+            margin-top: -32px;  /* -1 * image height / 2 */
+            display: block;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 32px;
+        }
+
+        .ajax-loader2 {
+
+            margin: auto;
+
+
+        }
+    </style>
+    </head>
+<body>
+<script>
+    var myid='P1';
+    var started=false;
+    //Process the Move for Person or Weapon to new location
+    function MoveObject(PID,TO){
+        var currentLoc=document.getElementById(PID).getAttribute('data-locId');
+        document.getElementById(PID).setAttribute('data-locId',TO);
+        RenderRoom(currentLoc);
+        RenderRoom(TO);
+    }
+
+    //Sets current user Character
+    function SetUser(NUSR){
+        myid=NUSR;
+    }
+
+    //Organizes Objects in a room/hallway  (Updates Room on Gui)
+    function RenderRoom(RID){
+        var roomidx=-1;
+        for(roomidx=0;roomidx<21;roomidx++){
+            if(RID==roomCode[roomidx])
+                break;
+        }
+        //alert(roomidx+','+roomCode[roomidx]);
+        var fromx=roomArra[roomidx][0];
+        var fromy=roomArra[roomidx][1];
+        var tox=roomArra[roomidx][2];
+        var toy=roomArra[roomidx][3];
+        var i=0;
+        var cx=fromx;
+        var cy=fromy;
+        for(i=1;i<7;i++){
+            if(roomCode[roomidx]==document.getElementById('P'+i).getAttribute('data-locId')){
+                $('#P'+i).css({ left: cx+ 'px' });
+                $('#P'+i).css({ top: cy+'px' });
+                cy+=45;
+                if(cy+40>toy) {
+                    cx+=45;
+                    cy=fromy;
+                }
+            }
+        }
+        for(i=1;i<7;i++){
+            if(roomCode[roomidx]==document.getElementById('W'+i).getAttribute('data-locId')){
+                $('#W'+i).css({ left: cx+ 'px' });
+                $('#W'+i).css({ top: cy+'px' });
+                cy+=45;
+
+                if(cy+40>toy) {
+                    cx+=45;
+                    cy=fromy;
+                }
+            }
+        }
+        //var rcode=roomCode;
+    }
+
+    //Checks if Hallway is free to move in ?
+    function ISFree(HWID){
+        for(var i=1;i<7;i++) {
+            if (HWID == document.getElementById('P' + i).getAttribute('data-locId')) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //Validates the requested move.
+    // We can not move to a Hallway if already someone is there
+    // We only can move to neighbor areas and cross connected rooms
+    function ValidateMove(dataId){
+        var roomidx=-1;
+
+        var locid= document.getElementById(myid).getAttribute('data-locId');
+        for(roomidx=0;roomidx<21;roomidx++){
+            if(locid==roomCode[roomidx])
+                break;
+        }
+
+        for (var i=0;i<roomAccess[roomidx].length;i++){
+            if(roomAccess[roomidx][i]==dataId){
+                if(roomAccess[roomidx][i].length==2)
+                    return true;
+                return ISFree(roomAccess[roomidx][i]);
+            }
+        }
+        return false;
+    }
+
+    //Manages Click event on area (Room or Hallway) . Validate the Move and Move the player to new location.
+    function AreaClicked(area){
+        if(!started)
+            return ;
+        var dataId=area.getAttribute('data-Id');
+        if(!ValidateMove(dataId))
+        {
+            alert('Your requested move is not valid!');
+            return ;
+        }
+        MoveObject(myid,area.getAttribute('data-Id'));
+    }
+
+    //All rooms and Hallways codes. Sequence is important - Please don't change them.
+    var roomCode = ['11','12','13','21','22','23','31','32','33','1112','1213','1121','1222','1323','2122','2223','2131','2232','2333','3132','3233']
+
+    //All rooms and Hallways locations to put objects. Sequence is important - Please don't change them.
+    var roomArra = [
+        [103,241,273,426],
+        [379,300,585,455],
+        [691,235,853,394],
+        [103,541,337,716],
+        [423,544,561,715],
+        [674,510,828,660],
+        [103,835,305,1011],
+        [385,796,569,995],
+        [640,892,861,1017],
+        [304,374,304,374],
+        [625,374,625,374],
+        [219,460,219,460],
+        [543,479,543,479],
+        [735,440,735,440],
+        [365,599,365,599],
+        [591,567,591,567],
+        [284,753,284,753],
+        [444,741,444,741],
+        [680,725,680,725],
+        [335,924,335,924],
+        [590,923,590,923]
+    ]
+
+    //All valid rooms and hallways to move in (based on player's current location). Sequence is important - Please don't change them.
+    var roomAccess = [
+        ['1112','1121','33'],
+        ['1112','1222','1213'],
+        ['1213','1323','31'],
+        ['1121','2122','2131'],
+        ['2122','1222','2223','2232'],
+        ['2223','1323','2333'],
+        ['2131','3132','13'],
+        ['3132','2232','3233'],
+        ['3233','2333','11'],
+        ['11','12'],
+        ['12','13'],
+        ['11','21'],
+        ['12','22'],
+        ['13','23'],
+        ['21','22'],
+        ['22','23'],
+        ['21','31'],
+        ['22','32'],
+        ['23','33'],
+        ['31','32'],
+        ['32','33']
+    ]
+
+
+
+    //TODO : In this function we need to initialize websocket and then connect to Server and request to Join game
+    function join(){
+        $("#joindiv").hide();
+        //TODO: Call Server to Join - Init Web Socket
+        $("#startdiv").show();
+    }
+
+
+    //TODO : Call when server sent signal to start game. Currently I have onclick event do it manually on waiting image. You may find it in Div with ID 'startdiv'
+    function start(){
+        //TODO :  Server should send my player id with start message. by doing that we need to set  myid= 'P1' or 'P2' or 'P3' or 'P4' or 'P5' or 'P6' . You may use SetUser function that I prepared.
+
+        $("#startdiv").hide();
+        var roomidx=-1;
+        for(roomidx=0;roomidx<21;roomidx++){
+            RenderRoom( roomCode[roomidx]);
+        }
+
+        //MY Cards
+        //TODO :  This part should be replace by server call. I put this code here for my testing. These are not random selected cards.
+        // S1 to S6  Players
+        // C1 to C6  Weapons
+        // H11 , H12 , H13 , H21 , H22 , H23 , H31 , H32 , H33   Rooms
+        ShowMyCard('S1');
+        ShowMyCard('S2');
+        ShowMyCard('S3');
+        ShowMyCard('S4');
+        ShowMyCard('S5');
+        ShowMyCard('S6');
+        ShowMyCard('C1');
+        ShowMyCard('C5');
+        ShowMyCard('H11');
+        ShowMyCard('H22');
+        ShowMyCard('H33');
+
+        //Let GUI knows knows game started
+        started=true;
+    }
+
+    // Will show one of mycards on buttom of the gameboard
+    function ShowMyCard(MyCardID){
+        document.getElementById(MyCardID).style.display ='inline-block';
+    }
+
+</script>
+<script>
+    //My development code to find points
+    $(document).ready(function() {
+        $('.map').maphilight();
+        $("area").on("click", function(event) {
+            var x = event.pageX - this.offsetLeft;
+            var y = event.pageY - this.offsetTop;
+           // alert("X Coordinate: " + x + " Y Coordinate: " + y);
+        });
+    });
+
+</script>
+
+<div>
+    <div id="joindiv" class="overlay"><button class="ajax-loader" onclick="join();">Join</button> </div>
+    <div id="startdiv" class="overlay2"><img class="ajax-loader2" src="Wait.gif" onclick="start();"></img><br/> </div>
+
+    <!-- START ** This Part os for development, at the end we can remove it-->
+    <div style="z-index: 500;position: absolute;height:45px;width:200px;top: 45px;left: 15px;">
+        <select name="CurrentUsersn" id="CurrentUsers">
+            <option value="P1">Miss Scarlet</option>
+            <option value="P2">Mr. Green</option>
+            <option value="P3">Colonel Mustard</option>
+            <option value="P4">Prof. Plum</option>
+            <option value="P5">Mrs. Peacock</option>
+            <option value="P6">Mrs. White</option>
+        </select>
+        <button onclick="SetUser(document.getElementById('CurrentUsers').value);">SET</button>
+    </div>
+    <!-- END ** -->
+
+
+   <!-- <div style="z-index: 500;position: absolute;height:45px;width:200px;top: 10px;left: 15px;"><button onclick="start();">START</button> </div>
+
+    <div style="z-index: 500;position: absolute;height:45px;width:200px;top: 10px;left: 15px;"><button onclick="start();">START</button> </div>-->
+
+    <div id="P1" data-locId="2333"  style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;"><img src="P1.png" height="45" width="28" title="Miss Scarlet" /></div>
+    <div id="P2"  data-locId="3233"  style="z-index: 500;position: absolute;height:45px;width:28px;top: 690px;left: 150px;transition: 1s all;"><img src="P2.png" height="45" width="28" title="Mr. Green"/></div>
+    <div id="P3" data-locId="2131"  style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;"><img src="P3.png" height="45" width="28" title="Colonel Mustard"/></div>
+    <div id="P4" data-locId="1121"  style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;"><img src="P4.png" height="45" width="28" title="Prof. Plum"/></div>
+    <div id="P5" data-locId="1112"  style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;"><img src="P5.png" height="45" width="28" title="Mrs. Peacock"/></div>
+    <div id="P6" data-locId="1323"  style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;"><img src="P6.png" height="45" width="28" title="Mrs. White"/></div>
+
+    <div id="W1" data-locId="11"  style="z-index: 500;position: absolute;height:45px;width:45px;top: 675px;left: 270px;background:rgba(25,25,25,0.8);border-color: white;border-width: 1px;border-style: solid;transition: 1s all;"><img src="W1.png" height="45" width="45" title="Candlestick"/></div>
+    <div id="W2"  data-locId="13"  style="z-index: 500;position: absolute;height:45px;width:45px;top: 390px;left: 210px;background:rgba(25,25,25,0.8);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;"><img src="W2.png" height="45" width="45" title="Dagger"/></div>
+    <div id="W3"  data-locId="22"  style="z-index: 500;position: absolute;height:45px;width:45px;top: 520px;left: 510px;background:rgba(25,25,25,0.8);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;"><img src="W3.png" height="45" width="45" title="Lead Pipe"/></div>
+    <div id="W4" data-locId="23"   style="z-index: 500;position: absolute;height:45px;width:45px;top: 390px;left: 790px;background:rgba(125,125,125,0.6);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;"><img src="W4.png" height="45" width="45" title="Revolver"/></div>
+    <div id="W5"  data-locId="31"  style="z-index: 500;position: absolute;height:45px;width:45px;top: 1010px;left: 240px;background:rgba(25,25,25,0.6);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;"><img src="W5.png" height="45" width="45" title="Rope"/></div>
+    <div id="W6"  data-locId="32"  style="z-index: 500;position: absolute;height:45px;width:45px;top: 1010px;left: 240px;background:rgba(25,25,25,0.6);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;"><img src="W6.png" height="45" width="45" title="Wrench"/></div>
+    <img src="GBG.png"  usemap="#image-map"  class="map" />
+    <map name="image-map">
+        <area data-Id="11" onclick="AreaClicked(this);" target=""  alt="Kitchen" title="Kitchen" style="cursor: pointer;" coords="93,213,286,439" shape="rect" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area data-Id="12"  onclick="AreaClicked(this);" target="" alt="Ballroom" title="Ballroom" style="cursor: pointer;"   coords="350,278,416,277,416,243,542,245,543,279,607,279,606,468,349,468" shape="poly" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area data-Id="13"  onclick="AreaClicked(this);" target="" alt="Conservatory" title="Conservatory" style="cursor: pointer;"   coords="673,216,863,407" shape="rect" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area data-Id="21" onclick="AreaClicked(this);"   target="" alt="Diningroom" title="Diningroom"  style="cursor: pointer;"  coords="92,503,253,505,254,534,349,537,348,727,93,727" shape="poly" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area  data-Id="22" onclick="AreaClicked(this);"  target="" alt="Billiardroom" title="Billiardroom" style="cursor: pointer;"   coords="418,537,575,724" shape="rect" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area  data-Id="23" onclick="AreaClicked(this);"  target="" alt="Library" title="Library" style="cursor: pointer;"  coords="642,538,670,538,671,506,831,506,832,538,862,539,864,632,831,636,833,664,670,666,669,633,639,632" shape="poly" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area  data-Id="31" onclick="AreaClicked(this);"  target="" alt="Lounge" title="Lounge" style="cursor: pointer;"   coords="91,822,316,1020" shape="rect" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area  data-Id="32" onclick="AreaClicked(this);"  target="" alt="Hall" title="Hall"  style="cursor: pointer;"  coords="382,792,571,1001" shape="rect" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area  data-Id="33"  onclick="AreaClicked(this);" target="" alt="Study" title="Study" style="cursor: pointer;"   coords="639,892,862,1017" shape="rect" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+        <area  data-Id="1112" onclick="AreaClicked(this);"  target="" alt="1112" title="1112"  style="cursor: pointer;"  coords="288,373,348,403" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="1213" onclick="AreaClicked(this);"  target="" alt="1213" title="1213"  style="cursor: pointer;"  coords="610,371,671,404" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="2122"  onclick="AreaClicked(this);" target="" alt="2122" title="2122"  style="cursor: pointer;"  coords="352,597,416,629" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="2223" onclick="AreaClicked(this);"  target="" alt="2223" title="2223"  style="cursor: pointer;"  coords="578,563,639,598" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="3132" onclick="AreaClicked(this);"  target="" alt="3132" title="3132"  style="cursor: pointer;"  coords="318,921,381,953" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="3233" onclick="AreaClicked(this);"  target="" alt="3233" title="3233"  style="cursor: pointer;"  coords="576,920,637,953" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="1121" onclick="AreaClicked(this);"  target="" alt="1121" title="1121"  style="cursor: pointer;"  coords="218,440,252,501" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="1222" onclick="AreaClicked(this);"  target="" alt="1222" title="1222"  style="cursor: pointer;"  coords="542,471,576,531" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="1323"  onclick="AreaClicked(this);" target="" alt="1323" title="1323"  style="cursor: pointer;"  coords="734,409,771,503" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area data-Id="2131"   onclick="AreaClicked(this);" target="" alt="2131" title="2131"  style="cursor: pointer;"  coords="282,730,318,819" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="2232"  onclick="AreaClicked(this);" target="" alt="2232" title="2232"  style="cursor: pointer;"  coords="444,729,479,789" shape="rect" data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        <area  data-Id="2333"  onclick="AreaClicked(this);" target="" alt="2333" title="2333"  style="cursor: pointer;"  coords="680,668,716,884" shape="rect" data-maphilight='{"fillColor":"00fff7","fillOpacity":0.6}'>
+    </map>
+    <div id="BPH" data-locId="0"  style="z-index: 500;position: absolute;height:215px;width:1220px;top: 1100px;left: 12px;background:rgba(125,125,125,0.4);border-color: saddlebrown;border-width: 1px;border-style: solid;">
+        <span id="S1" height="200" width="90" style="display:  none;color: red;margin: 5px; text-align: center;background: white;  border: 2px solid red;border-radius: 5px;"><img src="S1.png" height="183" width="80" title="Miss Scarlet"/><br/>Miss Scarlet</span>
+        <span id="S2"  height="200" width="90" style="display: none;color: green;margin: 5px; text-align: center;background: white;  border: 2px solid green;border-radius: 5px;"><img src="S2.png" height="183" width="80" title="Mr. Green"/><br/>Mr. Green</span>
+        <span id="S3"  height="200" width="90" style="display:  none;color: sandybrown;margin: 5px; text-align: center;background: white;  border: 2px solid sandybrown;border-radius: 5px;"><img src="S3.png" height="183" width="80" title="Colonel Mustard"/><br/>Col Mustard</span>
+        <span id="S4"  height="200" width="90" style="display:  none;color: rebeccapurple;margin: 5px; text-align: center;background: white;  border: 2px solid rebeccapurple;border-radius: 5px;"><img src="S4.png" height="183" width="80" title="Professor Plum"/><br/>Prof. Plum</span>
+        <span id="S5"  height="200" width="90" style="display:  none;color: blue;margin: 5px; text-align: center;background: white;  border: 2px solid blue;border-radius: 5px;"><img src="S5.png" height="183" width="80" title="Mrs. Peacock"/><br/>Mrs. Peacock</span>
+        <span id="S6"  height="200" width="90" style="display:  none;color: black;margin:5px; text-align: center;background: white;  border: 2px solid black;border-radius: 5px;"><img src="S6.png" height="183" width="80" title="Mrs. White"/><br/>Mrs. White</span>
+
+        <span id="C1"  height="200" width="90" style="display:  none;color: gold;margin: 5px; text-align: center;background: white;  border: 2px solid gold;border-radius: 5px;"><img src="W1.png" height="80" width="80" title="Candlestick"/><br/>Candlestick</span>
+        <span id="C2"  height="200" width="90" style="display:  none;color: gold;margin: 5px; text-align: center;background: white;  border: 2px solid gold;border-radius: 5px;"><img src="W2.png" height="80" width="80" title="Dagger"/><br/>Dagger</span>
+        <span id="C3"  height="200" width="90" style="display:  none;color: gold;margin: 5px; text-align: center;background: white;  border: 2px solid gold;border-radius: 5px;"><img src="W3.png" height="80" width="80" title="Lead Pipe"/><br/>Lead Pipe</span>
+        <span id="C4"  height="200" width="90" style="display:  none;color: gold;margin: 5px; text-align: center;background: white;  border: 2px solid gold;border-radius: 5px;"><img src="W4.png" height="80" width="80" title="Revolver"/><br/>Revolver</span>
+        <span id="C5"  height="200" width="90" style="display:  none;color: gold;margin: 5px; text-align: center;background: white;  border: 2px solid gold;border-radius: 5px;"><img src="W5.png" height="80" width="80" title="Rope"/><br/>Rope</span>
+        <span id="C6"  height="200" width="90" style="display:  none;color: gold;margin: 5px; text-align: center;background: white;  border: 2px solid gold;border-radius: 5px;"><img src="W6.png" height="80" width="80" title="Wrench"/><br/>Wrench</span>
+
+        <span id="H11"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Kitchen"/><br/><b>Kitchen</b></span>
+        <span id="H12"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Ballroom"/><br/><b>Ballroom</b></span>
+        <span id="H13"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Conservatory"/><br/><b>Conservatory</b></span>
+        <span id="H21"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Dining Room"/><br/><b>Dining Room</b></span>
+        <span id="H22"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Billiards Room"/><br/><b>Billiards Room</b></span>
+        <span id="H23"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Library"/><br/><b>Library</b></span>
+        <span id="H31"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Lounge"/><br/><b>Lounge</b></span>
+        <span id="H32"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Hall"/><br/><b>Hall</b></span>
+        <span id="H33"  height="200" width="90" style="display:  none;color: saddlebrown;margin: 5px; text-align: center;background: white;  border: 2px solid saddlebrown;border-radius: 5px;"><img src="H.png" height="80" width="80" title="Study"/><br/><b>Study</b></span>
+
+    </div>
+</div>
+
+
+</body>
+</html>
