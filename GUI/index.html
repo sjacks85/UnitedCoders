@@ -213,9 +213,11 @@
 
 
     //TODO : In this function we need to initialize websocket and then connect to Server and request to Join game
+
     function join(){
-        $("#joindiv").hide();
         //TODO: Call Server to Join - Init Web Socket
+        $("#joindiv").hide();
+
         $("#startdiv").show();
     }
 
@@ -231,7 +233,7 @@
         }
 
         //MY Cards
-        //TODO :  This part should be replace by server call. I put this code here for my testing. These are not random selected cards.
+        //TODO :  This part should be replaced with server call. I put this code here for testing purposes. These are not random selected cards.
         // S1 to S6  Players
         // C1 to C6  Weapons
         // H11 , H12 , H13 , H21 , H22 , H23 , H31 , H32 , H33   Rooms
@@ -251,7 +253,7 @@
         started=true;
     }
 
-    // Will show one of mycards on buttom of the gameboard
+    // Will show one of mycards on bottom of the gameboard
     function ShowMyCard(MyCardID){
         document.getElementById(MyCardID).style.display ='inline-block';
     }
