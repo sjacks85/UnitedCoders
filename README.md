@@ -1,5 +1,38 @@
 # UnitedCoders
 
+# How to start project
+Note: In all different terminals
+
+-- Start client 3000
+cd UnitedCoders/clueless_react/
+export PORT=3000
+npm start
+*Should open http://localhost:3000 page
+
+-- Start client 3001
+cd UnitedCoders/clueless_react/
+export PORT=3001
+npm start
+*Should open http://localhost:3001 page
+
+-- Start client 3002
+cd UnitedCoders/clueless_react/
+export PORT=3002
+npm start
+*Should open http://localhost:3002 page
+
+-- Start server
+cd UnitedCoders/clueless_react/server
+npm start
+*Should start logging client connections
+
+Note: If actively changing React code, webpage will reload and try to reconnect to server.
+This messes up the turn logic right now. So if you change the client and need to restart
+the game, kill the server. Then restart the server (no need to refresh client web pages).
+The client should automatically join when it finds the server again. And then the game
+will start over and initate the turn logic.
+
+
 GitHub Installation & Cloning:
 
 (0) Check whether you have Git installed by opening your temrinal and entering "git --version". 
@@ -57,3 +90,4 @@ Sidney Jackson
 Cheryl Limer
 Kathryn Crisafulli
 Sophia An.
+Kathryn Crisafulli (branch)
