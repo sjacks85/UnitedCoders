@@ -2,8 +2,10 @@ import React from 'react';
 import './App.css';
 import Divider from "./Divider";
 import Greeting from "./Greeting";
+import Gameboard from "./Gameboard";
 import { startClient, socket } from './ClientManager';
 import { subscribeToGame } from './Api';
+import MapExample from './MapExample';
 
 class App extends React.Component {
 
@@ -36,6 +38,10 @@ class App extends React.Component {
   //   console.log("UPDATEARRAY: " + elem)
   // }
 
+  // <p></p>
+  // <img src="game_board_small.png" />
+  //<img src="/gameboard/GBG.png" />
+
 render() {
   const greeting = 'Welcome to React';
   //<Greeting greeting={greeting} />
@@ -43,9 +49,8 @@ render() {
   return (
     <div className="App">
       <header className="App-header">
-        <p></p>
-        <img src="game_board_small.png" />
         <p>Username = {window.location.port}</p>
+        <Gameboard actions={this.state.actions} />
       </header>
        <Divider greeting={greeting} actions={this.state.actions} />
     </div>
