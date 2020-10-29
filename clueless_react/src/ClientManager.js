@@ -122,6 +122,7 @@ function makeAccusation(accuse, room, person, weapon) {
         // accused_weapon (String) - The name ID if the weapon that was accused.
         
     var accusation = {
+        "accuse_made": accuse,
         "accused_room": room,
         "accused_character": person,
         "accused_weapon": weapon

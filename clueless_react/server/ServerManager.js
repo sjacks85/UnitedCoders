@@ -42,12 +42,35 @@ function assignCards() {
   weapons.splice(weapons.indexOf(weapon), 1);
   rooms.splice(rooms.indexOf(room), 1);
 
+    /*
   envelope = {
     "suspect": suspect,
     "weapon": weapon,
     "room": room
-  };
+  };*/
+    envelope = {
+        "suspect": "Ms. White",
+        "weapon": "Pipe",
+        "room": "Library"
+    };
 
+    var player1 = {
+        "suspect": "Mr.Green",
+        "weapon": "Rope",
+        "room": "Kitchen"
+    };
+    var player2 = {
+        "suspect": "Ms. Peacock",
+        "weapon": "Revolver",
+        "room": "Study"
+    };
+    var player3 = {
+        "suspect": "Professor Plum",
+        "weapon": "Candlestick",
+        "room": "Ballroom"
+    };
+
+    hard_code_cards = [player1, player2, player3];
   console.log("Envelope Cards:", envelope);
 
   //Assign cards to players
@@ -72,8 +95,9 @@ function assignCards() {
           // "character":"Mrs. White","cards":["Mrs. White","Wrench","Billiards Room"]}}
           "player_id": players[i].id,
           //right now everyone is playing as the card they get
-          "character": suspect,
-          "cards": [suspect, weapon, room]
+          "character": hard_code_cards[i].suspect,
+          //"cards": [suspect, weapon, room],
+          "cards": hard_code_cards[i]
       };
 
       //broadcast these, have clients look for matching username to get player id for future

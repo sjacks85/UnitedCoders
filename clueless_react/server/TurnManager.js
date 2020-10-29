@@ -17,6 +17,7 @@ class TurnManager {
     async startGame() {
         while (true) {
             for (var i = 0; i < this.players.length; i++) {
+                console.log('\n---TurnManager starts next turn---\n');
                 await this.newTurn(this.players[i]);
             }
         }
@@ -25,11 +26,8 @@ class TurnManager {
     newTurn(player) {
         return new Promise((resolve) => {
             this.movementManager.move(player).then(move_done => {
-                console.log('movement done');
                 this.suggestionManager.suggest(player).then(suggest_done => {
-                    console.log("end of suggestion")
                     this.accusationManager.accuse(player).then(accuse_done => {
-                        console.log("end of accusation")
                         resolve(accuse_done);
                         resolve(suggest_done);
                         resolve(move_done);
