@@ -72,6 +72,7 @@ render() {
         <option value="P4">Prof. Plum</option>
         <option value="P5">Mrs. Peacock</option>
         <option value="P6">Mrs. White</option>
+        <option value="P7">Test</option>
     </select>
     <button onclick="SetUser(document.getElementById('CurrentUsers').value);">SET</button>
 </div>

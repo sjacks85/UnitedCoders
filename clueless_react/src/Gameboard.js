@@ -64,7 +64,7 @@ render() {
 
   return (
     <div>
-      <MapExample />
+      <MapExample actions={this.props.actions}/>
     <div>
       <Gameboard_Players />
     </div>

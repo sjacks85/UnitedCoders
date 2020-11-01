@@ -1,0 +1,8 @@
+.imagemapper {
+    z-index: 1;
+    position: relative;
+}
+.iconimage {
+    z-index: 100;
+    position: absolute;
+}

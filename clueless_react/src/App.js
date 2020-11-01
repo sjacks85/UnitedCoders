@@ -48,11 +48,13 @@ render() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>Username = {window.location.port}</p>
+      <div className="top">
+      <p>Username = {window.location.port}</p>
         <Gameboard actions={this.state.actions} />
-      </header>
-       <Divider greeting={greeting} actions={this.state.actions} />
+      </div>
+      <div className="bottom">
+        <Divider greeting={greeting} actions={this.state.actions} />
+      </div>
     </div>
   );
 }
