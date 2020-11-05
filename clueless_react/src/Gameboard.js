@@ -67,9 +67,20 @@ render() {
       <MapExample actions={this.props.actions}/>
     <div>
       <Gameboard_Players />
+      <Gameboard_Players />
     </div>
     </div>
   );
+
+  // return (
+  //   <div>
+  //     <MapExample actions={this.props.actions}/>
+  //   <div>
+  //     <Gameboard_Players />
+  //     <Gameboard_Players />
+  //   </div>
+  //   </div>
+  // );
 }
 }
 

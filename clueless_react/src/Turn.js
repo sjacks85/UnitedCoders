@@ -39,12 +39,12 @@ class Turn extends React.Component {
     //   }
     
     const first = array[0];
-    console.log('Turn First' + JSON.stringify(first));
+    //console.log('Turn First' + JSON.stringify(first));
     if (first != undefined) {
-      console.log('Turn return true')
+      //console.log('Turn return true')
       return first.message_type == 31 || first.message_type == 32 || first.message_type == 33 || first.message_type == 34 || first.message_type == 61;
     }
-    console.log('Turn return false')
+    //console.log('Turn return false')
     return false;
     // console.log("TurnUN: " + array == undefined)
     // console.log("Turn: " + JSON.stringify(array))
@@ -77,7 +77,7 @@ class Turn extends React.Component {
 render() {
   var temp = []
   var test = [{"game_id":0,"player_id":0,"message_type":11,"message":{"username":"3000","player_id":3,"character":"Mr. Green","cards":["Mr. Green","Candlestick","Conservatory"]}}]
-  var turn = this.findTurn(this.props.actions);
+  //var turn = this.findTurn(this.props.actions);
 
   return (
           <p>{this.displayTurn(this.props.actions)}</p>

@@ -3,6 +3,7 @@ import './App.css';
 import Divider from "./Divider";
 import Greeting from "./Greeting";
 import Gameboard from "./Gameboard";
+import TicTac from "./TicTac";
 import { startClient, socket } from './ClientManager';
 import { subscribeToGame } from './Api';
 import MapExample from './MapExample';
@@ -19,7 +20,10 @@ class App extends React.Component {
     currentAction: '',
     // Store in the App, and passed into children as props
     actions: [],
-    color: 'red'
+    color: 'red', 
+    player_id: 0,
+    character: "",
+    cards: {},
   }
 
   componentDidMount() {
@@ -28,7 +32,21 @@ class App extends React.Component {
       console.log('GameMessage' + JSON.stringify(message))
       //console.log('AppBefore' + this.state.actions)
       this.setState({ actions : [message, ...this.state.actions] })
-      //console.log('AppAfter' + this.state.actions)
+      if (message.message_type == 11)
+        if (message.message.username != undefined)
+          //console.log("User message" + message.message.username + " " + window.location.port)
+          if (message.message.username != undefined)
+          if (message.message.username == window.location.port) {
+            //console.log("APP: found 11 " + message.message.username + ' ' + message.message.player_id)
+           //alert(JSON.stringify(message))
+            this.setState(
+              {player_id: message.message.player_id, 
+               character: message.message.character,
+               cards: message.message.cards})
+            //console.log("APP: state " + this.state.player_id)
+          }
+            //console.log('Found user message' + JSON.stringify(message))
+            //console.log('Found user message state' + JSON.stringify(this.state))
   });
   }
 
@@ -48,9 +66,10 @@ render() {
 
   return (
     <div className="App">
-      <div className="top">
-      <p>Username = {window.location.port}</p>
-        <Gameboard actions={this.state.actions} />
+      <div className="bottom">
+        <h1>Gameboard</h1>
+        <p>Username = {window.location.port}</p>
+        <TicTac actions={this.state.actions} player_id={"P" + this.state.player_id}/>
       </div>
       <div className="bottom">
         <Divider greeting={greeting} actions={this.state.actions} />
