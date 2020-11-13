@@ -3,6 +3,8 @@ import { Square } from "./Square";
 import memoize from "memoize-one";
 import {  makeSuggestion, makeAccusation } from './ClientManager';
 
+var styleResU = {};
+
 var roomCode = [
   "11",
   "12",
@@ -560,6 +562,63 @@ export class TicTac extends React.Component {
 		makeAccusation(roomName,a,b);
 	}
  
+	// Suggestion Response Functions Starts
+	ShowSuggestionWindow(suggestionTxt){
+		document.getElementById("MyCardsType").selectedIndex='0';
+		document.getElementById("suggestiondetail").innerHTML=suggestionTxt;
+		this.updateDisproveUI();
+		document.getElementById("suggestionresponsediv").style.display = "";
+	}
+	
+	updateDisproveUI(){
+		var mtVal=document.getElementById("MyCardsType").value;
+		if(mtVal=='-1'){
+		 document.getElementById("ResponseUser").style.display = "none";
+		 document.getElementById("ResponseWeapon").style.display = "none";
+		 document.getElementById("ResponseRoom").style.display = "none";
+		}
+		if(mtVal=='0'){
+		 document.getElementById("ResponseUser").style.display = "";
+		 document.getElementById("ResponseWeapon").style.display = "none";
+		 document.getElementById("ResponseRoom").style.display = "none";
+		}
+		if(mtVal=='1'){
+		 document.getElementById("ResponseUser").style.display = "none";
+		 document.getElementById("ResponseWeapon").style.display = "";
+		 document.getElementById("ResponseRoom").style.display = "none";
+		}
+		if(mtVal=='2'){
+		 document.getElementById("ResponseUser").style.display = "none";
+		 document.getElementById("ResponseWeapon").style.display = "none";
+		 document.getElementById("ResponseRoom").style.display = "";
+		}
+		
+	}
+	
+	sendSuggestionResponse(){
+		var mtVal=document.getElementById("MyCardsType").value;
+		var selectedvalue="";
+		if(mtVal=='-1'){
+		   // Send Socket Response that this user doesn't have any of the suggested items.
+		}
+		if(mtVal=='0'){
+		    selectedvalue = document.getElementById("ResponseUser").value;
+			// Send Socket Response that this user has the suggested user (user id is in selectedvalue).	
+		}
+		if(mtVal=='1'){
+		 selectedvalue = document.getElementById("ResponseWeapon").value;
+		// Send Socket Response that this user has the suggested Weapon (Weapon id is in selectedvalue).	
+		}
+		if(mtVal=='2'){
+		 selectedvalue = document.getElementById("ResponseRoom").value;
+		// Send Socket Response that this user has the suggested Room (Room id is in selectedvalue).	
+		}
+		document.getElementById("suggestionresponsediv").style.display = "none";
+		//alert(selectedvalue);
+	}
+	
+	//Suggestion Response Functions Ends
+ 
   handleOnClick(x, y) {
     const cx = this.state.playerLocations[this.props.player_id].startX;
     const cy = this.state.playerLocations[this.props.player_id].startY;
@@ -669,6 +728,49 @@ export class TicTac extends React.Component {
 
 </div>
 <br/>
+<button onClick={()=>{ this.ShowSuggestionWindow("This is the suggestion.")}}>Respond To Suggestion</button> {/*Testing*/}
+	{/*Suggestion Response START*/}
+		<div id="suggestionresponsediv" style={{position:"absolute",top:"0",left:"0",width:"100%",height:"150%","background-color":"grey",opacity: ".98","z-index": "1000", display : "none"}}>
+		<br/><br/>
+		<h2  name="suggestiondetail" id="suggestiondetail"></h2>
+		    <select name="MyCardsType" id="MyCardsType" style={{margin:"10px",marginLeft:"0px"}} onChange={()=>{this.updateDisproveUI()}}>
+			    <option value="-1" selected="selected">I don't have any of the suggested cards</option>
+				<option value="0" >I have suggested Player card : </option>
+				<option value="1">I have suggested Weapon card : </option>
+				<option value="2">I have suggested Room card : </option>
+			</select>
+			<select name="ResponseUser" id="ResponseUser" style={{margin:"10px",marginLeft:"0px", display : "none"}}>
+				<option value="scarlet" selected="selected">Miss Scarlet</option>
+				<option value="green">Mr. Green</option>
+				<option value="mustard">Colonel Mustard</option>
+				<option value="plum">Prof. Plum</option>
+				<option value="peacock">Mrs. Peacock</option>
+				<option value="white">Mrs. White</option>
+			</select>
+			<select name="ResponseWeapon" id="ResponseWeapon" style={{margin:"10px", display : "none"}}>
+				<option value="candlestick" selected="selected">candlestick</option>
+				<option value="revolver">revolver</option>
+				<option value="knife">knife</option>
+				<option value="pipe">pipe</option>
+				<option value="rope">rope</option>
+				<option value="wrench">wrench</option>
+			</select>
+			<select name="ResponseRoom" id="ResponseRoom" style={{margin:"10px", display : "none"}}>
+				<option value="Kitchen" selected="selected">Kitchen</option>
+				<option value="Ballroom">Ballroom</option>
+				<option value="Conservatory">Conservatory</option>
+				<option value="Dining">Dining Room</option>
+				<option value="Cellar">Cellar</option>
+				<option value="Billiards">Billiards Room</option>
+				<option value="Library">Library</option>
+				<option value="Study">Study</option>
+				<option value="Lounge">Lounge</option>
+			</select>
+			<button onClick={()=>{ this.sendSuggestionResponse()}}>Repond</button> 
+			
+		</div>
+		{/*Suggestion Response START*/}
+		
         <table cellSpacing="0" id="table" style={style}>
           <tbody>{rows}</tbody>
         </table>
