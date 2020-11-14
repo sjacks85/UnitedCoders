@@ -14,20 +14,20 @@ var uniqueIDs = [
   { type: "character", name: "Mrs. Peacock", image: "P5" },
   { type: "character", name: "Mrs. White", image: "P6" },
   { type: "weapon", name: "Candlestick", image: "W1" },
-  { type: "weapon", name: "Revolver", image: "W2" },
-  { type: "weapon", name: "Knife", image: "W3" },
-  { type: "weapon", name: "Pipe", image: "W4" },
+  { type: "weapon", name: "Revolver", image: "W4" },
+  { type: "weapon", name: "Knife", image: "W2" },
+  { type: "weapon", name: "Pipe", image: "W3" },
   { type: "weapon", name: "Rope", image: "W5" },
   { type: "weapon", name: "Wrench", image: "W6" },
-  { type: "room", name: "Study" },
-  { type: "room", name: "Hall" },
-  { type: "room", name: "Lounge" },
-  { type: "room", name: "Dinning" },
-  { type: "room", name: "Billiard" },
-  { type: "room", name: "Library" },
-  { type: "room", name: "Conservatory" },
-  { type: "room", name: "Ballroom" },
-  { type: "room", name: "Kitchen" },
+  { type: "room", name: "Study", roomId: 33, gridX: 4, gridY: 4 },
+  { type: "room", name: "Hall", roomId: 32, gridX: 2, gridY: 4 },
+  { type: "room", name: "Lounge", roomId: 31, gridX: 0, gridY: 4 },
+  { type: "room", name: "Dinning", roomId: 21, gridX: 0, gridY: 2 },
+  { type: "room", name: "Billiard", roomId: 22, gridX: 2, gridY: 2 },
+  { type: "room", name: "Library", roomId: 23, gridX: 4, gridY: 2 },
+  { type: "room", name: "Conservatory", roomId: 13, gridX: 4, gridY: 0 },
+  { type: "room", name: "Ballroom", roomId: 12, gridX: 2, gridY: 0 },
+  { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0 },
 ];
 
 export class Box extends React.Component {
@@ -35,7 +35,7 @@ export class Box extends React.Component {
     super(props);
     this.state = {
       actions: this.props.actions,
-      turn: '',
+      turn: "",
       // Tracks current player location
       currentLocation: this.props.currentLocation,
     };
@@ -43,19 +43,38 @@ export class Box extends React.Component {
     this.noMovementClick = this.noMovementClick.bind(this);
     this.suggestionClicked = this.suggestionClicked.bind(this);
     this.accusationClicked = this.accusationClicked.bind(this);
+  }
 
+  createSelectItems(type) {
+    let items =
+      uniqueIDs.map((item, i) => {
+        return (
+          item.type == type &&
+          <option key={i} value={i}>
+            {item.name} {i}
+          </option>
+        );
+      }, this);
+    return items
+  }
+
+  onDropdownSelected(e) {
+    console.log("THE VAL", e.target.value);
+    console.log("THE VAL" + JSON.stringify(uniqueIDs[e.target.value]));
+    //here you will see the current selected value of the select input
   }
 
   suggestionClicked(a, b) {
-    //alert(a);
-    //alert(b);
-    const cx = this.state.locations[this.props.player_id].currentX;
-    const cy = this.state.locations[this.props.player_id].currentY;
+    var aindex = Number(a) + 1;
+    var bindex = Number(b) + 1;
+
+    console.log(a + " " + JSON.stringify(uniqueIDs[aindex])+ " " + b + " " + JSON.stringify(uniqueIDs[bindex]));
+
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
 
     var roomName = "";
-    switch (this.state.grid[cx][cy].roomId) {
+    switch (this.props.locationId) {
       case "11":
         roomName = "kitchen";
         break;
@@ -88,21 +107,23 @@ export class Box extends React.Component {
         break;
     }
     if (roomName == "") return;
-    var playerInput = "You are Suggesting : " + roomName + " " + a + " " + b;
+    var playerInput = "Your Suggestion: " + roomName + " " + a + " " + b;
     alert(playerInput);
     //this.setState({ inputs : [playerInput, ...this.state.inputs]})
     makeSuggestion(roomName, a, b);
   }
 
   accusationClicked(a, b) {
+    var aindex = Number(a) + 1;
+    var bindex = Number(b) + 1;
+
+    console.log(a + " " + JSON.stringify(uniqueIDs[aindex])+ " " + b + " " + JSON.stringify(uniqueIDs[bindex]));
     //alert(a);
     //alert(b);
-    const cx = this.state.locations[this.props.player_id].currentX;
-    const cy = this.state.locations[this.props.player_id].currentY;
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
     var roomName = "";
-    switch (this.state.grid[cx][cy].roomId) {
+    switch (this.props.locationId) {
       case "11":
         roomName = "kitchen";
         break;
@@ -170,6 +191,9 @@ export class Box extends React.Component {
   render() {
     return (
       <div style={{ textAlign: "center" }}>
+        <select onChange={this.onDropdownSelected}> {this.createSelectItems("character")}</select>
+        <select onChange={this.onDropdownSelected}> {this.createSelectItems("weapon")}</select>
+        <select onChange={this.onDropdownSelected}> {this.createSelectItems("room")}</select>
         <div
           style={{
             textAlign: "center",
@@ -197,28 +221,28 @@ export class Box extends React.Component {
                 id="GuessedUser"
                 style={{ margin: "10px", marginLeft: "0px" }}
               >
-                <option value="scarlet" selected="selected">
+                <option value="0" selected="selected">
                   Miss Scarlet
                 </option>
-                <option value="green">Mr. Green</option>
-                <option value="mustard">Colonel Mustard</option>
-                <option value="plum">Prof. Plum</option>
-                <option value="peacock">Mrs. Peacock</option>
-                <option value="white">Mrs. White</option>
+                <option value="1">Mr. Green</option>
+                <option value="2">Colonel Mustard</option>
+                <option value="3">Prof. Plum</option>
+                <option value="4">Mrs. Peacock</option>
+                <option value="5">Mrs. White</option>
               </select>
               <select
                 name="GuessedWeapon"
                 id="GuessedWeapon"
                 style={{ margin: "10px" }}
               >
-                <option value="candlestick" selected="selected">
-                  candlestick
+                <option value="6" selected="selected">
+                  Candlestick
                 </option>
-                <option value="revolver">revolver</option>
-                <option value="knife">knife</option>
-                <option value="pipe">pipe</option>
-                <option value="rope">rope</option>
-                <option value="wrench">wrench</option>
+                <option value="7">Revolver</option>
+                <option value="8">Knife</option>
+                <option value="9">Pipe</option>
+                <option value="10">Rope</option>
+                <option value="11">Wrench</option>
               </select>
               <br />
               <button
@@ -250,6 +274,7 @@ export class Box extends React.Component {
               &nbsp;&nbsp;&nbsp;
             </span>
           </div>
+          <p>{this.props.location}</p>
         </div>
       </div>
     );

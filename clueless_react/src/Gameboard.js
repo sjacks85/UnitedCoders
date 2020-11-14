@@ -1,9 +1,7 @@
 import React from "react";
 import { Room } from "./Room";
-import { Box } from "./Box"
-import {
-  makeMovement
-} from "./ClientManager";
+import { Box } from "./Box";
+import { makeMovement } from "./ClientManager";
 
 var uniqueIDs = [
   { type: "character", name: "Miss Scarlet", image: "P1" },
@@ -13,21 +11,27 @@ var uniqueIDs = [
   { type: "character", name: "Mrs. Peacock", image: "P5" },
   { type: "character", name: "Mrs. White", image: "P6" },
   { type: "weapon", name: "Candlestick", image: "W1" },
-  { type: "weapon", name: "Revolver", image: "W2" },
-  { type: "weapon", name: "Knife", image: "W3" },
-  { type: "weapon", name: "Pipe", image: "W4" },
+  { type: "weapon", name: "Revolver", image: "W4" },
+  { type: "weapon", name: "Knife", image: "W2" },
+  { type: "weapon", name: "Pipe", image: "W3" },
   { type: "weapon", name: "Rope", image: "W5" },
   { type: "weapon", name: "Wrench", image: "W6" },
-  { type: "room", name: "Study", roomId: 33, gridX: 4, gridY: 4},
+  { type: "room", name: "Study", roomId: 33, gridX: 4, gridY: 4 },
   { type: "room", name: "Hall", roomId: 32, gridX: 2, gridY: 4 },
-  { type: "room", name: "Lounge", roomId: 31, gridX: 0, gridY: 4},
-  { type: "room", name: "Dinning", roomId: 21, gridX: 0, gridY: 2},
-  { type: "room", name: "Billiard", roomId: 22, gridX: 2, gridY: 2},
-  { type: "room", name: "Library", roomId: 23, gridX: 4, gridY: 2},
-  { type: "room", name: "Conservatory", roomId: 13, gridX: 4, gridY: 0},
-  { type: "room", name: "Ballroom", roomId: 12, gridX: 2, gridY: 0},
-  { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0},
+  { type: "room", name: "Lounge", roomId: 31, gridX: 0, gridY: 4 },
+  { type: "room", name: "Dinning", roomId: 21, gridX: 0, gridY: 2 },
+  { type: "room", name: "Billiard", roomId: 22, gridX: 2, gridY: 2 },
+  { type: "room", name: "Library", roomId: 23, gridX: 4, gridY: 2 },
+  { type: "room", name: "Conservatory", roomId: 13, gridX: 4, gridY: 0 },
+  { type: "room", name: "Ballroom", roomId: 12, gridX: 2, gridY: 0 },
+  { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0 },
 ];
+// 7 = Candlestick, X = 0, Y = 0 W1
+// 8 = Revolver, X = 2, Y = 0 W4
+// 9 = Knife, X = 4, Y = 0 W2
+// 10 = Pipe, X = 0, Y = 4 W3
+// 11 = Rope, X = 2, Y = 4 W5
+// 12 = Wrench, X = 4, Y = 4 W6
 
 var startLocations = {
   P0: {
@@ -67,19 +71,19 @@ var startLocations = {
     currentY: 0,
   },
   W3: {
-    currentX: 2,
-    currentY: 2,
-  },
-  W4: {
-    currentX: 4,
-    currentY: 2,
-  },
-  W5: {
     currentX: 0,
     currentY: 4,
   },
-  W6: {
+  W4: {
+    currentX: 4,
+    currentY: 0,
+  },
+  W5: {
     currentX: 2,
+    currentY: 4,
+  },
+  W6: {
+    currentX: 4,
     currentY: 4,
   },
 };
@@ -142,7 +146,7 @@ var startGrid = [
       ],
       roomLimit: -1, // No limit
       roomPlayers: [],
-      roomWeapons: ["W2"],
+      roomWeapons: ["W3"],
     },
   ],
   [
@@ -207,7 +211,7 @@ var startGrid = [
       ],
       roomLimit: -1, // No limit
       roomPlayers: [],
-      roomWeapons: [],
+      roomWeapons: ["W4"],
     },
     {
       roomId: "2122",
@@ -231,7 +235,7 @@ var startGrid = [
       ],
       roomLimit: -1, // No limit
       roomPlayers: [],
-      roomWeapons: ["W3"],
+      roomWeapons: [],
     },
     {
       roomId: "2223",
@@ -254,7 +258,7 @@ var startGrid = [
       ],
       roomLimit: -1, // No limit
       roomPlayers: [],
-      roomWeapons: ["W4"],
+      roomWeapons: ["W5"],
     },
   ],
   [
@@ -319,7 +323,7 @@ var startGrid = [
       ],
       roomLimit: -1, // No limit
       roomPlayers: [],
-      roomWeapons: ["W5"],
+      roomWeapons: ["W2"],
     },
     {
       roomId: "3132",
@@ -342,7 +346,7 @@ var startGrid = [
       ],
       roomLimit: -1, // No limit
       roomPlayers: [],
-      roomWeapons: ["W6"],
+      roomWeapons: [],
     },
     {
       roomId: "3233",
@@ -365,7 +369,7 @@ var startGrid = [
       ],
       roomLimit: -1, // No limit
       roomPlayers: [],
-      roomWeapons: [],
+      roomWeapons: ["W6"],
     },
   ],
 ];
@@ -431,7 +435,7 @@ export class Gameboard extends React.Component {
     //console.log("getDerivedStateFromProps state:" + JSON.stringify(state))
 
     var newcount = state.count + 1;
-    var newplayerLocations = state.playerLocations;
+    var newLocations = state.locations;
     var newGrid = state.grid;
     var newCurrentX = state.currentX;
     var newCurrentY = state.currentY;
@@ -443,62 +447,58 @@ export class Gameboard extends React.Component {
     if (first != undefined) {
       if (first.message_type == 22) {
         console.log("Found movement broadcast");
-        console.log(JSON.stringify(first.message.character_moved));
-        console.log(JSON.stringify(first.message.weapon_moved));
         if (first.message.character_moved === true) {
           //alert("Found char move")
+          var index = Number(first.message.moved_character) - 1;
           console.log(
             "Found char move: " +
-              JSON.stringify(uniqueIDs[first.message.moved_character])
+              " " +
+              index +
+              " " +
+              JSON.stringify(uniqueIDs[index])
           );
-          var player = uniqueIDs[first.message.moved_character].image;
-          const cx = newplayerLocations[player].currentX;
-          const cy = newplayerLocations[player].currentY;
+          var player = uniqueIDs[index].image;
+          const cx = newLocations[player].currentX;
+          const cy = newLocations[player].currentY;
           console.log("Found Char move: " + player + " " + cx + " " + cy);
           const nx = 4;
           const ny = 4;
           console.log("CharDerived: " + JSON.stringify(newGrid[cx][cy]));
           console.log("CharDerived: " + JSON.stringify(newGrid[nx][ny]));
 
-          if ((cx != nx) & (cy != cy)) {
-            var index = newGrid[cx][cy].roomPlayers.indexOf(
-              JSON.stringify(player)
-            );
-            console.log(
-              "CharDerivedIndex: " +
-                index +
-                " " +
-                newGrid[cx][cy].roomPlayers.indexOf(player)
-            );
-            newGrid[cx][cy].roomPlayers.splice(index, 1); //Remove current player to old room
-            newGrid[nx][ny].roomPlayers.push(player); //Add current player to new room
-            //NEW TO UPDATE CURRENTX AND CURRENTY if currentplayer
-            newplayerLocations[player].currentX = nx;
-            newplayerLocations[player].currentY = ny;
+          var index = newGrid[cx][cy].roomPlayers.indexOf(
+            JSON.stringify(player)
+          );
+          console.log(
+            "CharDerivedIndex: " +
+              index +
+              " " +
+              newGrid[cx][cy].roomPlayers.indexOf(player)
+          );
+          newGrid[cx][cy].roomPlayers.splice(index, 1); //Remove current player to old room
+          newGrid[nx][ny].roomPlayers.push(player); //Add current player to new room
+          //NEW TO UPDATE CURRENTX AND CURRENTY if currentplayer
+          newLocations[player].currentX = nx;
+          newLocations[player].currentY = ny;
 
-            if ((player = props.player_id)) {
-              newCurrentX = nx;
-              newCurrentY = ny;
-            }
+          if ((player = props.player_id)) {
+            newCurrentX = nx;
+            newCurrentY = ny;
           }
 
           //console.log("CharDerived: " + JSON.stringify(newGrid));
           console.log("AfterCharDerived: " + JSON.stringify(newGrid[cx][cy]));
           console.log("AfterCharDerived: " + JSON.stringify(newGrid[nx][ny]));
-          console.log(
-            "AfterCharDerived: " + JSON.stringify(newplayerLocations)
-          );
+          console.log("AfterCharDerived: " + JSON.stringify(newLocations));
         }
 
         if (first.message.weapon_moved === true) {
           //alert("Found weapon move")
-          console.log(
-            "Found Weap move: " +
-              JSON.stringify(uniqueIDs[first.message.moved_weapon])
-          );
-          var player = uniqueIDs[first.message.moved_weapon].image;
-          const cx = newplayerLocations[player].currentX;
-          const cy = newplayerLocations[player].currentY;
+          var index = Number(first.message.moved_weapon) - 1;
+          console.log("Found Weap move: " + JSON.stringify(uniqueIDs[index]));
+          var player = uniqueIDs[index].image;
+          const cx = newLocations[player].currentX;
+          const cy = newLocations[player].currentY;
           console.log("Found Weap move: " + player + " " + cx + " " + cy);
           const nx = 4;
           const ny = 4;
@@ -509,27 +509,44 @@ export class Gameboard extends React.Component {
           newGrid[cx][cy].roomWeapons.splice(index, 1); //Remove current player to old room
           newGrid[nx][ny].roomWeapons.push(player); //Add current player to new room
           //NEW TO UPDATE CURRENTX AND CURRENTY if currentplayer
-          newplayerLocations[player].currentX = nx;
-          newplayerLocations[player].currentY = ny;
+          newLocations[player].currentX = nx;
+          newLocations[player].currentY = ny;
 
-          console.log("WeapDerived: " + JSON.stringify(newplayerLocations));
+          console.log("WeapDerived: " + JSON.stringify(newLocations));
         }
-      }
-      if (first.message_type == 31) {
+      } else if (first.message_type == 31) {
         newmovementTurn = true;
         newvalidOptions = first.message.valid_locations;
+      } else {
+        newmovementTurn = false;
+        newvalidOptions = [];
       }
     }
 
     return {
       count: newcount,
       grid: newGrid,
-      playerLocations: newplayerLocations,
+      locations: newLocations,
       playerX: newCurrentX,
       playerY: newCurrentY,
       movementTurn: newmovementTurn,
       validOptions: newvalidOptions,
     };
+  }
+
+  provideLocationId() {
+    var cx = this.state.locations[this.props.player_id].currentX;
+    var cy = this.state.locations[this.props.player_id].currentY;
+    var result = "0";
+
+    console.log("PLAYER: " + this.props.player_id);
+    console.log("PLAYER: x" + cx + " y" + cy);
+
+    if (cx != -1 && cy != -1) {
+      result = this.state.grid[cx][cy].roomId;
+    }
+    console.log("RESULTS" + result);
+    return result;
   }
 
   render() {
@@ -569,7 +586,7 @@ export class Gameboard extends React.Component {
           {this.state.locations[this.props.player_id].currentX} | Y ={" "}
           {this.state.locations[this.props.player_id].currentY}
         </p>
-        <Box actions={this.state.actions} />
+        <Box actions={this.state.actions} locationId={this.provideLocationId()} />
         <br />
         <table cellSpacing="0" id="table" style={style}>
           <tbody>{rows}</tbody>
