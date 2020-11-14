@@ -19,9 +19,9 @@ class MovementManager {
                 console.log('Movement:', movement);
                 var move_broadcast = {
                     "character_moved": true,
-                    "weapon_moved": false,
+                    "weapon_moved": true,
                     "moved_character": player.id,
-                    "moved_weapon": "",
+                    "moved_weapon": 7,
                     "new_character_location": movement.new_location,
                     "new_weapon_location": []
                 };

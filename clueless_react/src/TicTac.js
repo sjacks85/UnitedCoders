@@ -1,6 +1,36 @@
 import React from "react";
 import { Square } from "./Square";
 import memoize from "memoize-one";
+import {
+  makeMovement,
+  makeSuggestion,
+  makeDisprove,
+  makeAccusation,
+} from "./ClientManager";
+
+var uniqueIDs = [
+  { type: "character", name: "Miss Scarlet", image: "P1" },
+  { type: "character", name: "Mr. Green", image: "P2" },
+  { type: "character", name: "Colonel Mustard", image: "P3" },
+  { type: "character", name: "Prof. Plum", image: "P4" },
+  { type: "character", name: "Mrs. Peacock", image: "P5" },
+  { type: "character", name: "Mrs. White", image: "P6" },
+  { type: "weapon", name: "Candlestick", image: "W1" },
+  { type: "weapon", name: "Revolver", image: "W2" },
+  { type: "weapon", name: "Knife", image: "W3" },
+  { type: "weapon", name: "Pipe", image: "W4" },
+  { type: "weapon", name: "Rope", image: "W5" },
+  { type: "weapon", name: "Wrench", image: "W6" },
+  { type: "room", name: "Study" },
+  { type: "room", name: "Hall" },
+  { type: "room", name: "Lounge" },
+  { type: "room", name: "Dinning" },
+  { type: "room", name: "Billiard" },
+  { type: "room", name: "Library" },
+  { type: "room", name: "Conservatory" },
+  { type: "room", name: "Ballroom" },
+  { type: "room", name: "Kitchen" },
+];
 
 var roomCode = [
   "11",
@@ -27,35 +57,59 @@ var roomCode = [
 ];
 
 var startXY = {
-  "P0": {
+  P0: {
     startX: -1,
-    startY: -1
+    startY: -1,
   },
-  "P1": {
+  P1: {
     startX: 3,
-    startY: 4
+    startY: 4,
   },
-  "P2": {
-   startX: 4,
-   startY: 3
+  P2: {
+    startX: 4,
+    startY: 3,
   },
-  "P3": {
-   startX: 3,
-   startY: 0
+  P3: {
+    startX: 3,
+    startY: 0,
   },
-  "P4": {
-   startX: 1,
-   startY: 0
+  P4: {
+    startX: 1,
+    startY: 0,
   },
-  "P5": {
-   startX: 0,
-   startY: 1
+  P5: {
+    startX: 0,
+    startY: 1,
   },
-  "P6": {
-   startX: 1,
-   startY: 4
+  P6: {
+    startX: 1,
+    startY: 4,
   },
-}
+  W1: {
+    startX: 0,
+    startY: 0,
+  },
+  W2: {
+    startX: 4,
+    startY: 0,
+  },
+  W3: {
+    startX: 2,
+    startY: 2,
+  },
+  W4: {
+    startX: 4,
+    startY: 2,
+  },
+  W5: {
+    startX: 0,
+    startY: 4,
+  },
+  W6: {
+    startX: 2,
+    startY: 4,
+  },
+};
 
 //All valid rooms and hallways to move in (based on player's current location). Sequence is important - Please don't change them.
 var roomAccess = [
@@ -349,11 +403,10 @@ export class TicTac extends React.Component {
     super(props);
     this.state = {
       dim: 3,
-      //grid:Array(5).fill(0).map(x=>Array(5).fill({})),
+      count: 0,
+
+      // Gameboard grid
       grid: roomAccess,
-      player: "X",
-      winner: null,
-      active: true,
 
       // Stores players current locID
       players: [
@@ -364,17 +417,23 @@ export class TicTac extends React.Component {
         "1112", //Mrs. Peacock
         "1323", //Mrs. White
       ],
-
       playerLocations: startXY,
 
       // Stores weapons current locID
       weapons: ["11", "13", "22", "23", "31", "32"],
+
+      currentPlayer: this.props.player_id,
       currentPlayerId: this.props.player_id,
       currentX: 0,
       currentY: 0,
       currentPlayer: this.props.player_id,
+      validOptions: [],
+      movementTurn: false,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
+    this.noMovementClick = this.noMovementClick.bind(this);
+    this.suggestionClicked = this.suggestionClicked.bind(this);
+    this.accusationClicked = this.accusationClicked.bind(this);
     this.dims = [
       parseFloat(500 / this.state.grid.length),
       parseFloat(500 / this.state.grid[0].length),
@@ -383,6 +442,101 @@ export class TicTac extends React.Component {
 
   state = {
     playerLocations: startXY,
+  };
+
+  suggestionClicked(a, b) {
+    //alert(a);
+    //alert(b);
+    const cx = this.state.playerLocations[this.props.player_id].startX;
+    const cy = this.state.playerLocations[this.props.player_id].startY;
+    //alert(JSON.stringify(this.state.grid[cx][cy]));
+    //alert(this.state.grid[cx][cy].roomName);
+
+    var roomName = "";
+    switch (this.state.grid[cx][cy].roomId) {
+      case "11":
+        roomName = "kitchen";
+        break;
+      case "12":
+        roomName = "ballroom";
+        break;
+      case "13":
+        roomName = "conservatory";
+        break;
+      case "21":
+        roomName = "dinning";
+        break;
+      case "22":
+        roomName = "hall";
+        break;
+      case "23":
+        roomName = "billiard";
+        break;
+      case "31":
+        roomName = "library";
+        break;
+      case "32":
+        roomName = "study";
+        break;
+      case "33":
+        roomName = "lounge";
+        break;
+      default:
+        alert("You need to be in a room!");
+        break;
+    }
+    if (roomName == "") return;
+    var playerInput = "You are Suggesting : " + roomName + " " + a + " " + b;
+    alert(playerInput);
+    //this.setState({ inputs : [playerInput, ...this.state.inputs]})
+    makeSuggestion(roomName, a, b);
+  }
+
+  accusationClicked(a, b) {
+    //alert(a);
+    //alert(b);
+    const cx = this.state.playerLocations[this.props.player_id].startX;
+    const cy = this.state.playerLocations[this.props.player_id].startY;
+    //alert(JSON.stringify(this.state.grid[cx][cy]));
+    //alert(this.state.grid[cx][cy].roomName);
+    var roomName = "";
+    switch (this.state.grid[cx][cy].roomId) {
+      case "11":
+        roomName = "kitchen";
+        break;
+      case "12":
+        roomName = "ballroom";
+        break;
+      case "13":
+        roomName = "conservatory";
+        break;
+      case "21":
+        roomName = "dinning";
+        break;
+      case "22":
+        roomName = "hall";
+        break;
+      case "23":
+        roomName = "billiard";
+        break;
+      case "31":
+        roomName = "library";
+        break;
+      case "32":
+        roomName = "study";
+        break;
+      case "33":
+        roomName = "lounge";
+        break;
+      default:
+        alert("You need to be in a room!");
+        break;
+    }
+    if (roomName == "") return;
+    var playerInput = "Your Accusation : " + roomName + " " + a + " " + b;
+    alert(playerInput);
+    //this.setState({ inputs : [playerInput, ...this.state.inputs]})
+    makeAccusation(roomName, a, b);
   }
 
   moveCurrentPlayer(x, y) {
@@ -391,16 +545,16 @@ export class TicTac extends React.Component {
     const cx = this.state.playerLocations[this.props.player_id].startX;
     const cy = this.state.playerLocations[this.props.player_id].startY;
 
-    var index = g[cx][cy].roomPlayers.indexOf(this.props.player_id)
-    g[cx][cy].roomPlayers.splice(index, 1) //Remove current player to old room
-    g[x][y].roomPlayers.push(this.props.player_id) //Add current player to new room
+    var index = g[cx][cy].roomPlayers.indexOf(this.props.player_id);
+    g[cx][cy].roomPlayers.splice(index, 1); //Remove current player to old room
+    g[x][y].roomPlayers.push(this.props.player_id); //Add current player to new room
 
-    this.setState({grid: g, currentX: x, currentY: y})
+    this.setState({ grid: g, currentX: x, currentY: y });
 
     var s = this.state.playerLocations;
     s[this.props.player_id].startX = x;
     s[this.props.player_id].startY = y;
-    this.setState({playerLocations: s})
+    this.setState({ playerLocations: s });
 
     //const cx = this.state.playerLocations[this.props.player_id].startX;
     //const cy = this.state.playerLocations[this.props.player_id].startY;
@@ -458,31 +612,237 @@ export class TicTac extends React.Component {
     return false;
   }
 
+  // {"game_id":0,"player_id":1,"message_type":31,"message":
+  // {"movement_required":true,"movement_possible":true,"valid_locations":
+  // [{"movement_id":1,"location":[0,0]},{"movement_id":2,"location":[0,1]},
+  // {"movement_id":3,"location":[0,2]},{"movement_id":4,"location":[0,3]},
+  // {"movement_id":5,"location":[0,4]},{"movement_id":6,"location":[1,0]},
+  // {"movement_id":7,"location":[1,1]},{"movement_id":8,"location":[1,2]},
+  // {"movement_id":9,"location":[1,3]},{"movement_id":10,"location":[1,4]},
+  // {"movement_id":11,"location":[2,0]},{"movement_id":12,"location":[2,1]},
+  // {"movement_id":13,"location":[2,2]},{"movement_id":14,"location":[2,3]},
+  // {"movement_id":15,"location":[2,4]},{"movement_id":16,"location":[3,0]},
+  // {"movement_id":17,"location":[3,1]},{"movement_id":18,"location":[3,2]},
+  // {"movement_id":19,"location":[3,3]},{"movement_id":20,"location":[3,4]},
+  // {"movement_id":21,"location":[4,0]},{"movement_id":22,"location":[4,1]},
+  // {"movement_id":23,"location":[4,2]},{"movement_id":24,"location":[4,3]},
+  // {"movement_id":25,"location":[4,4]}]}}
+
   handleOnClick(x, y) {
     const cx = this.state.playerLocations[this.props.player_id].startX;
     const cy = this.state.playerLocations[this.props.player_id].startY;
     const currentRoom = this.state.grid[cx][cy];
     const requestedRoom = this.state.grid[x][y];
 
-    console.log("TicTac current x=" + cx + " y=" + cy);
-    console.log("TicTac currentroom" + JSON.stringify(currentRoom));
-    console.log("TicTac requested x=" + x + " y=" + y + " ");
-    console.log("TicTac requestedroom" + JSON.stringify(requestedRoom));
+    //console.log("TicTac current x=" + cx + " y=" + cy);
+    //console.log("TicTac currentroom" + JSON.stringify(currentRoom));
+    //console.log("TicTac requested x=" + x + " y=" + y + " ");
+    //console.log("TicTac requestedroom" + JSON.stringify(requestedRoom));
 
     // Need to store current player, with location to base valid movements on
 
-    const valid = this.validateMove(x, y)
-    if (valid) {
-      this.moveCurrentPlayer(x, y);
+    if (this.state.movementTurn) {
+      //Check against array
+      var myArray = this.state.validOptions;
+      //console.log("ValidOptions: " + JSON.stringify(this.state.validOptions))
+
+      for (let i = 0; i < myArray.length; i++) {
+        //console.log("Array: " + JSON.stringify(myArray[i]))
+        //console.log("Location: " + myArray[i].location);
+        var requestedLoc = [x, y];
+        //console.log("Requested Location: " + requestedLoc);
+        //var found = requestedLoc = myArray[i].location
+        //var found = JSON.stringify(requestedLoc) == JSON.stringify(myArray[i].location)
+        //console.log("Found=" + found)
+        var found =
+          JSON.stringify(requestedLoc) == JSON.stringify(myArray[i].location);
+        if (found) {
+          var index = i;
+          break;
+        }
+      }
+      if (found) {
+        alert("Valid movement");
+
+        //Send movement request with requested room
+        //console.log("Found" + JSON.stringify(myArray[index].movement_id))
+        makeMovement("true", myArray[index].movement_id);
+        this.setState({ movementTurn: false, validOptions: [] });
+      } else {
+        alert("Not valid movement");
+      }
     } else {
-      alert("not valid movement")
+      alert("Not your movement turn");
     }
 
+    // const valid = this.validateMove(x, y)
+    // if (valid) {
+    //   alert("valid movement")
+    //   //this.moveCurrentPlayer(x, y);
+    // } else {
+    //   alert("not valid movement")
+    // }
   }
 
-  filter = memoize(
-    (list) => list.filter(item => item.message_type == 31)
-  );
+  noMovementClick() {
+    makeMovement("false", [-1, -1]);
+    this.setState({ movementTurn: false, validOptions: [] });
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    //console.log("getDerivedStateFromProps");
+    //console.log("getDerivedStateFromProps prop:" + JSON.stringify(props))
+    //console.log("getDerivedStateFromProps state:" + JSON.stringify(state))
+    var newcount = state.count + 1;
+    var newplayerLocations = state.playerLocations;
+    var newGrid = state.grid;
+    var newCurrentX = state.currentX;
+    var newCurrentY = state.currentY;
+    var newmovementTurn = state.movementTurn;
+    var newvalidOptions = state.validOptions;
+
+    var first = props.actions[0];
+    console.log("getDerivedStateFromProps " + JSON.stringify(first));
+    if (first != undefined) {
+      if (first.message_type == 22) {
+        console.log("Found movement broadcast");
+        console.log(JSON.stringify(first.message.character_moved));
+        console.log(JSON.stringify(first.message.weapon_moved));
+        if (first.message.character_moved === true) {
+          alert("KATHRYN")
+        }
+        if (JSON.stringify(first.message.character_moved) == "true") {
+          //alert("Found char move")
+          console.log(
+            "Found char move: " +
+              JSON.stringify(uniqueIDs[first.message.moved_character])
+          );
+          var player = uniqueIDs[first.message.moved_character].image;
+          const cx = newplayerLocations[player].startX;
+          const cy = newplayerLocations[player].startY;
+          console.log("Found Char move: " + player + " " + cx + " " + cy);
+          const nx = 4;
+          const ny = 4;
+          console.log("CharDerived: " + JSON.stringify(newGrid[cx][cy]));
+          console.log("CharDerived: " + JSON.stringify(newGrid[nx][ny]));
+
+          if ((cx != nx) & (cy != cy)) {
+            var index = newGrid[cx][cy].roomPlayers.indexOf(
+              JSON.stringify(player)
+            );
+            console.log(
+              "CharDerivedIndex: " +
+                index +
+                " " +
+                newGrid[cx][cy].roomPlayers.indexOf(player)
+            );
+            newGrid[cx][cy].roomPlayers.splice(index, 1); //Remove current player to old room
+            newGrid[nx][ny].roomPlayers.push(player); //Add current player to new room
+            //NEW TO UPDATE CURRENTX AND CURRENTY if currentplayer
+            newplayerLocations[player].startX = nx;
+            newplayerLocations[player].startY = ny;
+
+            if ((player = props.player_id)) {
+              newCurrentX = nx;
+              newCurrentY = ny;
+            }
+          }
+
+          //console.log("CharDerived: " + JSON.stringify(newGrid));
+          console.log("AfterCharDerived: " + JSON.stringify(newGrid[cx][cy]));
+          console.log("AfterCharDerived: " + JSON.stringify(newGrid[nx][ny]));
+          console.log(
+            "AfterCharDerived: " + JSON.stringify(newplayerLocations)
+          );
+        }
+
+        if (JSON.stringify(first.message.weapon_moved) == "true") {
+          //alert("Found weapon move")
+          console.log(
+            "Found Weap move: " +
+              JSON.stringify(uniqueIDs[first.message.moved_weapon])
+          );
+          var player = uniqueIDs[first.message.moved_weapon].image;
+          const cx = newplayerLocations[player].startX;
+          const cy = newplayerLocations[player].startY;
+          console.log("Found Weap move: " + player + " " + cx + " " + cy);
+          const nx = 4;
+          const ny = 4;
+          console.log("WeapDerived: " + JSON.stringify(newGrid[cx][cy]));
+          console.log("WeapDerived: " + JSON.stringify(newGrid[nx][ny]));
+
+          var index = newGrid[cx][cy].roomWeapons.indexOf(player);
+          newGrid[cx][cy].roomWeapons.splice(index, 1); //Remove current player to old room
+          newGrid[nx][ny].roomWeapons.push(player); //Add current player to new room
+          //NEW TO UPDATE CURRENTX AND CURRENTY if currentplayer
+          newplayerLocations[player].startX = nx;
+          newplayerLocations[player].startY = ny;
+
+          console.log("WeapDerived: " + JSON.stringify(newplayerLocations));
+        }
+
+        // var player = "P" + first.message.moved_character;
+        // const cx = newplayerLocations[player].startX;
+        // const cy = newplayerLocations[player].startY;
+        // const nx = 4;
+        // const ny = 4;
+
+        // console.log("Derived: " + JSON.stringify(newGrid[cx][cy]));
+        // console.log("Derived: " + JSON.stringify(newGrid[nx][ny]));
+        // var index = newGrid[cx][cy].roomPlayers.indexOf(player);
+        // newGrid[cx][cy].roomPlayers.splice(index, 1); //Remove current player to old room
+        // newGrid[nx][ny].roomPlayers.push(player); //Add current player to new room
+        // //NEW TO UPDATE CURRENTX AND CURRENTY if currentplayer
+        // newplayerLocations[player].startX = nx;
+        // newplayerLocations[player].startX = ny;
+
+        // if ((player = props.player_id)) {
+        //   newCurrentX = nx;
+        //   newCurrentY = ny;
+        // }
+
+        // console.log("Derived: " + player);
+        // console.log("Derived: " + props.player_id);
+        // console.log("Derived: " + JSON.stringify(newGrid));
+        // console.log("Derived: " + JSON.stringify(newplayerLocations));
+        // console.log("Player location state:" + JSON.stringify(state.playerLocations))
+        // console.log("Player location:" + JSON.stringify(state.playerLocations[player]))
+        // newplayerLocations[player].startX = 5
+        // newplayerLocations[player].startY = 5
+        // console.log("Player new location:" + JSON.stringify(newplayerLocations[player]))
+        // console.log("Moving P1 to 11")
+        //var newplayerLocations = state.playerLocations
+        // newplayerLocations[player].startX = 1
+        // newplayerLocations[player].startY = 1
+        // console.log("Player new location:" + JSON.stringify(newplayerLocations[player]))
+      }
+      if (first.message_type == 31) {
+        newmovementTurn = true;
+        newvalidOptions = first.message.valid_locations;
+      }
+    }
+
+    return {
+      count: newcount,
+      grid: newGrid,
+      playerLocations: newplayerLocations,
+      currentX: newCurrentX,
+      currentY: newCurrentY,
+      movementTurn: newmovementTurn,
+      validOptions: newvalidOptions,
+    };
+
+    // if (props.url !== state.prevUrl) {
+    //   return {
+    //     isLoading: true,
+    //     prevUrl: props.url
+    //   };
+    // }
+
+    return null;
+  }
+
+  filter = memoize((list) => list.filter((item) => item.message_type == 31));
 
   render() {
     const style = {
@@ -517,7 +877,9 @@ export class TicTac extends React.Component {
         </tr>
       );
     });
-
+    //console.log("Render");
+    //console.log("Render:" + JSON.stringify(this.state))
+    //console.log("Render:" + this.state.active)
     //console.log("TicTac: props playerid = " + this.props.player_id)
     //var test = this.props.player_id;
     //console.log("TicTac: test playerid = " + test)
@@ -531,16 +893,105 @@ export class TicTac extends React.Component {
     // const cy = this.state.playerLocations[this.props.player_id].startY;
     // console.log(cx + " " + cy)
 
-    const filteredList = this.filter(this.props.actions);
-    console.log("Filtered" + JSON.stringifyfilteredList);
+    //const filteredList = this.filter(this.props.actions);
+    // console.log("Filtered" + JSON.stringifyfilteredList);
 
     return (
       <div style={{ textAlign: "center" }}>
-        <p>Player = {this.props.player_id} | X = {this.state.playerLocations[this.props.player_id].startX} | Y = {this.state.playerLocations[this.props.player_id].startY}</p>
+        <p>
+          Player = {this.props.player_id} | X ={" "}
+          {this.state.playerLocations[this.props.player_id].startX} | Y ={" "}
+          {this.state.playerLocations[this.props.player_id].startY}
+        </p>
+
+        <div
+          style={{
+            textAlign: "center",
+            width: "100%",
+            height: "150px",
+            margin: "10px",
+          }}
+        >
+          <div
+            style={{
+              textAlign: "center",
+              width: "300px",
+              "Min-Height": "150px",
+              "border-width": "5px",
+              "border-color": "red",
+              "border-style": "outset",
+              margin: "0 auto",
+              position: "relative",
+            }}
+          >
+            <span>
+              <h3>Suggestion / Accusation Box</h3>
+              <select
+                name="GuessedUser"
+                id="GuessedUser"
+                style={{ margin: "10px", marginLeft: "0px" }}
+              >
+                <option value="scarlet" selected="selected">
+                  Miss Scarlet
+                </option>
+                <option value="green">Mr. Green</option>
+                <option value="mustard">Colonel Mustard</option>
+                <option value="plum">Prof. Plum</option>
+                <option value="peacock">Mrs. Peacock</option>
+                <option value="white">Mrs. White</option>
+              </select>
+              <select
+                name="GuessedWeapon"
+                id="GuessedWeapon"
+                style={{ margin: "10px" }}
+              >
+                <option value="candlestick" selected="selected">
+                  candlestick
+                </option>
+                <option value="revolver">revolver</option>
+                <option value="knife">knife</option>
+                <option value="pipe">pipe</option>
+                <option value="rope">rope</option>
+                <option value="wrench">wrench</option>
+              </select>
+              <br />
+              <button
+                name="sgbtn"
+                id="sgbtn"
+                onClick={() => {
+                  this.suggestionClicked(
+                    document.getElementById("GuessedUser").value,
+                    document.getElementById("GuessedWeapon").value
+                  );
+                }}
+              >
+                Make Suggestion
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button
+                name="acbtn"
+                id="acbtn"
+                onClick={() => {
+                  this.accusationClicked(
+                    document.getElementById("GuessedUser").value,
+                    document.getElementById("GuessedWeapon").value
+                  );
+                }}
+              >
+                Make Accusation
+              </button>
+              <br />
+              &nbsp;&nbsp;&nbsp;
+            </span>
+          </div>
+        </div>
+        <br />
 
         <table cellSpacing="0" id="table" style={style}>
           <tbody>{rows}</tbody>
         </table>
+        <br />
+        <button onClick={this.noMovementClick}>No Movement</button>
         <br />
         {/* <button style={{margin:"auto"}} onClick={this.handleReset}>reset</button>
         <br /><br />

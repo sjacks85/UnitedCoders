@@ -62,7 +62,7 @@ function makeMovement(move, room) {
         
     var movement = {
         "movement_made" : move,
-        "movement_id": 1, //KPC - Hardcoded
+        "movement_id": room,
     };
     console.log('movement request: ' + move + room)    
     console.log("makeMovement: " + JSON.stringify(movement));
@@ -70,6 +70,26 @@ function makeMovement(move, room) {
     //socket.emit('game', movement);
     socket.emit(41, movement)
 }
+
+// // Messages to server from client, called by user input
+// function makeMovement(move, room) {
+
+//     // “movement_made”:
+//     // “movement_id”:
+//     // }
+//     // movement_made (bool) - True if the player has moved to a new location, false otherwise. 
+//     // new_location (int) - The unique ID of the chosen movement option. 
+    
+// var movement = {
+//     "movement_made" : move,
+//     "movement_id": 1, //KPC - Hardcoded
+// };
+// console.log('movement request: ' + move + room)    
+// console.log("makeMovement: " + JSON.stringify(movement));
+// //socket.emit('movement', movement);
+// //socket.emit('game', movement);
+// socket.emit(41, movement)
+// }
 
 function makeSuggestion(room, person, weapon) {
 
