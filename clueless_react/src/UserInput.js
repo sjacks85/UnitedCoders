@@ -1,5 +1,10 @@
 import React from "react";
-import { makeMovement, makeSuggestion, makeAccusation, makeDisprove } from './ClientManager';
+import {
+  makeMovement,
+  makeSuggestion,
+  makeAccusation,
+  makeDisprove,
+} from "./ClientManager";
 
 class UserInput extends React.Component {
   constructor(props) {
@@ -9,10 +14,8 @@ class UserInput extends React.Component {
       response: "",
       inputs: [],
     };
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.makeSuggestion = this.makeSuggestion.bind(this); // Use when we have endpoints, and back end logic to work with.
   }
 
   handleChange(event) {
@@ -28,42 +31,14 @@ class UserInput extends React.Component {
     // Notify User that their action was registered.
     let userInput = this.state.value;
     this.setState({ response: userInput });
-    //alert("Player action registered: " + this.state.value);
-   
+
     alert("User Input: " + this.state.value);
     console.log("User Input: " + this.state.value);
     this.parseMessage(this.state.value);
     this.setState({
-      value: ""
+      value: "",
     });
     event.preventDefault();
-  }
-
-  makeSuggestion() {
-    const _this = this;
-
-    // let jsonBody = '{"Test":"Test"}';
-    // //console.log(jsonBody);
-    // fetch(
-    //   "http://node-express-env.eba-m3dz2nxw.us-east-2.elasticbeanstalk.com/test",
-    //   {
-    //     method: "GET",
-    //     withCredentials: true,
-    //     //credentials: "include",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     //body: jsonBody,
-    //   }
-    // )
-    //   .then((response) => response.json())
-    //   .then((jsonResponse) => {
-    //     console.log("Response: " + JSON.stringify(jsonResponse));
-    //     _this.setState({
-    //       response: JSON.stringify(jsonResponse),
-    //     });
-    //   });
-    // console.log("Response: " + this.state.response);
   }
 
   parseMessage(playerInput) {
@@ -72,47 +47,30 @@ class UserInput extends React.Component {
     // Can use to differentiate player actions for the back end.
     // Can place fetch in each block specific to the player action.
     if (parsedPlayerInput[0] === "Movement:") {
-      //alert("Player Moved to the " + parsedPlayerInput[1]);
-      this.setState({ inputs : [playerInput, ...this.state.inputs]})
-      makeMovement(parsedPlayerInput[1], parsedPlayerInput[2])
+      this.setState({ inputs: [playerInput, ...this.state.inputs] });
+      makeMovement(parsedPlayerInput[1], parsedPlayerInput[2]);
     } else if (parsedPlayerInput[0] === "Suggestion:") {
-      // alert(
-      //   "Player suggested that " +
-      //     parsedPlayerInput[1] +
-      //     " commited the murder in the " +
-      //     parsedPlayerInput[2] +
-      //     " using a " +
-      //     parsedPlayerInput[3] +
-      //     "!"
-      // );
-      this.setState({ inputs : [playerInput, ...this.state.inputs]})
-      makeSuggestion(parsedPlayerInput[1], parsedPlayerInput[2], parsedPlayerInput[3])
+      this.setState({ inputs: [playerInput, ...this.state.inputs] });
+      makeSuggestion(
+        parsedPlayerInput[1],
+        parsedPlayerInput[2],
+        parsedPlayerInput[3]
+      );
     } else if (parsedPlayerInput[0] === "Accusation:") {
-      // alert(
-      //   "Player accused " +
-      //     parsedPlayerInput[1] +
-      //     " of committing the murder in the " +
-      //     parsedPlayerInput[2] +
-      //     " using a " +
-      //     parsedPlayerInput[3] +
-      //     "!"
-      // );
-      this.setState({ inputs : [playerInput, ...this.state.inputs]})
-      makeAccusation(parsedPlayerInput[1], parsedPlayerInput[2], parsedPlayerInput[3], parsedPlayerInput[4])
+      this.setState({ inputs: [playerInput, ...this.state.inputs] });
+      makeAccusation(
+        parsedPlayerInput[1],
+        parsedPlayerInput[2],
+        parsedPlayerInput[3],
+        parsedPlayerInput[4]
+      );
     } else if (parsedPlayerInput[0] === "Disprove:") {
-      // alert(
-      //   "Player disproved with card " +
-      //     parsedPlayerInput[1] + 
-      //     "!"
-      // );
-      this.setState({ inputs : [playerInput, ...this.state.inputs]})
-      makeDisprove(parsedPlayerInput[1], parsedPlayerInput[2])
+      this.setState({ inputs: [playerInput, ...this.state.inputs] });
+      makeDisprove(parsedPlayerInput[1], parsedPlayerInput[2]);
     } else {
       alert("This move isn't recognized.");
     }
   }
-
-  // <div>Last Action Taken = {this.state.response}</div>
 
   render() {
     return (
@@ -128,12 +86,12 @@ class UserInput extends React.Component {
         </form>
         <p> </p>
         <div>
-        <h4>Previous Inputs</h4>
-        <ul>
-        {this.state.inputs.map(elem => (
-          <li>{elem}</li>
-        ))}
-        </ul>
+          <h4>Previous Inputs</h4>
+          <ul>
+            {this.state.inputs.map((elem) => (
+              <li>{elem}</li>
+            ))}
+          </ul>
         </div>
       </React.Fragment>
     );
