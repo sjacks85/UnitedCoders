@@ -1,8 +1,11 @@
+var Deck = require('./support_classes/Deck.js');
+
 class SuggestionManager {
 
-    constructor(communication, players) {
-        //this.socket = socket;
+    constructor(communication, gameboard, players) {
+        //will have to pass in cards for string mapping too
         this.communication = communication;
+        this.gameboard = gameboard;
         this.players = players;
         this.suggestingPlayer;
     }
@@ -10,46 +13,34 @@ class SuggestionManager {
     suggest(player) {
 
         console.log('\n\t---SuggestionManager starts suggestion logic---');
-        this.suggestingPlayer = player;
-        return new Promise((resolve) => {
-            this.promptSuggestion(player).then((suggestion) => {
-                resolve(suggestion);
+        //only prompt for a suggestion if the player is in a room and can make a suggestion
+        if (this.gameboard.isInRoom(player.character)) {
+            this.suggestingPlayer = player;
+            return new Promise((resolve) => {
+                this.promptSuggestion(player).then((suggestion) => {
+                    resolve(suggestion);
+                });
             });
-
-
-
-            //iterate through each player
-            //iterate through this.players starting at index
-
-            // let playerIndex = 0;
-            // for (var i = 0; i < this.players.length; i++) {
-            //     if (this.players[i] === player) {
-            //         playerIndex = i;
-            //     }
-            // }
-
-            // for (var i = 0; i < this.players.length; i++) {
-            //     var player = (i + playerIndex) % this.players.length;
-            //     this.askDisprove(player, suggestion);
-            // }
-
-        });
-
+        }
     }
 
     promptSuggestion(player) {
         return new Promise((resolve) => {
 
-            
             const handler = (suggestion) => {
-                var suggestion_string = "Player " + player.username + " suggested suspect: " + suggestion.suggested_character +
-                    " weapon: " + suggestion.suggested_weapon + " room: " + suggestion.suggested_room;
+                var character_string = Deck.getCardNameById(suggestion.suggested_character);
+                var weapon_string = Deck.getCardNameById(suggestion.suggested_weapon);
+                var room_string = Deck.getCardNameById(suggestion.suggested_room);
+                var suggestion_string = "Player " + player.username + " suggested suspect: " + character_string +
+                    " weapon: " + weapon_string + " room: " + room_string;
                 console.log('Suggestion:', suggestion_string);
                 var broadcast = {
                     "broadcast_message": suggestion_string
                 };
 
                 this.communication.send(0, 21, broadcast);
+
+                this.gameboard.handleSuggestionMovement(suggestion.suggested_character, suggestion.suggested_weapon, suggestion.suggested_room);
 
                 this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
                     resolve(done);
@@ -59,11 +50,8 @@ class SuggestionManager {
                 // return;
             }
 
-            //need to figure out how to keep track of the rooms players are in for this validation
-            var suggest_request = {
-                "suggested_room":""
-            };
-
+            //suggestion request is an empty message with the correct message ID
+            var suggest_request = {};
             this.communication.send(player.id, 32, suggest_request, handler, 42);
         });
     }

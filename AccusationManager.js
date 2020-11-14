@@ -1,3 +1,5 @@
+var Deck = require('./support_classes/Deck.js');
+
 class AccusationManager {
 
     constructor(communication) {
@@ -20,8 +22,11 @@ class AccusationManager {
                 //console.log(accusation)
                 if (accusation.accuse_made == "true") {
                     //broadcast accusation
-                    var accusation_string = "Player " + player.username + " has made an accusation of suspect: " + accusation.accused_character +
-                        " weapon: " + accusation.accused_room + " room: " + accusation.accused_room;
+                    var character_string = Deck.getCardNameById(suggestion.suggested_character);
+                    var weapon_string = Deck.getCardNameById(suggestion.suggested_weapon);
+                    var room_string = Deck.getCardNameById(suggestion.suggested_room);
+                    var accusation_string = "Player " + player.username + " has made an accusation of suspect: " + character_string +
+                        " weapon: " + weapon_string + " room: " + room_string;
                     console.log("Player accusation:", accusation_string);
                     var accusation_broadcast = {
                         "broadcast_message": accusation_string
@@ -61,10 +66,8 @@ class AccusationManager {
                 // return;
             }
 
-            //this will prob go away eventually, not technically in ICD
-            var accusation_request = {
-                "accusation":""
-            };
+            //accusation request is an empty message with the correct message ID
+            var accusation_request = {};
 
             this.communication.send(player.id, 34, accusation_request, handler, 44);
         });
