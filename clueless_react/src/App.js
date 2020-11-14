@@ -3,6 +3,7 @@ import "./App.css";
 import Divider from "./Divider";
 import Gameboard from "./Gameboard";
 import { startClient, socket } from "./ClientManager";
+import NoteBook from "./NoteBook";
 
 class App extends React.Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class App extends React.Component {
         <div className="bottom">
           <h1>Gameboard</h1>
           <p>Username = {window.location.port}</p>
+          <NoteBook></NoteBook>
           <Gameboard
             actions={this.state.actions}
             player_id={"P" + this.state.player_id}
