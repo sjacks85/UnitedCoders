@@ -30,32 +30,58 @@ var uniqueIDs = [
   { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0 },
 ];
 
+var startHand = [
+  { type: "character", name: "Miss Scarlet", assigned: false },
+  { type: "character", name: "Mr. Green", assigned: false },
+  { type: "character", name: "Colonel Mustard", assigned: false },
+  { type: "character", name: "Prof. Plum", assigned: false },
+  { type: "character", name: "Mrs. Peacock", assigned: false },
+  { type: "character", name: "Mrs. White", assigned: false },
+  { type: "weapon", name: "Candlestick", assigned: false },
+  { type: "weapon", name: "Revolver", assigned: false },
+  { type: "weapon", name: "Knife", assigned: false },
+  { type: "weapon", name: "Pipe", assigned: false },
+  { type: "weapon", name: "Rope", assigned: false },
+  { type: "weapon", name: "Wrench", assigned: false },
+  { type: "room", name: "Study", assigned: false },
+  { type: "room", name: "Hall", assigned: false },
+  { type: "room", name: "Lounge", assigned: false },
+  { type: "room", name: "Dinning", assigned: false },
+  { type: "room", name: "Billiard", assigned: false },
+  { type: "room", name: "Library", assigned: false },
+  { type: "room", name: "Conservatory", assigned: false },
+  { type: "room", name: "Ballroom", assigned: false },
+  { type: "room", name: "Kitchen", assigned: false },
+];
+
 export class Box extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       actions: this.props.actions,
-      turn: "",
+      assignedCards: false,
+      playerHand: startHand,
+      turn: this.props.turn,
       // Tracks current player location
       currentLocation: this.props.currentLocation,
     };
 
-    this.noMovementClick = this.noMovementClick.bind(this);
     this.suggestionClicked = this.suggestionClicked.bind(this);
     this.accusationClicked = this.accusationClicked.bind(this);
+    this.noMovementClick = this.noMovementClick.bind(this);
   }
 
   createSelectItems(type) {
-    let items =
-      uniqueIDs.map((item, i) => {
-        return (
-          item.type == type &&
+    let items = this.state.playerHand.map((item, i) => {
+      return (
+        item.type == type && item.assigned == true && (
           <option key={i} value={i}>
-            {item.name} {i}
+            {item.name}
           </option>
-        );
-      }, this);
-    return items
+        )
+      );
+    }, this);
+    return items;
   }
 
   onDropdownSelected(e) {
@@ -64,11 +90,40 @@ export class Box extends React.Component {
     //here you will see the current selected value of the select input
   }
 
-  suggestionClicked(a, b) {
-    var aindex = Number(a) + 1;
-    var bindex = Number(b) + 1;
+  static getDerivedStateFromProps(props, state) {
+    //console.log("CARDS " + JSON.stringify(state.playerCards));
+    var newassignedCards = state.assignedCards;
+    var newplayerHand = state.playerHand;
 
-    console.log(a + " " + JSON.stringify(uniqueIDs[aindex])+ " " + b + " " + JSON.stringify(uniqueIDs[bindex]));
+    //console.log("CARDS " + state.assignedCards);
+    //console.log("CARDS " + props.cards + " " + props.cards.length);
+    if (state.assignedCards == false && props.cards.length != 0) {
+     // console.log("ASSIGNMENT");
+      var i;
+      for (i = 0; i < props.cards.length; i++) {
+         var index = Number(props.cards[i])
+         newplayerHand[index].assigned = true;
+         //console.log("CARD " + props.cards[i])
+       }
+
+      newassignedCards = true;
+    }
+    return { assignedCards: newassignedCards, playerHand: newplayerHand };
+  }
+
+  suggestionClicked(a, b) {
+    var aindex = Number(a);
+    var bindex = Number(b);
+
+    console.log(
+      a +
+        " " +
+        JSON.stringify(uniqueIDs[aindex]) +
+        " " +
+        b +
+        " " +
+        JSON.stringify(uniqueIDs[bindex])
+    );
 
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
@@ -97,10 +152,10 @@ export class Box extends React.Component {
         roomName = "library";
         break;
       case "32":
-        roomName = "study";
+        roomName = "lounge";
         break;
       case "33":
-        roomName = "lounge";
+        roomName = "study";
         break;
       default:
         alert("You need to be in a room!");
@@ -109,15 +164,22 @@ export class Box extends React.Component {
     if (roomName == "") return;
     var playerInput = "Your Suggestion: " + roomName + " " + a + " " + b;
     alert(playerInput);
-    //this.setState({ inputs : [playerInput, ...this.state.inputs]})
     makeSuggestion(roomName, a, b);
   }
 
   accusationClicked(a, b) {
-    var aindex = Number(a) + 1;
-    var bindex = Number(b) + 1;
+    var aindex = Number(a);
+    var bindex = Number(b);
 
-    console.log(a + " " + JSON.stringify(uniqueIDs[aindex])+ " " + b + " " + JSON.stringify(uniqueIDs[bindex]));
+    console.log(
+      a +
+        " " +
+        JSON.stringify(uniqueIDs[aindex]) +
+        " " +
+        b +
+        " " +
+        JSON.stringify(uniqueIDs[bindex])
+    );
     //alert(a);
     //alert(b);
     //alert(JSON.stringify(this.state.grid[cx][cy]));
@@ -163,37 +225,85 @@ export class Box extends React.Component {
   }
 
   noMovementClick() {
-    makeMovement("false", [-1, -1]);
+    console.log("noMovmentClick");
+    makeMovement("false", -1);
   }
 
-  static getDerivedStateFromProps(props, state) {
-    var newTurn = state.turn;
-    var first = props.actions[0];
+  // Suggestion Response Functions Starts
+  ShowSuggestionWindow(suggestionTxt) {
+    document.getElementById("MyCardsType").selectedIndex = "0";
+    document.getElementById("suggestiondetail").innerHTML = suggestionTxt;
+    this.updateDisproveUI();
+    document.getElementById("suggestionresponsediv").style.display = "";
+  }
 
-    if (first != undefined) {
-      if (first.message_type == 31) {
-        newTurn = "Movement";
-      } else if (first.message_type == 32) {
-        newTurn = "Suggestion";
-      } else if (first.message_type == 33) {
-        newTurn = "Disprove";
-      } else if (first.message_type == 34) {
-        newTurn = "Accusation";
-      } else if (first.message_type == 61) {
-        newTurn = "End of Game";
-      } else {
-        newTurn = "Other Players Turn";
-      }
+  updateDisproveUI() {
+    var mtVal = document.getElementById("MyCardsType").value;
+    if (mtVal == "-1") {
+      document.getElementById("ResponseUser").style.display = "none";
+      document.getElementById("ResponseWeapon").style.display = "none";
+      document.getElementById("ResponseRoom").style.display = "none";
     }
-    return { turn: newTurn };
+    if (mtVal == "0") {
+      document.getElementById("ResponseUser").style.display = "";
+      document.getElementById("ResponseWeapon").style.display = "none";
+      document.getElementById("ResponseRoom").style.display = "none";
+    }
+    if (mtVal == "1") {
+      document.getElementById("ResponseUser").style.display = "none";
+      document.getElementById("ResponseWeapon").style.display = "";
+      document.getElementById("ResponseRoom").style.display = "none";
+    }
+    if (mtVal == "2") {
+      document.getElementById("ResponseUser").style.display = "none";
+      document.getElementById("ResponseWeapon").style.display = "none";
+      document.getElementById("ResponseRoom").style.display = "";
+    }
+  }
+
+  sendSuggestionResponse() {
+    var mtVal = document.getElementById("MyCardsType").value;
+    var selectedvalue = -1;
+    if (mtVal == "-1") {
+      // Send Socket Response that this user doesn't have any of the suggested items.
+      makeDisprove(false, -1);
+    } else {
+      if (mtVal == "0") {
+        selectedvalue = document.getElementById("ResponseUser").value;
+        // Send Socket Response that this user has the suggested user (user id is in selectedvalue).
+      }
+      if (mtVal == "1") {
+        selectedvalue = document.getElementById("ResponseWeapon").value;
+        // Send Socket Response that this user has the suggested Weapon (Weapon id is in selectedvalue).
+      }
+      if (mtVal == "2") {
+        selectedvalue = document.getElementById("ResponseRoom").value;
+        // Send Socket Response that this user has the suggested Room (Room id is in selectedvalue).
+      }
+      makeDisprove(true, selectedvalue);
+    }
+    document.getElementById("suggestionresponsediv").style.display = "none";
+    alert(selectedvalue);
   }
 
   render() {
     return (
       <div style={{ textAlign: "center" }}>
-        <select onChange={this.onDropdownSelected}> {this.createSelectItems("character")}</select>
-        <select onChange={this.onDropdownSelected}> {this.createSelectItems("weapon")}</select>
-        <select onChange={this.onDropdownSelected}> {this.createSelectItems("room")}</select>
+        {/* <p>!{JSON.stringify(this.props.cards)}!</p>
+        <p>!{JSON.stringify(this.state.assignedCards)}!</p>
+        <p>!{JSON.stringify(this.state.playerHand)}!</p>
+        <select onChange={this.onDropdownSelected}>
+          {" "}
+          {this.createSelectItems("character")}
+        </select>
+        <select onChange={this.onDropdownSelected}>
+          {" "}
+          {this.createSelectItems("weapon")}
+        </select>
+        <select onChange={this.onDropdownSelected}>
+          {" "}
+          {this.createSelectItems("room")}
+        </select> */}
         <div
           style={{
             textAlign: "center",
@@ -274,8 +384,108 @@ export class Box extends React.Component {
               &nbsp;&nbsp;&nbsp;
             </span>
           </div>
-          <p>{this.props.location}</p>
         </div>
+        <br />
+        <button
+          onClick={() => {
+            this.ShowSuggestionWindow("This is the suggestion.");
+          }}
+        >
+          Disprove
+        </button>{" "}
+        <div
+          id="suggestionresponsediv"
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "150%",
+            "background-color": "grey",
+            opacity: ".98",
+            "z-index": "1000",
+            display: "none",
+          }}
+        >
+          <br />
+          <br />
+          <h2 name="suggestiondetail" id="suggestiondetail"></h2>
+          <select
+            name="MyCardsType"
+            id="MyCardsType"
+            style={{ margin: "10px", marginLeft: "0px" }}
+            onChange={() => {
+              this.updateDisproveUI();
+            }}
+          >
+            <option value="-1" selected="selected">
+              I don't have any of the suggested cards
+            </option>
+            <option value="0">I have suggested Player card : </option>
+            <option value="1">I have suggested Weapon card : </option>
+            <option value="2">I have suggested Room card : </option>
+          </select>
+          <select
+            name="ResponseUser"
+            id="ResponseUser"
+            style={{ margin: "10px", marginLeft: "0px", display: "none" }}
+          >
+            {this.createSelectItems("character")}
+            {/* <option value="0" selected="selected">
+              Miss Scarlet
+            </option>
+            <option value="1">Mr. Green</option>
+            <option value="2">Colonel Mustard</option>
+            <option value="3">Prof. Plum</option>
+            <option value="4">Mrs. Peacock</option>
+            <option value="5">Mrs. White</option> */}
+          </select>
+          <select
+            name="ResponseWeapon"
+            id="ResponseWeapon"
+            style={{ margin: "10px", display: "none" }}
+          >
+            {this.createSelectItems("weapon")}
+            {/* <option value="6" selected="selected">
+              Candlestick
+            </option>
+            <option value="7">Revolver</option>
+            <option value="8">Knife</option>
+            <option value="9">Pipe</option>
+            <option value="10">Rope</option>
+            <option value="11">Wrench</option> */}
+          </select>
+          <select
+            name="ResponseRoom"
+            id="ResponseRoom"
+            style={{ margin: "10px", display: "none" }}
+          >
+            {this.createSelectItems("room")}
+            {/* <option value="20" selected="selected">
+              Kitchen
+            </option>
+            <option value="19">Ballroom</option>
+            <option value="18">Conservatory</option>
+            <option value="15">Dining Room</option>
+            <option value="13">Hall</option>
+            <option value="16">Billiards Room</option>
+            <option value="17">Library</option>
+            <option value="14">Lounge</option>
+            <option value="12">Study</option> */}
+          </select>
+          <button
+            onClick={() => {
+              this.sendSuggestionResponse();
+            }}
+          >
+            Disprove
+          </button>
+          <button onClick={this.noMovementClick()}>No Movement</button>
+        </div>
+        {/*Suggestion Response START*/}
+        <br />
+        <br />
+        <br />
       </div>
     );
   }

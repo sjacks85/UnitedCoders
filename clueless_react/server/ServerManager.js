@@ -55,19 +55,19 @@ function assignCards() {
     };
 
     var player1 = {
-        "suspect": "Mr.Green",
-        "weapon": "Rope",
-        "room": "Kitchen"
+        "suspect": 0,
+        "weapon": 10,
+        "room": 16
     };
     var player2 = {
-        "suspect": "Ms. Peacock",
-        "weapon": "Revolver",
-        "room": "Study"
+        "suspect": 1,
+        "weapon": 9,
+        "room": 15
     };
     var player3 = {
-        "suspect": "Professor Plum",
-        "weapon": "Candlestick",
-        "room": "Ballroom"
+        "suspect": 2,
+        "weapon": 7,
+        "room": 10
     };
 
     hard_code_cards = [player1, player2, player3];
@@ -97,7 +97,8 @@ function assignCards() {
           //right now everyone is playing as the card they get
           "character": hard_code_cards[i].suspect,
           //"cards": [suspect, weapon, room],
-          "cards": hard_code_cards[i]
+          //"cards": hard_code_cards[i]
+          "cards": ["1", "10", "18"]
       };
 
       //broadcast these, have clients look for matching username to get player id for future

@@ -23,7 +23,8 @@ class MovementManager {
                     "moved_character": player.id,
                     "moved_weapon": 7,
                     "new_character_location": movement.new_location,
-                    "new_weapon_location": []
+                    new_location_x: 2,
+                    new_location_y: 2,
                 };
                 this.communication.send(0, 22, move_broadcast);
                 resolve(movement);
