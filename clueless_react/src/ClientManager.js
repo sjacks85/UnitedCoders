@@ -1,13 +1,4 @@
-
-import { setMessage } from './Message.js'
-import React, { Component } from 'react';
-
 var io = require('socket.io-client');
-
-// var CARDS = require('./game_data/cards.json');
-
-var myArgs = process.argv.slice(2);
-var cards;
 
 // Start socket and export it for others to use
 var url = "http://localhost:5000";
@@ -16,40 +7,12 @@ export { socket }
 
 // Called by App to join
 const startClient = function(port) {
-    
+
     socket.on('connect', function () {
         socket.emit('join', port);
     });
 
 };
-
-// socket.on('turn', data => {
-//     console.log(data);
-//     alert("CLIENTMANAGER: Your turn to make suggestion");
-    
-//     var suggestion = {
-//         "suspect": "peacock",
-//         "weapon": "gun",
-//         "room": "kitchen"
-//     };
-
-//     //sendSuggestion(suggestion);
-// });
-
-socket.on('assignCards', data => {
-    cards = data;
-    console.log("Cards:", cards);
-});
-
-socket.on('Do you have?', suggestion => {
-    alert('do you have any of these cards?: ' + JSON.stringify(suggestion))
-    socket.emit('I have gun');
-});
-
-socket.on("Has your card", (response) => {
-    alert('Has your card:' + response)
-    console.log(response)
-})
 
 // Messages to server from client, called by user input
 function makeMovement(move, room) {
@@ -66,30 +29,8 @@ function makeMovement(move, room) {
     };
     console.log('movement request: ' + move + room)    
     console.log("makeMovement: " + JSON.stringify(movement));
-    //socket.emit('movement', movement);
-    //socket.emit('game', movement);
     socket.emit(41, movement)
 }
-
-// // Messages to server from client, called by user input
-// function makeMovement(move, room) {
-
-//     // “movement_made”:
-//     // “movement_id”:
-//     // }
-//     // movement_made (bool) - True if the player has moved to a new location, false otherwise. 
-//     // new_location (int) - The unique ID of the chosen movement option. 
-    
-// var movement = {
-//     "movement_made" : move,
-//     "movement_id": 1, //KPC - Hardcoded
-// };
-// console.log('movement request: ' + move + room)    
-// console.log("makeMovement: " + JSON.stringify(movement));
-// //socket.emit('movement', movement);
-// //socket.emit('game', movement);
-// socket.emit(41, movement)
-// }
 
 function makeSuggestion(room, person, weapon) {
 
@@ -98,8 +39,6 @@ function makeSuggestion(room, person, weapon) {
         // }
         // suggested_character (String) - The name of the character that was suggested.
         // suggested_weapon (String) - The name ID if the weapon that was suggested.
-
-        //KPC - Added room for skeletal
         
     var suggestion = {
         "suggested_room": room,
