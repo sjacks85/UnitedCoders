@@ -1,16 +1,17 @@
 var MovementManager = require('./MovementManager.js');
 var SuggestionManager = require('./SuggestionManager.js');
 var AccusationManager = require('./AccusationManager.js');
+var GameBoard = require('./GameBoard.js');
 const { resolve } = require('path');
 
 class TurnManager {
 
     constructor(communication, players) {
-        this.communication = communication;
         this.players = players;
 
-        this.movementManager = new MovementManager(communication);
-        this.suggestionManager = new SuggestionManager(communication, players);
+        this.gameBoard = new GameBoard(communication);
+        this.movementManager = new MovementManager(communication, this.gameBoard, players);
+        this.suggestionManager = new SuggestionManager(communication, this.gameBoard, players);
         this.accusationManager = new AccusationManager(communication);
     }
 
