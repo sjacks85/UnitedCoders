@@ -46,37 +46,67 @@ class SuggestionManager {
                 this.gameboard.handleSuggestionMovement(suggestion.suggested_character, suggestion.suggested_weapon, suggestion.suggested_room);
 
                 //ask each next player
-                for (let i = 0, p = Promise.resolve(); i < this.players.length - 1; i++) {
-                    console.log("TOPFOR " + i)
-                    p = p.then(() => this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
-                        
-                        if (done.can_disprove === "false") {
-                            console.log("CURRENT PLAYER COULD NOT DISPROVE, MOVING TO THE NEXT")
-                            player = this.getNextPlayer(player);
-                        } else {
-                            console.log("GOING INTO ELSE STATEMENT")
-                            //BREAK OUT OF THE LOOP HERE SINCE A PLAYER WAS ABLE TO DISPROVE!!!
-                            resolve(done);
-                            console.log("AFTER DONE")
-                            resolve(suggestion);
-                            console.log("AFTER SUGGESTION")
-                        }
-                        console.log("BEFORE i=" + i)
-                        i = 20;
-                        console.log("AFTER i=" + i)
+                // var done = false;
+                // for (let i = 0, p = Promise.resolve(); i < this.players.length - 1; i++) {
 
-                        // if no player can disprove
-                        if (i === this.players.length - 2) {
-                            console.log("ENDING DISPROVE")
+                //     console.log("DONE:", done)
+                //     if (done) {
+                //         resolve(done);
+                //         resolve(suggestion);
+                //         break;
+                //     }
+
+                //     p = p.then(() => this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
+
+
+                //         if (done.can_disprove === false) {
+                //             console.log("CURRENT PLAYER COULD NOT DISPROVE, MOVING TO THE NEXT")
+                //             player = this.getNextPlayer(player);
+                //         } else {
+                //             console.log("GOING INTO ELSE STATEMENT")
+                //             //BREAK OUT OF THE LOOP HERE SINCE A PLAYER WAS ABLE TO DISPROVE!!!
+                //             done = true;
+                //             resolve(done);
+                //             resolve(suggestion);
+
+                //         }
+
+                //         // if no player can disprove
+                //         if (i === this.players.length - 2) {
+                //             console.log("ENDING DISPROVE")
+                //             resolve(done);
+                //             resolve(suggestion);
+                //         }
+                //     }));
+
+                //     console.log("GETTING HEREEEEEEEEE")
+                // }
+
+
+
+
+
+                var count = 0;
+                const doNextPromise = () => {
+                    this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
+
+                        if (done.can_disprove === 'false' && count < this.players.length - 2) {
+                            
+                            player = this.getNextPlayer(player);
+                            count++;
+                            doNextPromise();
+                        } else {
                             resolve(done);
                             resolve(suggestion);
+
                         }
-                        console.log("BOTTOMDONE")
-                    }));
-                    console.log("BOTTOMFOR " + i)
-                   // resolve(suggestion);
+
+                    });
                 }
+
+                doNextPromise();
             }
+
 
             //suggestion request is an empty message with the correct message ID
             var suggest_request = {};
@@ -96,21 +126,14 @@ class SuggestionManager {
 
                 this.communication.send(this.suggestingPlayer.id, 51, disprove_result);
 
-                var disprove_result_string;
-                if (data.can_disprove) {
-                    disprove_result_string = "Player " + player.username + " disproved the suggestion";
-                    
-                }
-                else {
-                    disprove_result_string = "Player " + player.username + " could not disprove the suggestion";
-                }
+                var disprove_result_string = "Player " + player.username + " disproved the suggestion";
                 console.log("Player disprove respones:", disprove_result_string);
                 var disprove_broadcast = {
                     "broadcast_message": disprove_result_string
                 }
-
                 this.communication.send(0, 21, disprove_broadcast);
                 resolve(data);
+                // return;
             }
 
             var disprove_request = {
