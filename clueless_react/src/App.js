@@ -14,8 +14,9 @@ class App extends React.Component {
     // Store in the App, and passed into children as props
     actions: [],
     player_id: 0,
-    character: "",
-    cards: {},
+    character: 0,
+    cards: [],
+    turn: "Waiting For Other Players Turn",
   };
 
   componentDidMount() {
@@ -24,16 +25,47 @@ class App extends React.Component {
       console.log("GameMessage" + JSON.stringify(message));
 
       this.setState({ actions: [message, ...this.state.actions] });
-      if (message.message_type == 11)
-        if (message.message.username != undefined)
-          if (message.message.username != undefined)
+      var newTurn = this.state.turn;
+
+      if (message.message_type == 11) {
+        if (message.message.username != undefined) {
+          if (message.message.username != undefined) {
             if (message.message.username == window.location.port) {
+              //console.log("APP: " + message.message.player_id)
+              //console.log("APP: " + message.message.character)
+              //console.log("APP: " + message.message.cards)
               this.setState({
                 player_id: message.message.player_id,
                 character: message.message.character,
                 cards: message.message.cards,
               });
             }
+          }
+        }
+      }
+
+      if (newTurn != "Revoked") {
+        if (message.message_type == 31) {
+          newTurn = "Movement";
+        } else if (message.message_type == 32) {
+          newTurn = "Suggestion";
+        } else if (message.message_type == 33) {
+          newTurn = "Disprove";
+        } else if (message.message_type == 34) {
+          newTurn = "Accusation";
+        } else if (message.message_type == 52) {
+          //Does 52 need to be send to everyone? To update their notecard
+          if (message.message.accusation_correct === false) {
+            newTurn = "Revoked"
+          }
+        } else if (message.message_type == 61) {
+          newTurn = "End of Game";
+        } else {
+          newTurn = "Other Players Turn";
+        }
+      }
+
+      this.setState({ turn: newTurn });
     });
   }
 
@@ -44,9 +76,13 @@ class App extends React.Component {
           <h1>Gameboard</h1>
           <p>Username = {window.location.port}</p>
           <NoteBook></NoteBook>
+          <br />
           <Gameboard
             actions={this.state.actions}
-            player_id={"P" + this.state.player_id}
+            player_id={this.state.player_id}
+            character={this.state.character}
+            cards={this.state.cards}
+            turn={this.state.turn}
           />
         </div>
         <div className="bottom">
