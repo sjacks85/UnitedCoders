@@ -44,8 +44,7 @@ class TurnManager {
                             this.communication.send(0, 61, end);
                         }
 
-
-                        resolve(accuse_done);
+                        resolve(game_over);
                         resolve(suggest_done);
                         resolve(move_done);
                     });

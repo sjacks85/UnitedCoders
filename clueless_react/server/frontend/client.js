@@ -66,10 +66,18 @@ socket.on('game', full_message => {
     }
     if (type == 33) {
         rl.question('do you have any of these cards?: ' + JSON.stringify(message) + '\n', (card) => {
-            var disprove = {
-                "can_disprove": true,
-                "disprove_card": card
-            };
+            if (card == "no") {
+                var disprove = {
+                    "can_disprove": "false",
+                    "disprove_card": -1
+                };
+            }
+            else {
+                var disprove = {
+                    "can_disprove": "true",
+                    "disprove_card": card
+                };
+            }
             socket.emit(43, disprove);
         });
     }

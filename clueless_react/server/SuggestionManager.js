@@ -50,8 +50,7 @@ class SuggestionManager {
                     
                     p = p.then(() => this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
                         
-
-                        if (done.can_disprove === false) {
+                        if (done.can_disprove === "false") {
                             console.log("CURRENT PLAYER COULD NOT DISPROVE, MOVING TO THE NEXT")
                             player = this.getNextPlayer(player);
                         } else {
@@ -90,14 +89,21 @@ class SuggestionManager {
 
                 this.communication.send(this.suggestingPlayer.id, 51, disprove_result);
 
-                var disprove_result_string = "Player " + player.username + " disproved the suggestion";
+                var disprove_result_string;
+                if (data.can_disprove) {
+                    disprove_result_string = "Player " + player.username + " disproved the suggestion";
+                    
+                }
+                else {
+                    disprove_result_string = "Player " + player.username + " could not disprove the suggestion";
+                }
                 console.log("Player disprove respones:", disprove_result_string);
                 var disprove_broadcast = {
                     "broadcast_message": disprove_result_string
                 }
+
                 this.communication.send(0, 21, disprove_broadcast);
                 resolve(data);
-                // return;
             }
 
             var disprove_request = {
