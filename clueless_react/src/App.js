@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Divider from "./Divider";
 import Gameboard from "./Gameboard";
+import PlayerHand from "./PlayerHand";
 import { startClient, socket } from "./ClientManager";
 import NoteBook from "./NoteBook";
 
@@ -15,7 +16,7 @@ class App extends React.Component {
     actions: [],
     player_id: 0,
     character: "",
-    cards: {},
+    cards: [], // (Sidney) Changed this to empty array since we now expect a array of card ids.
   };
 
   componentDidMount() {
@@ -48,6 +49,7 @@ class App extends React.Component {
             actions={this.state.actions}
             player_id={"P" + this.state.player_id}
           />
+          <PlayerHand cards={this.state.cards} />
         </div>
         <div className="bottom">
           <Divider actions={this.state.actions} />
