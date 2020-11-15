@@ -40,7 +40,7 @@ socket.on('game', full_message => {
 
         rl.question('New Location: ', (move_id) => {
             var movement = {
-                "movement_made": true,
+                "movement_made": "true",
                 "movement_id": move_id
             };
             socket.emit(41, movement);

@@ -62,7 +62,7 @@ var startLocations = [
   // 2
   {
     currentX: 1,
-    currentY: 2,
+    currentY: 4,
   },
   //3
   {
@@ -79,27 +79,32 @@ var startLocations = [
     currentX: 4,
     currentY: 3,
   },
-  //Weapons
+  //Weapons 6
   {
     currentX: 0,
     currentY: 0,
   },
+  //Weapons 7
+  {
+    currentX: 2,
+    currentY: 0,
+  },
+  //Weapons 8
   {
     currentX: 4,
     currentY: 0,
   },
+  //Weapons 9
   {
     currentX: 0,
     currentY: 4,
   },
-  {
-    currentX: 4,
-    currentY: 0,
-  },
+  //Weapons 10
   {
     currentX: 2,
     currentY: 4,
   },
+  //Weapons 11
   {
     currentX: 4,
     currentY: 4,
@@ -112,7 +117,7 @@ var startGrid = [
       uniqueid: 12,
       roomId: "11",
       roomName: "Study",
-      roomObjs: ["6"],
+      roomObjs: [6],
     },
     {
       uniqueid: 0,
@@ -130,13 +135,13 @@ var startGrid = [
       uniqueid: 0,
       roomId: "1213",
       roomName: "Hallway",
-      roomObjs: ["0"],
+      roomObjs: [0],
     },
     {
       uniqueid: 14,
       roomId: "13",
       roomName: "Lounge",
-      roomObjs: ["8"],
+      roomObjs: [9],
     },
   ],
   [
@@ -144,7 +149,7 @@ var startGrid = [
       uniqueid: 0,
       roomId: "1121",
       roomName: "Hallway",
-      roomObjs: ["3"],
+      roomObjs: [3],
     },
     {
       uniqueid: 0,
@@ -168,7 +173,7 @@ var startGrid = [
       uniqueid: 0,
       roomId: "1323",
       roomName: "Hallway",
-      roomObjs: ["2"],
+      roomObjs: [2],
     },
   ],
   [
@@ -176,7 +181,7 @@ var startGrid = [
       uniqueid: 17,
       roomId: "21",
       roomName: "Library",
-      roomObjs: ["9"],
+      roomObjs: [7],
     },
     {
       uniqueid: 0,
@@ -200,7 +205,7 @@ var startGrid = [
       uniqueid: 15,
       roomId: "23",
       roomName: "Dinning Room",
-      roomObjs: ["10"],
+      roomObjs: [10],
     },
   ],
   [
@@ -208,7 +213,7 @@ var startGrid = [
       uniqueid: 0,
       roomId: "2131",
       roomName: "Hallway",
-      roomObjs: ["4"],
+      roomObjs: [4],
     },
     {
       uniqueid: 0,
@@ -240,13 +245,13 @@ var startGrid = [
       uniqueid: 18,
       roomId: "31",
       roomName: "Conservatory",
-      roomObjs: ["7"],
+      roomObjs: [8],
     },
     {
       uniqueid: 0,
       roomId: "3132",
       roomName: "Hallway",
-      roomObjs: ["1"],
+      roomObjs: [1],
     },
     {
       uniqueid: 19,
@@ -258,13 +263,13 @@ var startGrid = [
       uniqueid: 0,
       roomId: "3233",
       roomName: "Hallway",
-      roomObjs: ["5"],
+      roomObjs: [5],
     },
     {
       uniqueid: 20,
       roomId: "33",
       roomName: "Kitchen",
-      roomObjs: ["11"],
+      roomObjs: [11],
     },
   ],
 ];
@@ -295,11 +300,27 @@ export class Gameboard extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.provideCurrentRoom = this.provideCurrentRoom.bind(this);
     this.provideCurrentLocationId = this.provideCurrentLocationId.bind(this);
+    this.displayIcons = this.displayIcons.bind(this);
 
     this.dims = [
       parseFloat(500 / this.state.grid.length),
       parseFloat(500 / this.state.grid[0].length),
     ];
+  }
+
+  displayIcons() {
+    const objects = uniqueIDs.map((object, index) => {
+      const imgsrc = "/gameboard/" + index.toString() + ".png";
+      return <p> {index.toString()}
+        <img src={imgsrc} height="45" width="30" />
+        </p>
+    });
+
+    return (
+      <div>
+        {objects}
+      </div>
+    );
   }
 
   handleOnClick(x, y) {
@@ -361,12 +382,15 @@ export class Gameboard extends React.Component {
         if (first.message.character_moved === true) {
           //console.log("Character move")
           var objId = Number(first.message.moved_character);
+          console.log("Character move: " + objId)
 
           const cx = newLocations[objId].currentX;
           const cy = newLocations[objId].currentY;
+          //console.log("MOVEMENT current" + cx + " " + cy)
 
           const nx = first.message.new_location_x;
           const ny = first.message.new_location_y;
+          //console.log("MOVEMENT new" + nx + " " + ny)
 
           var index = newGrid[cx][cy].roomObjs.indexOf(objId);
           newGrid[cx][cy].roomObjs.splice(index, 1); //Remove obj from old room
@@ -381,15 +405,16 @@ export class Gameboard extends React.Component {
           }
           // console.log("MOVEMENT " + JSON.stringify(newGrid[cx][cy]))
           // console.log("MOVEMENT " + JSON.stringify(newGrid[nx][ny]))
-          // console.log("MOVEMENT " + newLocations[objId].currentX)
+          //console.log("MOVEMENT " + newLocations[objId].currentX)
           // console.log("MOVEMENT " + newLocations[objId].currentY)
-          // console.log("MOVEMENT " + newCurrentX)
-          // console.log("MOVEMENT " + newCurrentY)
+          //console.log("MOVEMENT " + newCurrentX)
+          //console.log("MOVEMENT " + newCurrentY)
         }
 
         if (first.message.weapon_moved === true) {
           //console.log("Weapon move")
           var objId = Number(first.message.moved_weapon);
+          console.log("Weapon move: " + objId)
 
           const cx = newLocations[objId].currentX;
           const cy = newLocations[objId].currentY;

@@ -22,7 +22,7 @@ class MovementManager {
         return new Promise((resolve) => {
             const movementHandler = (movement) => {
                 console.log('Movement:', movement);
-                if (movement.movement_made) {
+                if (movement.movement_made == "true") {
                     var new_location = valid_move_options[movement.movement_id];
                     this.mLastPositions[player.id] = new_location;
 
