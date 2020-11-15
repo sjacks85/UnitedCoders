@@ -76,7 +76,7 @@ class App extends React.Component {
         <div className="bottom">
           <h1>Gameboard</h1>
           <p>Username = {window.location.port}</p>
-          <div><NoteBook></NoteBook></div>
+          <NoteBook></NoteBook>
           <br />
           <Gameboard
             actions={this.state.actions}
