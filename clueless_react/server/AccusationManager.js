@@ -32,9 +32,9 @@ class AccusationManager {
                 //console.log(accusation)
                 if (accusation.accuse_made == "true") {
                     //broadcast accusation
-                    var character_string = Deck.getCardNameById(suggestion.suggested_character);
-                    var weapon_string = Deck.getCardNameById(suggestion.suggested_weapon);
-                    var room_string = Deck.getCardNameById(suggestion.suggested_room);
+                    var character_string = Deck.getCardNameById(accusation.accuse_character);
+                    var weapon_string = Deck.getCardNameById(accusation.accuse_weapon);
+                    var room_string = Deck.getCardNameById(accusation.accuse_room);
                     var accusation_string = "Player " + player.username + " has made an accusation of suspect: " + character_string +
                         " weapon: " + weapon_string + " room: " + room_string;
                     console.log("Player accusation:", accusation_string);
