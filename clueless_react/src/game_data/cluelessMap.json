@@ -1,0 +1,134 @@
+{
+  "Suspects": [
+    {
+      "Id": 0,
+      "Name": "Miss Scarlet",
+      "Type": "Suspect",
+      "Img": "Miss_Scarlet.png"
+    },
+    {
+      "Id": 1,
+      "Name": "Mr. Green",
+      "Type": "Suspect",
+      "Img": "Mr_Green.png"
+    },
+    {
+      "Id": 2,
+      "Name": "Colonel Mustard",
+      "Type": "Suspect",
+      "Img": "Colonel_Mustard.png"
+    },
+    {
+      "Id": 3,
+      "Name": "Proffesor Plum",
+      "Type": "Suspect",
+      "Img": "Prof_Plum.png"
+    },
+    {
+      "Id": 4,
+      "Name": "Mrs. Peacock",
+      "Type": "Suspect",
+      "Img": "Mrs_Peacock.png"
+    },
+    {
+      "Id": 5,
+      "Name": "Mrs. White",
+      "Type": "Suspect",
+      "Img": "Mrs_White.png"
+    }
+  ],
+  "Weapons": [
+    {
+      "Id": 6,
+      "Name": "Candlestick",
+      "Type": "Weapon",
+      "Img": "Candlestick.png"
+    },
+    {
+      "Id": 7,
+      "Name": "Revolver",
+      "Type": "Weapon",
+      "Img": "Revolver.png"
+    },
+    {
+      "Id": 8,
+      "Name": "Knife",
+      "Type": "Weapon",
+      "Img": "Knife.png"
+    },
+    {
+      "Id": 9,
+      "Name": "Pipe",
+      "Type": "Weapon",
+      "Img": "Pipe.png"
+    },
+    {
+      "Id": 10,
+      "Name": "Rope",
+      "Type": "Weapon",
+      "Img": "Rope.png"
+    },
+    {
+      "Id": 11,
+      "Name": "Wrench",
+      "Type": "Weapon",
+      "Img": "Wrench.png"
+    }
+  ],
+  "Rooms": [
+    {
+      "Id": 12,
+      "Name": "Study",
+      "Type": "Room",
+      "Img": "Study.png"
+    },
+    {
+      "Id": 13,
+      "Name": "Hall",
+      "Type": "Room",
+      "Img": "Hall.png"
+    },
+    {
+      "Id": 14,
+      "Name": "Lounge",
+      "Type": "Room",
+      "Img": "Lounge.png"
+    },
+    {
+      "Id": 15,
+      "Name": "Dining Room",
+      "Type": "Room",
+      "Img": "DiningRoom.png"
+    },
+    {
+      "Id": 16,
+      "Name": "Billiard",
+      "Type": "Room",
+      "Img": "Billiard.png"
+    },
+    {
+      "Id": 17,
+      "Name": "Library",
+      "Type": "Room",
+      "Img": "Library.png"
+    },
+    {
+      "Id": 18,
+      "Name": "Conservatory",
+      "Type": "Room",
+      "Img": "Conservatory.png"
+    },
+    {
+      "Id": 19,
+      "Name": "Ballroom",
+      "Type": "Room",
+      "Img": "BallRoom.png"
+    },
+    {
+      "Id": 20,
+      "Name": "Kitchen",
+      "Type": "Room",
+      "Img": "Kitchen.png"
+    }
+  ]
+}

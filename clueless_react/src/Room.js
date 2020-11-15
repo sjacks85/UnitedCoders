@@ -2,13 +2,9 @@ import React from "react";
 
 export class Room extends React.Component {
   displayIcons() {
-    const players = this.props.contents.roomPlayers.map((player) => {
-      const imgsrc = "/gameboard/" + player.toString() + ".png";
-      return <img src={imgsrc} height="45" width="30" />;
-    });
 
-    const weapons = this.props.contents.roomWeapons.map((weapon) => {
-      const imgsrc = "/gameboard/" + weapon.toString() + ".png";
+    const objects = this.props.contents.roomObjs.map((object) => {
+      const imgsrc = "/gameboard/" + object.toString() + ".png";
       return <img src={imgsrc} height="45" width="30" />;
     });
 
@@ -17,12 +13,10 @@ export class Room extends React.Component {
         <p>
           {this.props.contents.roomName}
           <br></br>
-          Players: {JSON.stringify(this.props.contents.roomPlayers)}
+          Objects: {JSON.stringify(this.props.contents.roomObjs)}
           <br></br>
-          Weapons: {JSON.stringify(this.props.contents.roomWeapons)}
         </p>
-        {players}
-        {weapons}
+        {objects}
       </div>
     );
   }
@@ -42,6 +36,7 @@ export class Room extends React.Component {
 
     return (
       <td style={style} onClick={this.props.onClick}>
+        X={this.props.x} Y={this.props.y}
         {this.props.contents.roomId != 0 && this.displayIcons()}
       </td>
     );
