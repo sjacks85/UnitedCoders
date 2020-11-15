@@ -37,7 +37,7 @@ class App extends React.Component {
               //console.log("APP: " + message.message.cards)
               this.setState({
                 player_id: message.message.player_id,
-                character: message.message.character,
+                character_id: message.message.character_id,
                 cards: message.message.cards,
               });
             }
@@ -81,7 +81,7 @@ class App extends React.Component {
           <Gameboard
             actions={this.state.actions}
             player_id={this.state.player_id}
-            character={this.state.character}
+            character_id={this.state.character_id}
             cards={this.state.cards}
             turn={this.state.turn}
           />

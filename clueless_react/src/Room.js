@@ -36,6 +36,7 @@ export class Room extends React.Component {
 
     return (
       <td style={style} onClick={this.props.onClick}>
+        X={this.props.x} Y={this.props.y}
         {this.props.contents.roomId != 0 && this.displayIcons()}
       </td>
     );

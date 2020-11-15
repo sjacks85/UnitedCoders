@@ -12,7 +12,7 @@ class PlayerHand extends React.Component {
   state = {
     cards: [1, 2, 3, 4, 5], // Default. Can remove this once we know the cards are being populated.
   };
-  updatePlayerHand = this.state.cards.map((card) => {
+  updatePlayerHand = this.props.cards.map((card) => {
     CardMapper.generateIdMap();
     var imgLocation = "./CardImages/" + CardMapper.getCardImgById(card);
     return (

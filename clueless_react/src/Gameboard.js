@@ -49,30 +49,37 @@ var uniqueIDs = [
 ];
 
 var startLocations = [
+  //0 Miss Scarlet
+  {
+    currentX: 0,
+    currentY: 3,
+  },
+  // 1
+  {
+    currentX: 4,
+    currentY: 1,
+  },
+  // 2
+  {
+    currentX: 1,
+    currentY: 2,
+  },
+  //3
+  {
+    currentX: 1,
+    currentY: 0,
+  },
+  //4
   {
     currentX: 3,
-    currentY: 4,
+    currentY: 0,
   },
+  //5
   {
     currentX: 4,
     currentY: 3,
   },
-  {
-    currentX: 3,
-    currentY: 0,
-  },
-  {
-    currentX: 1,
-    currentY: 0,
-  },
-  {
-    currentX: 0,
-    currentY: 1,
-  },
-  {
-    currentX: 1,
-    currentY: 4,
-  },
+  //Weapons
   {
     currentX: 0,
     currentY: 0,
@@ -109,7 +116,7 @@ var startGrid = [
     {
       roomId: "1112",
       roomName: "Hallway",
-      roomObjs: ["4"],
+      roomObjs: [],
     },
     {
       roomId: "12",
@@ -119,7 +126,7 @@ var startGrid = [
     {
       roomId: "1213",
       roomName: "Hallway",
-      roomObjs: [],
+      roomObjs: ["0"],
     },
     {
       roomId: "13",
@@ -151,7 +158,7 @@ var startGrid = [
     {
       roomId: "1323",
       roomName: "Hallway",
-      roomObjs: ["5"],
+      roomObjs: ["2"],
     },
   ],
   [
@@ -185,7 +192,7 @@ var startGrid = [
     {
       roomId: "2131",
       roomName: "Hallway",
-      roomObjs: ["2"],
+      roomObjs: ["4"],
     },
     {
       roomId: "0",
@@ -205,7 +212,7 @@ var startGrid = [
     {
       roomId: "2333",
       roomName: "Hallway",
-      roomObjs: ["0"],
+      roomObjs: [],
     },
   ],
   [
@@ -217,7 +224,7 @@ var startGrid = [
     {
       roomId: "3132",
       roomName: "Hallway",
-      roomObjs: [],
+      roomObjs: ["1"],
     },
     {
       roomId: "32",
@@ -227,7 +234,7 @@ var startGrid = [
     {
       roomId: "3233",
       roomName: "Hallway",
-      roomObjs: ["1"],
+      roomObjs: ["5"],
     },
     {
       roomId: "33",
@@ -243,7 +250,7 @@ export class Gameboard extends React.Component {
     this.state = {
       actions: this.props.actions,
       player_id: -1,
-      character: -1,
+      character_id: -1,
       cards: {},
 
       // Gameboard grid
@@ -336,7 +343,7 @@ export class Gameboard extends React.Component {
           newLocations[objId].currentX = nx;
           newLocations[objId].currentY = ny;
 
-          if ((objId = props.character)) {
+          if ((objId = props.character_id)) {
             newCurrentX = nx;
             newCurrentY = ny;
           }
@@ -359,7 +366,7 @@ export class Gameboard extends React.Component {
           newLocations[objId].currentX = nx;
           newLocations[objId].currentY = ny;
 
-          if ((objId = props.character)) {
+          if ((objId = props.character_id)) {
             newCurrentX = nx;
             newCurrentY = ny;
           }
@@ -375,7 +382,7 @@ export class Gameboard extends React.Component {
 
     return {
       player_id: props.player_id,
-      character: props.character,
+      character_id: props.character_id,
       cards: props.cards,
       count: newcount,
       grid: newGrid,
@@ -390,16 +397,16 @@ export class Gameboard extends React.Component {
   displayPlayerInfo() {
     return (
       <p>
-        Player={this.props.player_id} | Character={uniqueIDs[this.props.character].name} | X={" "}
-        {this.state.locations[this.props.character].currentX} | Y={" "}
-        {this.state.locations[this.props.character].currentY}
+        Player={this.props.player_id} | Character={uniqueIDs[this.props.character_id].name} | X={" "}
+        {this.state.locations[this.props.character_id].currentX} | Y={" "}
+        {this.state.locations[this.props.character_id].currentY}
       </p>
     );
   }
 
   provideLocationId() {
-    var cx = this.state.locations[this.props.character].currentX;
-    var cy = this.state.locations[this.props.character].currentY;
+    var cx = this.state.currentX;
+    var cy = this.state.currentY;
     var result = "0";
 
     //console.log("PLAYER: " + this.props.player_id);
@@ -435,6 +442,8 @@ export class Gameboard extends React.Component {
                   this.handleOnClick(i, j);
                 }}
                 contents={d}
+                x={i}
+                y={j}
               />
             );
           })}
