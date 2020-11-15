@@ -462,108 +462,84 @@ export class TicTac extends React.Component {
     }
     return false;
   }
+
+
+
+
+ 	//=================  Making Suggestion/Accusation START =========================	
+	
+	showSuggestionWindow(){
+		document.getElementById("msadiv").style.display = "";
+	}
+	
+	hideSuggestionWindow(){
+		document.getElementById("msadiv").style.display = "none";
+	}	
+	
+	moveToNextTurn(){
+		
+		this.hideSuggestionWindow();
+		//TODO : Please put your code for user Turn here.
+	}
+	
+	SAClicked(typ,c,a,b){
+		// a =  player
+		// b =  weapon
+		// c =  room
+		// if typ is blank, it means it is accusation, if (typ == 'none'), it means it is a suggestion.
+		if(typ=='none'){
+			this.suggestionClicked(a,b);
+		}
+		else{
+			this.accusationClicked(a,b,c);
+		}
+		this.hideSuggestionWindow();
+	}
 	
 	suggestionClicked(a,b){
-		//alert(a);
-		//alert(b);
+		// a = sugegsted player
+		// b = suggested weapon
+		// Since it is Suhhestion, current room will be used as suggested room.
 		const cx = this.state.playerLocations[this.props.player_id].startX;
         const cy = this.state.playerLocations[this.props.player_id].startY;
-		//alert(JSON.stringify(this.state.grid[cx][cy]));
-		//alert(this.state.grid[cx][cy].roomName);
-
-		var roomName="";
-		switch (this.state.grid[cx][cy].roomId)
-			{
-			   case "11":
-				roomName="kitchen";
-				break;
-			   case "12":
-				roomName="ballroom";
-				break;
-			   case "13":
-				roomName="conservatory";
-				break;
-			   case "21":
-				roomName="dinning";
-				break;
-			   case "22":
-				roomName="hall";
-				break;
-			   case "23":
-				roomName="billiard";
-				break;
-			   case "31":
-				roomName="library";
-				break;
-			   case "32":
-				roomName="study";
-				break;
-			   case "33":
-				roomName="lounge";
-				break;				
-			   default: 
-				   alert('You need to be in a room!');
-				   break;
-			}
-			if(roomName=="")
-				return;
-		var playerInput = "You are Suggesting : "+roomName+" "+ a+" "+ b;
-		alert (playerInput);			
-		//this.setState({ inputs : [playerInput, ...this.state.inputs]})
-		makeSuggestion(roomName,a,b);
+		
+		// TODO:  We need to convert CX & CY to actual room ID. 
+		
+		var playerInput = "User is Suggesting : "+this.state.grid[cx][cy].roomId+" "+ a+" "+ b;
+		console.log(playerInput);
+		//TODO : Please fix following line if needed. It supposed to send the suggestion to backend. makeSuggestion function in part of client manager.
+		makeSuggestion(this.state.grid[cx][cy].roomId,a,b);
 	}
 	
-	accusationClicked(a,b){
-//alert(a);
-		//alert(b);
-		const cx = this.state.playerLocations[this.props.player_id].startX;
-        const cy = this.state.playerLocations[this.props.player_id].startY;
-		//alert(JSON.stringify(this.state.grid[cx][cy]));
-		//alert(this.state.grid[cx][cy].roomName);
-		var roomName="";
-		switch (this.state.grid[cx][cy].roomId)
-			{
-			   case "11":
-				roomName="kitchen";
-				break;
-			   case "12":
-				roomName="ballroom";
-				break;
-			   case "13":
-				roomName="conservatory";
-				break;
-			   case "21":
-				roomName="dinning";
-				break;
-			   case "22":
-				roomName="hall";
-				break;
-			   case "23":
-				roomName="billiard";
-				break;
-			   case "31":
-				roomName="library";
-				break;
-			   case "32":
-				roomName="study";
-				break;
-			   case "33":
-				roomName="lounge";
-				break;				
-			   default: 
-				   alert('You need to be in a room!');
-				   break;
-			}
-			if(roomName=="")
-				return;
-		var playerInput = "Your Accusation : "+roomName+" "+ a+" "+ b;
-		alert (playerInput);
-		//this.setState({ inputs : [playerInput, ...this.state.inputs]})
-		makeAccusation(roomName,a,b);
+	
+	accusationClicked(a,b,c){
+		// a =  player
+		// b =  weapon
+		// c =  room
+		var playerInput = "User Accusation is : "+c+" "+ a+" "+ b;
+		console.log(playerInput);
+		//TODO : Please fix following line if needed. It supposed to send the accusation to backend. makeAccusation function in part of client manager.
+		makeAccusation(c,a,b); 
 	}
+ 	//--------------  Making Suggestion Accusation END ----------------------------
+
+
+
+
+	
  
-	// Suggestion Response Functions Starts
-	ShowSuggestionWindow(suggestionTxt){
+    //=============== Update MessageBox Function START ============================
+	updateMsgbox(msgtxt){
+		window.scrollTo(0, 0);
+		document.getElementById("msgbox").innerHTML=msgtxt;
+	}
+	//---------------  Update MessageBox Function END  ----------------------------
+
+
+	
+	
+	//=============== Suggestion Response Functions Starts ========================
+	showResponseWindow(suggestionTxt){
 		document.getElementById("MyCardsType").selectedIndex='0';
 		document.getElementById("suggestiondetail").innerHTML=suggestionTxt;
 		this.updateDisproveUI();
@@ -597,27 +573,39 @@ export class TicTac extends React.Component {
 	
 	sendSuggestionResponse(){
 		var mtVal=document.getElementById("MyCardsType").value;
+		// If mtVal is -1, it means current user doesn't have any of the suggested items.
+		// If mtVal is 0, it means current user have the suggested user.
+		// If mtVal is 1, it means current user have the suggested weapon.
+		// If mtVal is 2, it means current user have the suggested room.
+		
 		var selectedvalue="";
 		if(mtVal=='-1'){
-		   // Send Socket Response that this user doesn't have any of the suggested items.
+		   //TODO : Send Socket Response that this user doesn't have any of the suggested items.
 		}
 		if(mtVal=='0'){
 		    selectedvalue = document.getElementById("ResponseUser").value;
-			// Send Socket Response that this user has the suggested user (user id is in selectedvalue).	
+			//selectedvalue is ID of selected User
+			
+			//TODO : Send Socket Response that this user has the suggested user (user id is in selectedvalue).	
 		}
 		if(mtVal=='1'){
 		 selectedvalue = document.getElementById("ResponseWeapon").value;
-		// Send Socket Response that this user has the suggested Weapon (Weapon id is in selectedvalue).	
+		 //selectedvalue is ID of selected Weapon
+		 
+			//TODO : Send Socket Response that this user has the suggested Weapon (Weapon id is in selectedvalue).	
 		}
 		if(mtVal=='2'){
 		 selectedvalue = document.getElementById("ResponseRoom").value;
-		// Send Socket Response that this user has the suggested Room (Room id is in selectedvalue).	
+		 //selectedvalue is ID of selected Room
+
+			//TODO : Send Socket Response that this user has the suggested Room (Room id is in selectedvalue).	
 		}
 		document.getElementById("suggestionresponsediv").style.display = "none";
-		//alert(selectedvalue);
 	}
 	
-	//Suggestion Response Functions Ends
+	//---------------------- Suggestion Response Functions Ends --------------------------
+
+
  
   handleOnClick(x, y) {
     const cx = this.state.playerLocations[this.props.player_id].startX;
@@ -696,39 +684,73 @@ export class TicTac extends React.Component {
     console.log("Filtered" + JSON.stringifyfilteredList);
 
     return (
-      <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center" }}>
         <p>Player = {this.props.player_id} | X = {this.state.playerLocations[this.props.player_id].startX} | Y = {this.state.playerLocations[this.props.player_id].startY}</p>
-<div style={{ textAlign: "center" ,width:"100%",height:"150px",margin:"10px"}}>
-	<div style={{ textAlign: "center" ,"width":"300px","Min-Height":"150px",  "border-width": "5px" ,"border-color": "red","border-style": "outset" , margin: "0 auto",position: "relative"}}>
+
+{/*MESSAGENOX START*/}		
+	<div style={{ textAlign: "center" ,width:"100%",height:"90px",margin:"10px"}}>
+		<div style={{ textAlign: "center" ,"width":"600px","Min-Height":"50px",  "border-width": "5px" ,"border-color": "orange","border-style": "outset" , margin: "0 auto",position: "relative"}}>
+			<span>
+				<h1 name="msgbox" id="msgbox" style={{"white-space":"nowrap"}}> Please wait for other players to Join.</h1>
+			</span>
+		</div>
+	</div>
+{/*MESSAGEBOX END*/}	
+
+{/*MAKE Suggestion/ACCUSATION START*/}	
+<div id="msadiv" name="msadiv" style={{ textAlign: "center" ,width:"100%",margin:"10px",display:"none"}}>
+	<div style={{ textAlign: "center" ,"width":"400px","Min-Height":"150px",  "border-width": "5px" ,"border-color": "red","border-style": "outset" , margin: "0 auto",position: "relative"}}>
 		<span>
 			<h3>Suggestion / Accusation Box</h3>
+			<select name="GuessedRoom" id="GuessedRoom" style={{margin:"10px", display : "none"}}>
+				<option value="21" selected="selected">Kitchen</option>
+				<option value="20">Ballroom</option>
+				<option value="19">Conservatory</option>
+				<option value="16">Dining Room</option>
+				<option value="14">Hall</option>
+				<option value="17">Billiards Room</option>
+				<option value="18">Library</option>
+				<option value="13">Study</option>
+				<option value="15">Lounge</option>
+			</select>
 			<select name="GuessedUser" id="GuessedUser" style={{margin:"10px",marginLeft:"0px"}}>
-				<option value="scarlet" selected="selected">Miss Scarlet</option>
-				<option value="green">Mr. Green</option>
-				<option value="mustard">Colonel Mustard</option>
-				<option value="plum">Prof. Plum</option>
-				<option value="peacock">Mrs. Peacock</option>
-				<option value="white">Mrs. White</option>
+				<option value="1" selected="selected">Miss Scarlet</option>
+				<option value="2">Mr. Green</option>
+				<option value="3">Colonel Mustard</option>
+				<option value="4">Prof. Plum</option>
+				<option value="5">Mrs. Peacock</option>
+				<option value="6">Mrs. White</option>
 			</select>
 			<select name="GuessedWeapon" id="GuessedWeapon" style={{margin:"10px"}}>
-				<option value="candlestick" selected="selected">candlestick</option>
-				<option value="revolver">revolver</option>
-				<option value="knife">knife</option>
-				<option value="pipe">pipe</option>
-				<option value="rope">rope</option>
-				<option value="wrench">wrench</option>
+				<option value="7" selected="selected">candlestick</option>
+				<option value="8">revolver</option>
+				<option value="9">knife</option>
+				<option value="10">pipe</option>
+				<option value="11">rope</option>
+				<option value="12">wrench</option>
 			</select>
 			<br/>
-			<button  name="sgbtn"  id="sgbtn" onClick={()=>{ this.suggestionClicked(document.getElementById("GuessedUser").value,document.getElementById("GuessedWeapon").value)}}>Make Suggestion</button>
-			&nbsp;&nbsp;&nbsp;
-			<button  name="acbtn"  id="acbtn" onClick={()=>{ this.accusationClicked(document.getElementById("GuessedUser").value,document.getElementById("GuessedWeapon").value)}}>Make Accusation</button>
+			I am providing a : <select name="GuessedType" id="GuessedType" style={{margin:"10px"}}  onChange={()=>{document.getElementById("GuessedRoom").style.display = document.getElementById("GuessedType").value;}} >
+				<option value="none" selected="selected">Suggestion</option>
+				<option value="">Accusation</option>
+			</select>&nbsp;&nbsp;&nbsp;<button  name="sgbtn"  id="sgbtn" onClick={()=>{ this.SAClicked(document.getElementById("GuessedType").value,document.getElementById("GuessedRoom").value,document.getElementById("GuessedUser").value,document.getElementById("GuessedWeapon").value)}}>Submit</button><br/>
+			<hr/><button  name="sgntbtn"  id="sgntbtn" onClick={()=>{ this.moveToNextTurn()}}>I am not making any suggestion or accusation!</button>
+
 			<br/>&nbsp;&nbsp;&nbsp;
 		</span>
 	</div>
 
 </div>
+{/*MAKE Suggestion/ACCUSATION END*/}
+
 <br/>
-<button onClick={()=>{ this.ShowSuggestionWindow("This is the suggestion.")}}>Respond To Suggestion</button> {/*Testing*/}
+
+{/*Testing Button START*/}
+<button onClick={()=>{ this.showSuggestionWindow()}}>Show Suggestion Window</button> &nbsp;&nbsp;&nbsp;
+<button onClick={()=>{ this.showResponseWindow("This is the suggestion.")}}>Respond To Suggestion</button> 
+{/*Testing Button END*/}
+
+
 	{/*Suggestion Response START*/}
 		<div id="suggestionresponsediv" style={{position:"absolute",top:"0",left:"0",width:"100%",height:"150%","background-color":"grey",opacity: ".98","z-index": "1000", display : "none"}}>
 		<br/><br/>
@@ -740,36 +762,36 @@ export class TicTac extends React.Component {
 				<option value="2">I have suggested Room card : </option>
 			</select>
 			<select name="ResponseUser" id="ResponseUser" style={{margin:"10px",marginLeft:"0px", display : "none"}}>
-				<option value="scarlet" selected="selected">Miss Scarlet</option>
-				<option value="green">Mr. Green</option>
-				<option value="mustard">Colonel Mustard</option>
-				<option value="plum">Prof. Plum</option>
-				<option value="peacock">Mrs. Peacock</option>
-				<option value="white">Mrs. White</option>
+				<option value="1" selected="selected">Miss Scarlet</option>
+				<option value="2">Mr. Green</option>
+				<option value="3">Colonel Mustard</option>
+				<option value="4">Prof. Plum</option>
+				<option value="5">Mrs. Peacock</option>
+				<option value="6">Mrs. White</option>
 			</select>
 			<select name="ResponseWeapon" id="ResponseWeapon" style={{margin:"10px", display : "none"}}>
-				<option value="candlestick" selected="selected">candlestick</option>
-				<option value="revolver">revolver</option>
-				<option value="knife">knife</option>
-				<option value="pipe">pipe</option>
-				<option value="rope">rope</option>
-				<option value="wrench">wrench</option>
+				<option value="7" selected="selected">candlestick</option>
+				<option value="8">revolver</option>
+				<option value="9">knife</option>
+				<option value="10">pipe</option>
+				<option value="11">rope</option>
+				<option value="12">wrench</option>
 			</select>
 			<select name="ResponseRoom" id="ResponseRoom" style={{margin:"10px", display : "none"}}>
-				<option value="Kitchen" selected="selected">Kitchen</option>
-				<option value="Ballroom">Ballroom</option>
-				<option value="Conservatory">Conservatory</option>
-				<option value="Dining">Dining Room</option>
-				<option value="Cellar">Cellar</option>
-				<option value="Billiards">Billiards Room</option>
-				<option value="Library">Library</option>
-				<option value="Study">Study</option>
-				<option value="Lounge">Lounge</option>
+				<option value="21" selected="selected">Kitchen</option>
+				<option value="20">Ballroom</option>
+				<option value="19">Conservatory</option>
+				<option value="16">Dining Room</option>
+				<option value="14">Hall</option>
+				<option value="17">Billiards Room</option>
+				<option value="18">Library</option>
+				<option value="13">Study</option>
+				<option value="15">Lounge</option>
 			</select>
-			<button onClick={()=>{ this.sendSuggestionResponse()}}>Repond</button> 
+			<button onClick={()=>{ this.sendSuggestionResponse()}}>Send Your Response</button> 
 			
 		</div>
-		{/*Suggestion Response START*/}
+		{/*Suggestion Response END*/}
 		
         <table cellSpacing="0" id="table" style={style}>
           <tbody>{rows}</tbody>
