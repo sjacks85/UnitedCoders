@@ -2,8 +2,18 @@ var Deck = require('./support_classes/Deck.js');
 
 class AccusationManager {
 
-    constructor(communication) {
+    constructor(communication, deck) {
         this.communication = communication;
+        this.deck = deck;
+
+
+        var envelope = this.deck.envelope;
+        var envelope_character = envelope[0].Name;
+        var envelope_weapon = envelope[1].Name;
+        var envelope_room = envelope[2].Name;
+        console.log("CHARACTER:", envelope_character)
+        console.log("WEAPON:", envelope_weapon)
+        console.log("ROOM:", envelope_room)
     }
 
     accuse(player) {
@@ -32,6 +42,14 @@ class AccusationManager {
                         "broadcast_message": accusation_string
                     }
                     this.communication.send(0, 21, accusation_broadcast);
+
+                    
+                    var envelope = this.deck.envelope;
+                    var envelope_character = envelope[0].Name;
+                    var envelope_weapon = envelope[1].Name;
+                    var envelope_room = envelope[2].Name;
+
+
 
                     //right now, assume accusation is correct
                     var accusation_result = {

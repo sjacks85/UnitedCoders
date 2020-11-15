@@ -13,7 +13,7 @@ function registerPlayer(playerObj) {
     players.push(playerObj);
 
     // If enough players have joined then start the game.
-    if (players.length >= 3) {
+    if (players.length >= 1) {
         startGame();
     }
 }
@@ -21,8 +21,8 @@ function registerPlayer(playerObj) {
 function startGame() {
     //Run initial setup and kickoff game.
     console.log("Starting Game");
-    assignCards();
-    var turnManager = new TurnManager(Communication, players);
+    var deck = assignCards();
+    var turnManager = new TurnManager(Communication, players, deck);
     turnManager.startGame();
 }
 
@@ -57,6 +57,8 @@ function assignCards() {
 
         players[i].character = CardDeck.idMapping[i].Id; // Note: This works because the first 6 ID Mapping Objects are Characters/Suspects.
     }
+
+    return cardDeck;
 }
 
 http.listen(5000, () => {
