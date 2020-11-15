@@ -218,14 +218,20 @@ class NoteBook extends React.Component {
 }
 
 window.onload = function () {
+    console.log("NOTEBOOKONLOD")
+    // var all = document.getElementsByTagName("td");
+    // for (var i = 0; i < all.length; i++) {
+    //     all[i].onclick = inputClickHandler;
+    // }
 
-    var all = document.getElementsByTagName("td");
+    var all = document.getElementsByClassName("notebookCell");
     for (var i = 0; i < all.length; i++) {
         all[i].onclick = inputClickHandler;
     }
 };
 
 function inputClickHandler(e) {
+    console.log("NOTEBOOOKINPUT")
     e = e || window.event;
     var tdElm = e.target || e.srcElement;
     if (tdElm.style.backgroundColor == 'lightblue') {
@@ -234,7 +240,5 @@ function inputClickHandler(e) {
         tdElm.style.backgroundColor = 'lightblue';
     }
 }
-
-
 
 export default NoteBook;

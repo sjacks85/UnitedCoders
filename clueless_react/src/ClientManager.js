@@ -45,7 +45,7 @@ function makeSuggestion(room, person, weapon) {
         "suggested_character": person,
         "suggested_weapon": weapon
     };
-    //console.log('suggestion request: ' + person + weapon)
+    console.log('suggestion request: ' + room + person + weapon)
     console.log("makeSuggestion: " + JSON.stringify(suggestion));
     socket.emit(42, suggestion);
 }

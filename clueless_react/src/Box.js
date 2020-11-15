@@ -7,27 +7,48 @@ import {
 } from "./ClientManager";
 
 var uniqueIDs = [
-  { type: "character", name: "Miss Scarlet", image: "P1" },
-  { type: "character", name: "Mr. Green", image: "P2" },
-  { type: "character", name: "Colonel Mustard", image: "P3" },
-  { type: "character", name: "Prof. Plum", image: "P4" },
-  { type: "character", name: "Mrs. Peacock", image: "P5" },
-  { type: "character", name: "Mrs. White", image: "P6" },
+  //0
+  { type: "character", name: "Miss Scarlet", image: "C1" },
+  //1
+  { type: "character", name: "Mr. Green", image: "C2" },
+  //2
+  { type: "character", name: "Colonel Mustard", image: "C3" },
+  //3
+  { type: "character", name: "Prof. Plum", image: "C4" },
+  //4
+  { type: "character", name: "Mrs. Peacock", image: "C5" },
+  //5
+  { type: "character", name: "Mrs. White", image: "C6" },
+  //6
   { type: "weapon", name: "Candlestick", image: "W1" },
+  //7
   { type: "weapon", name: "Revolver", image: "W4" },
+  //8
   { type: "weapon", name: "Knife", image: "W2" },
+  //9
   { type: "weapon", name: "Pipe", image: "W3" },
+  //10
   { type: "weapon", name: "Rope", image: "W5" },
+  //11
   { type: "weapon", name: "Wrench", image: "W6" },
-  { type: "room", name: "Study", roomId: 33, gridX: 4, gridY: 4 },
-  { type: "room", name: "Hall", roomId: 32, gridX: 2, gridY: 4 },
-  { type: "room", name: "Lounge", roomId: 31, gridX: 0, gridY: 4 },
-  { type: "room", name: "Dinning", roomId: 21, gridX: 0, gridY: 2 },
-  { type: "room", name: "Billiard", roomId: 22, gridX: 2, gridY: 2 },
-  { type: "room", name: "Library", roomId: 23, gridX: 4, gridY: 2 },
-  { type: "room", name: "Conservatory", roomId: 13, gridX: 4, gridY: 0 },
-  { type: "room", name: "Ballroom", roomId: 12, gridX: 2, gridY: 0 },
-  { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0 },
+  //12
+  { type: "room", name: "Study", roomId: 11 },
+  //13
+  { type: "room", name: "Hall", roomId: 12 },
+  //14
+  { type: "room", name: "Lounge", roomId: 13 },
+  //15
+  { type: "room", name: "Dinning Room", roomId: 23 },
+  //16
+  { type: "room", name: "Billiard Room", roomId: 22 },
+  //17
+  { type: "room", name: "Library", roomId: 21 },
+  //18
+  { type: "room", name: "Conservatory", roomId: 31 },
+  //19
+  { type: "room", name: "Ballroom", roomId: 32 },
+  //20
+  { type: "room", name: "Kitchen", roomId: 33 },
 ];
 
 var startHand = [
@@ -174,7 +195,7 @@ export class Box extends React.Component {
     }
     var playerInput = "Your Suggestion: " + this.props.currentRoom + " " + a + " " + b;
     alert(playerInput);
-    makeSuggestion("true", this.props.currentRoom, a, b);
+    makeSuggestion(this.props.currentLocId, a, b);
   }
 
   accusationClicked(a, b, c) {

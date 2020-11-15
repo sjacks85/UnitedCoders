@@ -29,23 +29,23 @@ var uniqueIDs = [
   //11
   { type: "weapon", name: "Wrench", image: "W6" },
   //12
-  { type: "room", name: "Study", roomId: 33, gridX: 4, gridY: 4 },
+  { type: "room", name: "Study", roomId: 11 },
   //13
-  { type: "room", name: "Hall", roomId: 32, gridX: 2, gridY: 4 },
+  { type: "room", name: "Hall", roomId: 12 },
   //14
-  { type: "room", name: "Lounge", roomId: 31, gridX: 0, gridY: 4 },
+  { type: "room", name: "Lounge", roomId: 13 },
   //15
-  { type: "room", name: "Dinning", roomId: 21, gridX: 0, gridY: 2 },
+  { type: "room", name: "Dinning Room", roomId: 23 },
   //16
-  { type: "room", name: "Billiard", roomId: 22, gridX: 2, gridY: 2 },
+  { type: "room", name: "Billiard Room", roomId: 22 },
   //17
-  { type: "room", name: "Library", roomId: 23, gridX: 4, gridY: 2 },
+  { type: "room", name: "Library", roomId: 21 },
   //18
-  { type: "room", name: "Conservatory", roomId: 13, gridX: 4, gridY: 0 },
+  { type: "room", name: "Conservatory", roomId: 31 },
   //19
-  { type: "room", name: "Ballroom", roomId: 12, gridX: 2, gridY: 0 },
+  { type: "room", name: "Ballroom", roomId: 32 },
   //20
-  { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0 },
+  { type: "room", name: "Kitchen", roomId: 33 },
 ];
 
 var startLocations = [
@@ -109,53 +109,63 @@ var startLocations = [
 var startGrid = [
   [
     {
+      uniqueid: 12,
       roomId: "11",
-      roomName: "Kitchen",
+      roomName: "Study",
       roomObjs: ["6"],
     },
     {
+      uniqueid: 0,
       roomId: "1112",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 13,
       roomId: "12",
-      roomName: "Ballroom",
+      roomName: "Hall",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "1213",
       roomName: "Hallway",
       roomObjs: ["0"],
     },
     {
+      uniqueid: 14,
       roomId: "13",
-      roomName: "Conservatory",
+      roomName: "Lounge",
       roomObjs: ["8"],
     },
   ],
   [
     {
+      uniqueid: 0,
       roomId: "1121",
       roomName: "Hallway",
       roomObjs: ["3"],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "1222",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "1323",
       roomName: "Hallway",
       roomObjs: ["2"],
@@ -163,53 +173,63 @@ var startGrid = [
   ],
   [
     {
+      uniqueid: 17,
       roomId: "21",
-      roomName: "Dinning Room",
+      roomName: "Library",
       roomObjs: ["9"],
     },
     {
+      uniqueid: 0,
       roomId: "2122",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 16,
       roomId: "22",
       roomName: "Billiard Room",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "2223",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 15,
       roomId: "23",
-      roomName: "Library",
+      roomName: "Dinning Room",
       roomObjs: ["10"],
     },
   ],
   [
     {
+      uniqueid: 0,
       roomId: "2131",
       roomName: "Hallway",
       roomObjs: ["4"],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "2232",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "2333",
       roomName: "Hallway",
       roomObjs: [],
@@ -217,28 +237,33 @@ var startGrid = [
   ],
   [
     {
+      uniqueid: 18,
       roomId: "31",
-      roomName: "Lounge",
+      roomName: "Conservatory",
       roomObjs: ["7"],
     },
     {
+      uniqueid: 0,
       roomId: "3132",
       roomName: "Hallway",
       roomObjs: ["1"],
     },
     {
+      uniqueid: 19,
       roomId: "32",
-      roomName: "Hall",
+      roomName: "Ballroom",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "3233",
       roomName: "Hallway",
       roomObjs: ["5"],
     },
     {
+      uniqueid: 20,
       roomId: "33",
-      roomName: "Study",
+      roomName: "Kitchen",
       roomObjs: ["11"],
     },
   ],
@@ -269,6 +294,7 @@ export class Gameboard extends React.Component {
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.provideCurrentRoom = this.provideCurrentRoom.bind(this);
+    this.provideCurrentLocationId = this.provideCurrentLocationId.bind(this);
 
     this.dims = [
       parseFloat(500 / this.state.grid.length),
@@ -430,6 +456,20 @@ export class Gameboard extends React.Component {
     }
   }
 
+  provideCurrentLocationId() {
+    var cx = this.state.locations[this.props.character_id].currentX;
+    var cy = this.state.locations[this.props.character_id].currentY;
+    //console.log("YYHALLWAY: x" + cx + " y" + cy);
+    // console.log(this.state.grid)
+    if (cx == -1 & cy == -1) {
+      return "";
+    } else {
+      var locid = this.state.grid[cx][cy].uniqueid;
+      //console.log("HALLWAY: " + locid);
+      return locid;
+    }
+  }
+
   render() {
     const style = {
       margin: "auto",
@@ -467,6 +507,7 @@ export class Gameboard extends React.Component {
         {this.props.player_id != 0 && this.displayPlayerInfo()}
         <Box
           actions={this.props.actions}
+          currentLocId={this.provideCurrentLocationId()}
           currentRoom={this.provideCurrentRoom()}
           cards={this.props.cards}
           turn={this.props.turn}
