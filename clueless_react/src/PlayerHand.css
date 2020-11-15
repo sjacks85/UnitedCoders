@@ -17,7 +17,7 @@
 
 .center {
   margin: auto;
-  width: 50%;
+  width: 100%;
 }
 
 img {
@@ -34,10 +34,11 @@ img:hover {
   box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
-ul {
+.playerHand_ul {
   padding: 0px;
 }
-li {
+
+.playerHand_li {
   list-style-type: none;
   width: 225px;
 }

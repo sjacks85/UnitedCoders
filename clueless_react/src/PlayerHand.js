@@ -22,7 +22,7 @@ class PlayerHand extends React.Component {
       CardMapper.generateIdMap();
       var imgLocation = "./CardImages/" + CardMapper.getCardImgById(card);
       return (
-        <li>
+        <li class="playerHand_li">
           <div class="block">
             <img src={imgLocation} />
           </div>
@@ -50,7 +50,7 @@ class PlayerHand extends React.Component {
     //console.log("PLAYERHAND"  + this.state.cards.length)
     return (
       <div class="playerHandFrame">
-        <ul class="hs center">{this.updatePlayerHand()}</ul>
+        <ul class="hs center playerHand_ul">{this.updatePlayerHand()}</ul>
       </div>
     );
   }

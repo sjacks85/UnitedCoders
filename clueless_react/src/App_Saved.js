@@ -1,12 +1,10 @@
 import React from "react";
 import "./App.css";
-import "./Divider.css";
 import Divider from "./Divider";
 import Gameboard from "./Gameboard";
 import PlayerHand from "./PlayerHand";
 import { startClient, socket } from "./ClientManager";
 import NoteBook from "./NoteBook";
-import MessageBoard from "./MessageBoard";
 
 class App extends React.Component {
   constructor(props) {
@@ -75,31 +73,22 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <h1>Gameboard</h1>
-        <div class="float-container">
-          <div class="float-child">
-            <div class="green">
-              <Gameboard
-                actions={this.state.actions}
-                player_id={this.state.player_id}
-                character_id={this.state.character_id}
-                cards={this.state.cards}
-                turn={this.state.turn}
-              />
-            </div>
-          </div>
-          <div class="float-child">
-            <div class="blue">
-              <p>Username = {window.location.port}</p>
-              <NoteBook></NoteBook>
-              <h4>Player Hand</h4>
-              <PlayerHand cards={this.state.cards} />
-              <h4>Message Board</h4>
-              <p>
-                <MessageBoard actions={this.state.actions} />
-              </p>
-            </div>
-          </div>
+        <div className="bottom">
+          <h1>Gameboard</h1>
+          <p>Username = {window.location.port}</p>
+          <NoteBook></NoteBook>
+          <br />
+          <Gameboard
+            actions={this.state.actions}
+            player_id={this.state.player_id}
+            character_id={this.state.character_id}
+            cards={this.state.cards}
+            turn={this.state.turn}
+          />
+          <PlayerHand cards={this.state.cards} />
+        </div>
+        <div className="bottom">
+          <Divider actions={this.state.actions} />
         </div>
       </div>
     );
