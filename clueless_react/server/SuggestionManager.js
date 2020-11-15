@@ -47,7 +47,7 @@ class SuggestionManager {
 
                 //ask each next player
                 for (let i = 0, p = Promise.resolve(); i < this.players.length - 1; i++) {
-                    
+                    console.log("TOPFOR " + i)
                     p = p.then(() => this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
                         
                         if (done.can_disprove === "false") {
@@ -57,9 +57,13 @@ class SuggestionManager {
                             console.log("GOING INTO ELSE STATEMENT")
                             //BREAK OUT OF THE LOOP HERE SINCE A PLAYER WAS ABLE TO DISPROVE!!!
                             resolve(done);
+                            console.log("AFTER DONE")
                             resolve(suggestion);
-                            
+                            console.log("AFTER SUGGESTION")
                         }
+                        console.log("BEFORE i=" + i)
+                        i = 20;
+                        console.log("AFTER i=" + i)
 
                         // if no player can disprove
                         if (i === this.players.length - 2) {
@@ -67,7 +71,10 @@ class SuggestionManager {
                             resolve(done);
                             resolve(suggestion);
                         }
+                        console.log("BOTTOMDONE")
                     }));
+                    console.log("BOTTOMFOR " + i)
+                   // resolve(suggestion);
                 }
             }
 

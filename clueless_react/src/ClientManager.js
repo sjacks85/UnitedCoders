@@ -82,9 +82,9 @@ function makeAccusation(accuse, room, person, weapon) {
         
     var accusation = {
         "accuse_made": accuse,
-        "accuse_room": room,
-        "accuse_character": person,
-        "accuse_weapon": weapon
+        "accused_room": room,
+        "accused_character": person,
+        "accused_weapon": weapon
     };
     //console.log('accusation request: ' + accuse + person + weapon + room)
     console.log("makeAccusation: " + JSON.stringify(accusation));
