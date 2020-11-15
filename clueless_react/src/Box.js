@@ -222,7 +222,7 @@ export class Box extends React.Component {
     var playerInput = "Your Accusation : " + a + " " + b + " " + c;
     alert(playerInput);
     //this.setState({ inputs : [playerInput, ...this.state.inputs]})
-    makeAccusation("true", c, a, b);
+    makeAccusation("true", Number(c), Number(a), Number(b));
   }
 
   noMovementClick() {
@@ -286,7 +286,7 @@ export class Box extends React.Component {
     var selectedvalue = -1;
     if (mtVal == "-1") {
       // Send Socket Response that this user doesn't have any of the suggested items.
-      makeDisprove(false, -1);
+      makeDisprove("false", -1);
     } else {
       if (mtVal == "0") {
         selectedvalue = document.getElementById("ResponseUser").value;
