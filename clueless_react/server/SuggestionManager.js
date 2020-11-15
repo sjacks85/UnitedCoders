@@ -14,14 +14,17 @@ class SuggestionManager {
 
         console.log('\n\t---SuggestionManager starts suggestion logic---');
         //only prompt for a suggestion if the player is in a room and can make a suggestion
-        if (this.gameboard.isInRoom(player.character)) {
-            this.suggestingPlayer = player;
-            return new Promise((resolve) => {
+        this.suggestingPlayer = player;
+        return new Promise((resolve) => {
+            if (this.gameboard.isInRoom(player.character)) {
                 this.promptSuggestion(player).then((suggestion) => {
                     resolve(suggestion);
                 });
-            });
-        }
+            }
+            else {
+                resolve(null);
+            }
+        });
     }
 
     promptSuggestion(player) {

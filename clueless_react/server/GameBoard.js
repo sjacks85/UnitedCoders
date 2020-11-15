@@ -57,21 +57,6 @@ class GameBoard {
         this.moveCharacter(4, [3, 0]);
         this.moveCharacter(5, [4, 3]);
 
-        /*
-        this.mBoard[0][3].enterPlayer("Ms. Scarlett");
-        this.mCardLocations["Ms. Scarlett"] = [0, 3];
-        this.mBoard[1][0].enterPlayer("Prof. Plum");
-        this.mCardLocations["Prof. Plum"] = [1, 0];
-        this.mBoard[1][4].enterPlayer("Col. Mustard");
-        this.mCardLocations["Col. Mustard"] = [1, 4];
-        this.mBoard[3][0].enterPlayer("Mrs. Peacock");
-        this.mCardLocations["Mrs. Peacock"] = [3, 0];
-        this.mBoard[4][1].enterPlayer("Mr. Green");
-        this.mCardLocations["Mr. Green"] = [4, 1];
-        this.mBoard[4][3].enterPlayer("Mrs. White");
-        this.mCardLocations["Mrs. White"] = [4, 3];
-        */
-
         //hardcoded weapon starting locations
         this.moveWeapon(6, [0, 0]);
         this.moveWeapon(7, [2, 0]);
@@ -184,7 +169,6 @@ class GameBoard {
         if (this.isCorner(row, col)) {
             possible_moves = this.handleCorner(row, col, possible_moves);
         }
-
         possible_moves = this.checkNewSpace(row - 1, col, possible_moves);
         possible_moves = this.checkNewSpace(row + 1, col, possible_moves);
         possible_moves = this.checkNewSpace(row, col - 1, possible_moves);
@@ -216,6 +200,7 @@ class GameBoard {
     handleCorner(row, col, possible_moves) {
         var new_row;
         var new_col;
+
         if (row == 0) {
             new_row = 4;
         }
@@ -226,11 +211,12 @@ class GameBoard {
         if (col == 0) {
             new_col = 4;
         }
+
         else if (col == 4) {
             new_col = 0;
         }
 
-        if (!this.mBoard[new_row][new_col].isAtLimit) {
+        if (!this.mBoard[new_row][new_col].isAtLimit()) {
             possible_moves.push([new_row, new_col]);
         }
 
