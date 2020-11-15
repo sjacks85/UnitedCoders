@@ -15,9 +15,9 @@ class App extends React.Component {
     // Store in the App, and passed into children as props
     actions: [],
     player_id: 0,
-    character: 0,
+    character_id: 0,
     cards: [],
-    turn: "Waiting For Other Players Turn",
+    turn: "Other Players Turn",
   };
 
   componentDidMount() {

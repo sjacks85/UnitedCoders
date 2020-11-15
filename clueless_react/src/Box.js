@@ -167,43 +167,14 @@ export class Box extends React.Component {
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
 
-    var roomName = "";
-    switch (this.props.locationId) {
-      case "11":
-        roomName = "kitchen";
-        break;
-      case "12":
-        roomName = "ballroom";
-        break;
-      case "13":
-        roomName = "conservatory";
-        break;
-      case "21":
-        roomName = "dinning";
-        break;
-      case "22":
-        roomName = "hall";
-        break;
-      case "23":
-        roomName = "billiard";
-        break;
-      case "31":
-        roomName = "library";
-        break;
-      case "32":
-        roomName = "lounge";
-        break;
-      case "33":
-        roomName = "study";
-        break;
-      default:
-        alert("You need to be in a room!");
-        break;
+    //console.log("LOCATION" + this.props.currentRoom)
+    if (this.props.currentRoom == "Hallway" || this.props.currentRoom == "") {
+      alert("You need to be in a room!");
+      return;
     }
-    if (roomName == "") return;
-    var playerInput = "Your Suggestion: " + roomName + " " + a + " " + b;
+    var playerInput = "Your Suggestion: " + this.props.currentRoom + " " + a + " " + b;
     alert(playerInput);
-    makeSuggestion("true", roomName, a, b);
+    makeSuggestion("true", this.props.currentRoom, a, b);
   }
 
   accusationClicked(a, b, c) {

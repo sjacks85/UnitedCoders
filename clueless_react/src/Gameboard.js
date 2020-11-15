@@ -268,6 +268,7 @@ export class Gameboard extends React.Component {
       movementTurn: false,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
+    this.provideCurrentRoom = this.provideCurrentRoom.bind(this);
 
     this.dims = [
       parseFloat(500 / this.state.grid.length),
@@ -316,9 +317,14 @@ export class Gameboard extends React.Component {
     var newmovementTurn = state.movementTurn;
     var newvalidOptions = state.validOptions;
 
-    if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {
-      newCurrentX = state.locations.currentX;
-      newCurrentY = state.locations.currentY;
+    //console.log("CHARACTER " + props.character_id)
+    if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {   
+      //console.log("BMOVEMENT " + newCurrentX)
+      //console.log("BMOVEMENT " + newCurrentY)
+      newCurrentX = state.locations[props.character_id].currentX;
+      newCurrentY = state.locations[props.character_id].currentY;
+      //console.log("AMOVEMENT " + newCurrentX)
+      //console.log("AMOVEMENT " + newCurrentY)
     }
 
     var first = props.actions[0];
@@ -347,6 +353,12 @@ export class Gameboard extends React.Component {
             newCurrentX = nx;
             newCurrentY = ny;
           }
+          // console.log("MOVEMENT " + JSON.stringify(newGrid[cx][cy]))
+          // console.log("MOVEMENT " + JSON.stringify(newGrid[nx][ny]))
+          // console.log("MOVEMENT " + newLocations[objId].currentX)
+          // console.log("MOVEMENT " + newLocations[objId].currentY)
+          // console.log("MOVEMENT " + newCurrentX)
+          // console.log("MOVEMENT " + newCurrentY)
         }
 
         if (first.message.weapon_moved === true) {
@@ -404,19 +416,18 @@ export class Gameboard extends React.Component {
     );
   }
 
-  provideLocationId() {
-    var cx = this.state.currentX;
-    var cy = this.state.currentY;
-    var result = "0";
-
-    //console.log("PLAYER: " + this.props.player_id);
-    //console.log("PLAYER: x" + cx + " y" + cy);
-
-    if (cx != -1 && cy != -1) {
-      result = this.state.grid[cx][cy].roomId;
+  provideCurrentRoom() {
+    var cx = this.state.locations[this.props.character_id].currentX;
+    var cy = this.state.locations[this.props.character_id].currentY;
+    //console.log("YYHALLWAY: x" + cx + " y" + cy);
+    // console.log(this.state.grid)
+    if (cx == -1 & cy == -1) {
+      return "";
+    } else {
+      var name = this.state.grid[cx][cy].roomName;
+      //console.log("HALLWAY: " + name);
+      return name;
     }
-    //console.log("RESULTS" + result);
-    return result;
   }
 
   render() {
@@ -456,7 +467,7 @@ export class Gameboard extends React.Component {
         {this.props.player_id != 0 && this.displayPlayerInfo()}
         <Box
           actions={this.props.actions}
-          locationId={this.provideLocationId()}
+          currentRoom={this.provideCurrentRoom()}
           cards={this.props.cards}
           turn={this.props.turn}
         />
