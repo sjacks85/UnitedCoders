@@ -29,22 +29,9 @@ class TurnManager {
         return new Promise((resolve) => {
             this.movementManager.move(player).then(move_done => {
                 this.suggestionManager.suggest(player).then(suggest_done => {
-                    this.accusationManager.accuse(player).then(game_over => {
+                    this.accusationManager.accuse(player).then(accuse_done => {
 
-                        if (game_over) {
-                            console.log("SENDING GAME OVER MESSAGE")
-                            //end of game message
-                            var end = {
-                                "game_over": true,
-                                "wining_player": player.username,
-                                "correct_room": accusation.accused_room,
-                                "correct_character": accusation.accused_character,
-                                "correct_weapon": accusation.accused_weapon,
-                            }
-                            this.communication.send(0, 61, end);
-                        }
-
-                        resolve(game_over);
+                        resolve(accuse_done);
                         resolve(suggest_done);
                         resolve(move_done);
                     });

@@ -58,7 +58,16 @@ class AccusationManager {
                             "correct_weapon": accusation.accused_weapon,
                         }
 
-                        game_over = true;
+                        console.log("SENDING GAME OVER MESSAGE")
+                        //end of game message
+                        var end = {
+                            "game_over": true,
+                            "wining_player": player.username,
+                            "correct_room": accusation.accused_room,
+                            "correct_character": accusation.accused_character,
+                            "correct_weapon": accusation.accused_weapon,
+                        }
+                        this.communication.send(0, 61, end);
 
                     } else {
                         //incorrect accusation

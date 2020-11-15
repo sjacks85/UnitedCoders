@@ -45,56 +45,15 @@ class SuggestionManager {
 
                 this.gameboard.handleSuggestionMovement(suggestion.suggested_character, suggestion.suggested_weapon, suggestion.suggested_room);
 
-                //ask each next player
-                // var done = false;
-                // for (let i = 0, p = Promise.resolve(); i < this.players.length - 1; i++) {
-
-                //     console.log("DONE:", done)
-                //     if (done) {
-                //         resolve(done);
-                //         resolve(suggestion);
-                //         break;
-                //     }
-
-                //     p = p.then(() => this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
-
-
-                //         if (done.can_disprove === false) {
-                //             console.log("CURRENT PLAYER COULD NOT DISPROVE, MOVING TO THE NEXT")
-                //             player = this.getNextPlayer(player);
-                //         } else {
-                //             console.log("GOING INTO ELSE STATEMENT")
-                //             //BREAK OUT OF THE LOOP HERE SINCE A PLAYER WAS ABLE TO DISPROVE!!!
-                //             done = true;
-                //             resolve(done);
-                //             resolve(suggestion);
-
-                //         }
-
-                //         // if no player can disprove
-                //         if (i === this.players.length - 2) {
-                //             console.log("ENDING DISPROVE")
-                //             resolve(done);
-                //             resolve(suggestion);
-                //         }
-                //     }));
-
-                //     console.log("GETTING HEREEEEEEEEE")
-                // }
-
-
-
-
-
                 var count = 0;
-                const doNextPromise = () => {
+                const doNextDisprove = () => {
                     this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
 
                         if (done.can_disprove === 'false' && count < this.players.length - 2) {
                             
                             player = this.getNextPlayer(player);
                             count++;
-                            doNextPromise();
+                            doNextDisprove();
                         } else {
                             resolve(done);
                             resolve(suggestion);
@@ -104,7 +63,7 @@ class SuggestionManager {
                     });
                 }
 
-                doNextPromise();
+                doNextDisprove();
             }
 
 
