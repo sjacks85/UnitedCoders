@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Divider from "./Divider";
 import Gameboard from "./Gameboard";
+import FlavorForm from "./FlavorForm";
 import { startClient, socket } from "./ClientManager";
 
 class App extends React.Component {
@@ -15,7 +16,7 @@ class App extends React.Component {
     player_id: 0,
     character: 0,
     cards: [],
-    turn: "",
+    turn: "Waiting For Other Players Turn",
   };
 
   componentDidMount() {
@@ -24,7 +25,7 @@ class App extends React.Component {
       console.log("GameMessage" + JSON.stringify(message));
 
       this.setState({ actions: [message, ...this.state.actions] });
-      var newTurn = "";
+      var newTurn = this.state.turn;
 
       if (message.message_type == 11) {
         if (message.message.username != undefined) {
@@ -41,23 +42,27 @@ class App extends React.Component {
             }
           }
         }
-      } else if (message.message_type == 31) {
-        newTurn = "Movement";
-      } else if (message.message_type == 32) {
-        newTurn = "Suggestion";
-      } else if (message.message_type == 33) {
-        newTurn = "Disprove";
-      } else if (message.message_type == 34) {
-        newTurn = "Accusation";
-      } else if (message.message_type == 52) {
-        //Does 52 need to be send to everyone? To update their notecard
-        if (message.message.accusation_correct === false) {
-          newTurn = "Revoked"
+      }
+
+      if (newTurn != "Revoked") {
+        if (message.message_type == 31) {
+          newTurn = "Movement";
+        } else if (message.message_type == 32) {
+          newTurn = "Suggestion";
+        } else if (message.message_type == 33) {
+          newTurn = "Disprove";
+        } else if (message.message_type == 34) {
+          newTurn = "Accusation";
+        } else if (message.message_type == 52) {
+          //Does 52 need to be send to everyone? To update their notecard
+          if (message.message.accusation_correct === false) {
+            newTurn = "Revoked"
+          }
+        } else if (message.message_type == 61) {
+          newTurn = "End of Game";
+        } else {
+          newTurn = "Other Players Turn";
         }
-      } else if (message.message_type == 61) {
-        newTurn = "End of Game";
-      } else {
-        newTurn = "Other Players Turn";
       }
 
       this.setState({ turn: newTurn });

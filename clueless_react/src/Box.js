@@ -64,17 +64,36 @@ export class Box extends React.Component {
       turn: this.props.turn,
       // Tracks current player location
       currentLocation: this.props.currentLocation,
+      suggestion: "",
     };
 
     this.suggestionClicked = this.suggestionClicked.bind(this);
     this.accusationClicked = this.accusationClicked.bind(this);
     this.noMovementClick = this.noMovementClick.bind(this);
+    this.noSuggestionClick = this.noSuggestionClick.bind(this);
+    this.noAccusationClick = this.noAccusationClick.bind(this);
+    this.sayHello = this.sayHello.bind(this);
+    this.displayMovement = this.displayMovement.bind(this);
   }
 
   createSelectItems(type) {
     let items = this.state.playerHand.map((item, i) => {
       return (
-        item.type == type && item.assigned == true && (
+        item.type == type && (
+          <option key={i} value={i}>
+            {item.name}
+          </option>
+        )
+      );
+    }, this);
+    return items;
+  }
+
+  createSelectAssignItems(type) {
+    let items = this.state.playerHand.map((item, i) => {
+      return (
+        item.type == type &&
+        item.assigned == true && (
           <option key={i} value={i}>
             {item.name}
           </option>
@@ -98,17 +117,37 @@ export class Box extends React.Component {
     //console.log("CARDS " + state.assignedCards);
     //console.log("CARDS " + props.cards + " " + props.cards.length);
     if (state.assignedCards == false && props.cards.length != 0) {
-     // console.log("ASSIGNMENT");
+      // console.log("ASSIGNMENT");
       var i;
       for (i = 0; i < props.cards.length; i++) {
-         var index = Number(props.cards[i])
-         newplayerHand[index].assigned = true;
-         //console.log("CARD " + props.cards[i])
-       }
+        var index = Number(props.cards[i]);
+        newplayerHand[index].assigned = true;
+        //console.log("CARD " + props.cards[i])
+      }
 
       newassignedCards = true;
     }
-    return { assignedCards: newassignedCards, playerHand: newplayerHand };
+
+    var first = props.actions[0];
+    var newSuggestion = state.suggestion;
+    if (first != undefined) {
+      if (first.message_type == 33) {
+        newSuggestion =
+          "Suggestion: " +
+          uniqueIDs[first.message.suggested_character].name +
+          ", " +
+          uniqueIDs[first.message.suggested_room].name +
+          ", " +
+          uniqueIDs[first.message.suggested_weapon].name;
+        console.log("DISPROVE " + newSuggestion);
+      }
+    }
+
+    return {
+      assignedCards: newassignedCards,
+      playerHand: newplayerHand,
+      suggestion: newSuggestion,
+    };
   }
 
   suggestionClicked(a, b) {
@@ -164,12 +203,13 @@ export class Box extends React.Component {
     if (roomName == "") return;
     var playerInput = "Your Suggestion: " + roomName + " " + a + " " + b;
     alert(playerInput);
-    makeSuggestion(roomName, a, b);
+    makeSuggestion("true", roomName, a, b);
   }
 
-  accusationClicked(a, b) {
+  accusationClicked(a, b, c) {
     var aindex = Number(a);
     var bindex = Number(b);
+    var cindex = Number(c);
 
     console.log(
       a +
@@ -178,50 +218,19 @@ export class Box extends React.Component {
         " " +
         b +
         " " +
-        JSON.stringify(uniqueIDs[bindex])
+        JSON.stringify(uniqueIDs[bindex]) +
+        c +
+        " " +
+        JSON.stringify(uniqueIDs[cindex])
     );
     //alert(a);
     //alert(b);
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
-    var roomName = "";
-    switch (this.props.locationId) {
-      case "11":
-        roomName = "kitchen";
-        break;
-      case "12":
-        roomName = "ballroom";
-        break;
-      case "13":
-        roomName = "conservatory";
-        break;
-      case "21":
-        roomName = "dinning";
-        break;
-      case "22":
-        roomName = "hall";
-        break;
-      case "23":
-        roomName = "billiard";
-        break;
-      case "31":
-        roomName = "library";
-        break;
-      case "32":
-        roomName = "study";
-        break;
-      case "33":
-        roomName = "lounge";
-        break;
-      default:
-        alert("You need to be in a room!");
-        break;
-    }
-    if (roomName == "") return;
-    var playerInput = "Your Accusation : " + roomName + " " + a + " " + b;
+    var playerInput = "Your Accusation : " + a + " " + b + " " + c;
     alert(playerInput);
     //this.setState({ inputs : [playerInput, ...this.state.inputs]})
-    makeAccusation(roomName, a, b);
+    makeAccusation("true", c, a, b);
   }
 
   noMovementClick() {
@@ -229,10 +238,29 @@ export class Box extends React.Component {
     makeMovement("false", -1);
   }
 
+  noSuggestionClick() {
+    console.log("noSuggestionClick");
+    //Random suggestion to keep game going
+    makeSuggestion(0, 7, 15);
+  }
+
+  noAccusationClick() {
+    console.log("noAccusationClick");
+    makeAccusation("false", -1, -1, -1);
+  }
+
+  sayHello() {
+    console.log("Sayhello");
+    alert("Hello!");
+  }
+
   // Suggestion Response Functions Starts
   ShowSuggestionWindow(suggestionTxt) {
     document.getElementById("MyCardsType").selectedIndex = "0";
-    document.getElementById("suggestiondetail").innerHTML = suggestionTxt;
+    //document.getElementById("suggestiondetail").innerHTML = suggestionTxt;
+    document.getElementById(
+      "suggestiondetail"
+    ).innerHTML = this.state.suggestion;
     this.updateDisproveUI();
     document.getElementById("suggestionresponsediv").style.display = "";
   }
@@ -283,109 +311,54 @@ export class Box extends React.Component {
       makeDisprove(true, selectedvalue);
     }
     document.getElementById("suggestionresponsediv").style.display = "none";
-    alert(selectedvalue);
+    //alert(selectedvalue);
   }
 
-  render() {
+  displayMovement() {
     return (
-      <div style={{ textAlign: "center" }}>
-        {/* <p>!{JSON.stringify(this.props.cards)}!</p>
-        <p>!{JSON.stringify(this.state.assignedCards)}!</p>
-        <p>!{JSON.stringify(this.state.playerHand)}!</p>
-        <select onChange={this.onDropdownSelected}>
-          {" "}
+      <div>
+        <p>Click gameboard to move!</p>
+        <button onClick={this.noMovementClick}>No Movement</button>
+      </div>
+    )
+  }
+  displaySuggestion() {
+    return (
+      <div>
+        <select
+          name="GuessedUser"
+          id="GuessedUser"
+          style={{ margin: "10px", marginLeft: "0px" }}
+        >
           {this.createSelectItems("character")}
         </select>
-        <select onChange={this.onDropdownSelected}>
-          {" "}
+        <select
+          name="GuessedWeapon"
+          id="GuessedWeapon"
+          style={{ margin: "10px" }}
+        >
           {this.createSelectItems("weapon")}
         </select>
-        <select onChange={this.onDropdownSelected}>
-          {" "}
-          {this.createSelectItems("room")}
-        </select> */}
-        <div
-          style={{
-            textAlign: "center",
-            width: "100%",
-            height: "150px",
-            margin: "10px",
+        <br />
+        <button
+          name="sgbtn"
+          id="sgbtn"
+          onClick={() => {
+            this.suggestionClicked(
+              document.getElementById("GuessedUser").value,
+              document.getElementById("GuessedWeapon").value
+            );
           }}
         >
-          <div
-            style={{
-              textAlign: "center",
-              width: "300px",
-              "Min-Height": "150px",
-              "border-width": "5px",
-              "border-color": "red",
-              "border-style": "outset",
-              margin: "0 auto",
-              position: "relative",
-            }}
-          >
-            <span>
-              <h3>Suggestion / Accusation Box</h3>
-              <select
-                name="GuessedUser"
-                id="GuessedUser"
-                style={{ margin: "10px", marginLeft: "0px" }}
-              >
-                <option value="0" selected="selected">
-                  Miss Scarlet
-                </option>
-                <option value="1">Mr. Green</option>
-                <option value="2">Colonel Mustard</option>
-                <option value="3">Prof. Plum</option>
-                <option value="4">Mrs. Peacock</option>
-                <option value="5">Mrs. White</option>
-              </select>
-              <select
-                name="GuessedWeapon"
-                id="GuessedWeapon"
-                style={{ margin: "10px" }}
-              >
-                <option value="6" selected="selected">
-                  Candlestick
-                </option>
-                <option value="7">Revolver</option>
-                <option value="8">Knife</option>
-                <option value="9">Pipe</option>
-                <option value="10">Rope</option>
-                <option value="11">Wrench</option>
-              </select>
-              <br />
-              <button
-                name="sgbtn"
-                id="sgbtn"
-                onClick={() => {
-                  this.suggestionClicked(
-                    document.getElementById("GuessedUser").value,
-                    document.getElementById("GuessedWeapon").value
-                  );
-                }}
-              >
-                Make Suggestion
-              </button>
-              &nbsp;&nbsp;&nbsp;
-              <button
-                name="acbtn"
-                id="acbtn"
-                onClick={() => {
-                  this.accusationClicked(
-                    document.getElementById("GuessedUser").value,
-                    document.getElementById("GuessedWeapon").value
-                  );
-                }}
-              >
-                Make Accusation
-              </button>
-              <br />
-              &nbsp;&nbsp;&nbsp;
-            </span>
-          </div>
-        </div>
-        <br />
+          Make Suggestion
+        </button>
+        <button onClick={this.noSuggestionClick}>(DELETE FOR DEMO) No Suggestion</button>
+      </div>
+    );
+  }
+  displayDisprove() {
+    return (
+      <div>
         <button
           onClick={() => {
             this.ShowSuggestionWindow("This is the suggestion.");
@@ -400,15 +373,13 @@ export class Box extends React.Component {
             top: "0",
             left: "0",
             width: "100%",
-            height: "150%",
+            height: "100%",
             "background-color": "grey",
             opacity: ".98",
             "z-index": "1000",
             display: "none",
           }}
         >
-          <br />
-          <br />
           <h2 name="suggestiondetail" id="suggestiondetail"></h2>
           <select
             name="MyCardsType"
@@ -430,48 +401,21 @@ export class Box extends React.Component {
             id="ResponseUser"
             style={{ margin: "10px", marginLeft: "0px", display: "none" }}
           >
-            {this.createSelectItems("character")}
-            {/* <option value="0" selected="selected">
-              Miss Scarlet
-            </option>
-            <option value="1">Mr. Green</option>
-            <option value="2">Colonel Mustard</option>
-            <option value="3">Prof. Plum</option>
-            <option value="4">Mrs. Peacock</option>
-            <option value="5">Mrs. White</option> */}
+            {this.createSelectAssignItems("character")}
           </select>
           <select
             name="ResponseWeapon"
             id="ResponseWeapon"
             style={{ margin: "10px", display: "none" }}
           >
-            {this.createSelectItems("weapon")}
-            {/* <option value="6" selected="selected">
-              Candlestick
-            </option>
-            <option value="7">Revolver</option>
-            <option value="8">Knife</option>
-            <option value="9">Pipe</option>
-            <option value="10">Rope</option>
-            <option value="11">Wrench</option> */}
+            {this.createSelectAssignItems("weapon")}
           </select>
           <select
             name="ResponseRoom"
             id="ResponseRoom"
             style={{ margin: "10px", display: "none" }}
           >
-            {this.createSelectItems("room")}
-            {/* <option value="20" selected="selected">
-              Kitchen
-            </option>
-            <option value="19">Ballroom</option>
-            <option value="18">Conservatory</option>
-            <option value="15">Dining Room</option>
-            <option value="13">Hall</option>
-            <option value="16">Billiards Room</option>
-            <option value="17">Library</option>
-            <option value="14">Lounge</option>
-            <option value="12">Study</option> */}
+            {this.createSelectAssignItems("room")}
           </select>
           <button
             onClick={() => {
@@ -480,13 +424,76 @@ export class Box extends React.Component {
           >
             Disprove
           </button>
-          <button onClick={this.noMovementClick()}>No Movement</button>
         </div>
-        {/*Suggestion Response START*/}
-        <br />
-        <br />
-        <br />
       </div>
+    );
+  }
+  displayAccusation() {
+    return (
+      <div>
+        <select
+          name="GuessedUser"
+          id="GuessedUser"
+          style={{ margin: "10px", marginLeft: "0px" }}
+        >
+          {this.createSelectItems("character")}
+        </select>
+        <select
+          name="GuessedWeapon"
+          id="GuessedWeapon"
+          style={{ margin: "10px" }}
+        >
+          {this.createSelectItems("weapon")}
+        </select>
+        <select
+          name="GuessedRoom"
+          id="GuessedRoom"
+          style={{ margin: "10px" }}
+        >
+          {this.createSelectItems("room")}
+        </select>
+        <br />
+        &nbsp;&nbsp;&nbsp;
+        <button
+          name="acbtn"
+          id="acbtn"
+          onClick={() => {
+            this.accusationClicked(
+              document.getElementById("GuessedUser").value,
+              document.getElementById("GuessedWeapon").value,
+              document.getElementById("GuessedRoom").value
+            );
+          }}
+        >
+          Make Accusation
+        </button>
+        <button onClick={this.noAccusationClick}>No Accusation</button>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div
+      style={{
+        textAlign: "center",
+        width: "500px",
+        height: "150px",
+        "border-width": "5px",
+        "border-color": "red",
+        "border-style": "outset",
+        margin: "0 auto",
+        position: "relative",
+      }}
+    >
+      <span>
+        <h3>Turn: {this.props.turn}</h3>
+        {this.props.turn == "Movement" && this.displayMovement()}
+        {this.props.turn == "Suggestion" && this.displaySuggestion()}
+        {this.props.turn == "Disprove" && this.displayDisprove()}
+        {this.props.turn == "Accusation" && this.displayAccusation()}
+      </span>
+    </div>
     );
   }
 }

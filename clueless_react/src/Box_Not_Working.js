@@ -271,33 +271,6 @@ export class Box extends React.Component {
 		//alert(selectedvalue);
 	}
 	
-	//Suggestion Response Functions Ends
- 
-  handleOnClick(x, y) {
-    const cx = this.state.playerLocations[this.props.player_id].startX;
-    const cy = this.state.playerLocations[this.props.player_id].startY;
-    const currentRoom = this.state.grid[cx][cy];
-    const requestedRoom = this.state.grid[x][y];
-
-    console.log("TicTac current x=" + cx + " y=" + cy);
-    console.log("TicTac currentroom" + JSON.stringify(currentRoom));
-    console.log("TicTac requested x=" + x + " y=" + y + " ");
-    console.log("TicTac requestedroom" + JSON.stringify(requestedRoom));
-
-    // Need to store current player, with location to base valid movements on
-
-    const valid = this.validateMove(x, y)
-    if (valid) {
-      this.moveCurrentPlayer(x, y);
-    } else {
-      alert("not valid movement")
-    }
-
-  }
-
-  filter = memoize(
-    (list) => list.filter(item => item.message_type == 31)
-  );
 
   render() {
     const style = {

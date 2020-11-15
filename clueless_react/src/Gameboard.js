@@ -245,7 +245,6 @@ export class Gameboard extends React.Component {
       player_id: -1,
       character: -1,
       cards: {},
-      turn: "",
 
       // Gameboard grid
       grid: startGrid,
@@ -377,7 +376,6 @@ export class Gameboard extends React.Component {
     return {
       player_id: props.player_id,
       character: props.character,
-      turn: props.turn,
       cards: props.cards,
       count: newcount,
       grid: newGrid,
@@ -392,8 +390,8 @@ export class Gameboard extends React.Component {
   displayPlayerInfo() {
     return (
       <p>
-        Player {this.props.player_id} | Character {this.props.character} | X ={" "}
-        {this.state.locations[this.props.character].currentX} | Y ={" "}
+        Player={this.props.player_id} | Character={uniqueIDs[this.props.character].name} | X={" "}
+        {this.state.locations[this.props.character].currentX} | Y={" "}
         {this.state.locations[this.props.character].currentY}
       </p>
     );
@@ -448,11 +446,13 @@ export class Gameboard extends React.Component {
       <div style={{ textAlign: "center" }}>
         {this.props.player_id != 0 && this.displayPlayerInfo()}
         <Box
-          actions={this.state.actions}
+          actions={this.props.actions}
           locationId={this.provideLocationId()}
-          cards={this.state.cards}
-          turn={this.state.turn}
+          cards={this.props.cards}
+          turn={this.props.turn}
         />
+        <br />
+        <br />
         <br />
         <table cellSpacing="0" id="table" style={style}>
           <tbody>{rows}</tbody>
