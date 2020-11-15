@@ -331,9 +331,9 @@ export class Gameboard extends React.Component {
     //console.log("getDerivedStateFromProps " + JSON.stringify(first));
     if (first != undefined) {
       if (first.message_type == 22) {
-        console.log("Found movement broadcast");
+        //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
-          console.log("Character move")
+          //console.log("Character move")
           var objId = Number(first.message.moved_character);
 
           const cx = newLocations[objId].currentX;
@@ -362,7 +362,7 @@ export class Gameboard extends React.Component {
         }
 
         if (first.message.weapon_moved === true) {
-          console.log("Weapon move")
+          //console.log("Weapon move")
           var objId = Number(first.message.moved_weapon);
 
           const cx = newLocations[objId].currentX;
