@@ -42,12 +42,31 @@ class SuggestionManager {
 
                 this.gameboard.handleSuggestionMovement(suggestion.suggested_character, suggestion.suggested_weapon, suggestion.suggested_room);
 
-                this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
-                    resolve(done);
-                    resolve(suggestion);
-                });
-                //resolve(suggestion);
-                // return;
+                //ask each next player
+                for (let i = 0, p = Promise.resolve(); i < this.players.length - 1; i++) {
+                    
+                    p = p.then(() => this.askDisprove(this.getNextPlayer(player), suggestion).then(done => {
+                        
+
+                        if (done.can_disprove === false) {
+                            console.log("CURRENT PLAYER COULD NOT DISPROVE, MOVING TO THE NEXT")
+                            player = this.getNextPlayer(player);
+                        } else {
+                            console.log("GOING INTO ELSE STATEMENT")
+                            //BREAK OUT OF THE LOOP HERE SINCE A PLAYER WAS ABLE TO DISPROVE!!!
+                            resolve(done);
+                            resolve(suggestion);
+                            
+                        }
+
+                        // if no player can disprove
+                        if (i === this.players.length - 2) {
+                            console.log("ENDING DISPROVE")
+                            resolve(done);
+                            resolve(suggestion);
+                        }
+                    }));
+                }
             }
 
             //suggestion request is an empty message with the correct message ID

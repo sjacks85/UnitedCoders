@@ -13,7 +13,7 @@ function registerPlayer(playerObj) {
     players.push(playerObj);
 
     // If enough players have joined then start the game.
-    if (players.length >= 1) {
+    if (players.length >= 3) {
         startGame();
     }
 }
