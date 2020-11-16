@@ -10,9 +10,6 @@ class GameSpace {
     }
 
     containsCharacter(character) {
-        console.log("CHARACTER " + character);
-        console.log("TO STRING: " + this.mCurrentCharacters.toString());
-        console.log("INCLUDES " + this.mCurrentCharacters.includes(Number(character)));
         return this.mCurrentCharacters.includes(Number(character));
     }
 
@@ -25,13 +22,18 @@ class GameSpace {
     }
 
     exitCharacter(character) {
-        console.log("EXIT");
         if (this.containsCharacter(Number(character))) {
-            console.log("CONTAINS");
             //get the index of the character and remove it
             var ind = this.mCurrentCharacters.indexOf(Number(character));
-            this.mCurrentCharacters.splice(0, ind);
-            console.log("curr character length " + this.mCurrentCharacters.length);
+            console.log("LENGTH BEFORE " + this.mCurrentCharacters.length);
+            console.log("ind " + ind);
+            if (ind == 0) {
+                this.mCurrentCharacters.pop();
+            }
+            else {
+                this.mCurrentCharacters.splice(0, ind);
+            }
+            console.log("LENGTH AFTER " + this.mCurrentCharacters.length);
             return true;
         }
         return false;
@@ -65,6 +67,7 @@ class GameSpace {
             return false;
         }
         return this.mCurrentCharacters.length >= this.mLimit;
+        //return false;
     }
 
     getType() {
