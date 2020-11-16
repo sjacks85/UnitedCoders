@@ -24,7 +24,7 @@ class GameSpace {
     exitCharacter(character) {
         if (this.containsCharacter(character)) {
             //get the index of the character and remove it
-            ind = this.mCurrentCharacters.indexOf(character);
+            var ind = this.mCurrentCharacters.indexOf(character);
             this.mCurrentCharacters.splice(0, ind);
             return true;
         }
@@ -48,7 +48,7 @@ class GameSpace {
     exitWeapon(weapon) {
         if (this.containsWeapon(weapon)) {
             //get the index of the weapon and remove it
-            ind = this.mCurrentWeapons.indexOf(weapon);
+            var ind = this.mCurrentWeapons.indexOf(weapon);
             this.mCurrentWeapons.splice(0, ind);
             return true;
         }
