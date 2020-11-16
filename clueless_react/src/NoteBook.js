@@ -218,7 +218,7 @@ class NoteBook extends React.Component {
 }
 
 window.onload = function () {
-    console.log("NOTEBOOKONLOD")
+    //console.log("NOTEBOOKONLOD")
     // var all = document.getElementsByTagName("td");
     // for (var i = 0; i < all.length; i++) {
     //     all[i].onclick = inputClickHandler;
@@ -231,7 +231,7 @@ window.onload = function () {
 };
 
 function inputClickHandler(e) {
-    console.log("NOTEBOOOKINPUT")
+    //console.log("NOTEBOOOKINPUT")
     e = e || window.event;
     var tdElm = e.target || e.srcElement;
     if (tdElm.style.backgroundColor == 'lightblue') {

@@ -5,6 +5,7 @@ import {
   makeDisprove,
   makeAccusation,
 } from "./ClientManager";
+import "./Box.css";
 
 var uniqueIDs = [
   //0
@@ -466,28 +467,37 @@ export class Box extends React.Component {
 
   render() {
     return (
-      <div
+ <div
       style={{
         textAlign: "center",
         width: "500px",
         height: "150px",
         "border-width": "5px",
-        "border-color": "red",
-        "border-style": "outset",
+        "border-color": 'rgb(0, 89, 179)',
+        "border-style": "double",
         margin: "0 auto",
         position: "relative",
       }}
     >
-      <span>
         <h3>Turn: {this.props.turn}</h3>
         {this.props.turn == "Movement" && this.displayMovement()}
         {this.props.turn == "Suggestion" && this.displaySuggestion()}
         {this.props.turn == "Disprove" && this.displayDisprove()}
         {this.props.turn == "Accusation" && this.displayAccusation()}
-      </span>
     </div>
     );
   }
 }
 
 export default Box;
+
+    //   textAlign: "center",
+    //   width: "500px",
+    //   height: "150px",
+    //   "border-width": "5px",
+    //   "border-color": rgb(0, 102, 255),
+    //`rgb(${box.color})`
+    //   "border-style": "outset",
+    //   margin: "0 auto",
+    //   position: "relative",
+    // }}>

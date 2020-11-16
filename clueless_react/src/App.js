@@ -20,6 +20,8 @@ class App extends React.Component {
     character_id: 0,
     cards: [],
     turn: "Other Players Turn",
+    currentLocationId: 0,
+    currentRoom: "",
   };
 
   componentDidMount() {
@@ -72,35 +74,27 @@ class App extends React.Component {
     });
   }
 
+  onselectTest = (string) => {
+    console.log("TESTCALLBACK" + string);
+    //this.setState({language: langValue});
+  };
+
   render() {
+    const imgsrc = "/Picture1.png";
     return (
       <div className="App">
-        <h1>Gameboard</h1>
-        <div class="float-container">
-          <div class="float-child">
-            <div class="green">
-              <Gameboard
+        <h1>United Coders ClueLess</h1>
+        <img src={imgsrc} height="50" width="100" />
+        <Gameboard
                 actions={this.state.actions}
                 player_id={this.state.player_id}
                 character_id={this.state.character_id}
                 cards={this.state.cards}
                 turn={this.state.turn}
+                changeCurrentLocationId={this.changeCurrentLocationId}
+                changeCurrentRoom={this.changeCurrentRoom}
+                onSelectTest={this.onselectTest}
               />
-            </div>
-          </div>
-          <div class="float-child">
-            <div class="blue">
-              <p>Username = {window.location.port}</p>
-              <NoteBook></NoteBook>
-              <h4>Player Hand</h4>
-              <PlayerHand cards={this.state.cards} />
-              <h4>Message Board</h4>
-              <p>
-                <MessageBoard actions={this.state.actions} />
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     );
   }

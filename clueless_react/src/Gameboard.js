@@ -2,6 +2,10 @@ import React from "react";
 import { Room } from "./Room";
 import { Box } from "./Box";
 import { makeMovement } from "./ClientManager";
+import PlayerHand from "./PlayerHand";
+import NoteBook from "./NoteBook";
+import MessageBoard from "./MessageBoard";
+import "./Divider.css";
 
 var uniqueIDs = [
   //0
@@ -298,8 +302,6 @@ export class Gameboard extends React.Component {
       movementTurn: false,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.provideCurrentRoom = this.provideCurrentRoom.bind(this);
-    this.provideCurrentLocationId = this.provideCurrentLocationId.bind(this);
     this.displayIcons = this.displayIcons.bind(this);
 
     this.dims = [
@@ -311,16 +313,16 @@ export class Gameboard extends React.Component {
   displayIcons() {
     const objects = uniqueIDs.map((object, index) => {
       const imgsrc = "/gameboard/" + index.toString() + ".png";
-      return <p> {index.toString()}
-        <img src={imgsrc} height="45" width="30" />
+      return (
+        <p>
+          {" "}
+          {index.toString()}
+          <img src={imgsrc} height="45" width="30" />
         </p>
+      );
     });
 
-    return (
-      <div>
-        {objects}
-      </div>
-    );
+    return <div>{objects}</div>;
   }
 
   handleOnClick(x, y) {
@@ -350,6 +352,33 @@ export class Gameboard extends React.Component {
       alert("Not your movement turn");
     }
   }
+  provideCurrentRoom() {
+    var cx = this.state.locations[this.props.character_id].currentX;
+    var cy = this.state.locations[this.props.character_id].currentY;
+    //console.log("YYHALLWAY: x" + cx + " y" + cy);
+    // console.log(this.state.grid)
+    if (cx == -1 & cy == -1) {
+      return "";
+    } else {
+      var name = this.state.grid[cx][cy].roomName;
+      //console.log("HALLWAY: " + name);
+      return name;
+    }
+  }
+
+  provideCurrentLocationId() {
+    var cx = this.state.locations[this.props.character_id].currentX;
+    var cy = this.state.locations[this.props.character_id].currentY;
+    //console.log("YYHALLWAY: x" + cx + " y" + cy);
+    // console.log(this.state.grid)
+    if (cx == -1 & cy == -1) {
+      return "";
+    } else {
+      var locid = this.state.grid[cx][cy].uniqueid;
+      //console.log("HALLWAY: " + locid);
+      return locid;
+    }
+  }
 
   static getDerivedStateFromProps(props, state) {
     //console.log("getDerivedStateFromProps");
@@ -365,7 +394,7 @@ export class Gameboard extends React.Component {
     var newvalidOptions = state.validOptions;
 
     //console.log("CHARACTER " + props.character_id)
-    if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {   
+    if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {
       //console.log("BMOVEMENT " + newCurrentX)
       //console.log("BMOVEMENT " + newCurrentY)
       newCurrentX = state.locations[props.character_id].currentX;
@@ -382,7 +411,7 @@ export class Gameboard extends React.Component {
         if (first.message.character_moved === true) {
           //console.log("Character move")
           var objId = Number(first.message.moved_character);
-          console.log("Character move: " + objId)
+          console.log("Character move: " + objId);
 
           const cx = newLocations[objId].currentX;
           const cy = newLocations[objId].currentY;
@@ -414,7 +443,7 @@ export class Gameboard extends React.Component {
         if (first.message.weapon_moved === true) {
           //console.log("Weapon move")
           var objId = Number(first.message.moved_weapon);
-          console.log("Weapon move: " + objId)
+          console.log("Weapon move: " + objId);
 
           const cx = newLocations[objId].currentX;
           const cy = newLocations[objId].currentY;
@@ -428,11 +457,6 @@ export class Gameboard extends React.Component {
 
           newLocations[objId].currentX = nx;
           newLocations[objId].currentY = ny;
-
-          if ((objId = props.character_id)) {
-            newCurrentX = nx;
-            newCurrentY = ny;
-          }
         }
       } else if (first.message_type == 31) {
         newmovementTurn = true;
@@ -458,41 +482,17 @@ export class Gameboard extends React.Component {
   }
 
   displayPlayerInfo() {
-    return (
-      <p>
-        Player={this.props.player_id} | Character={uniqueIDs[this.props.character_id].name} | X={" "}
-        {this.state.locations[this.props.character_id].currentX} | Y={" "}
-        {this.state.locations[this.props.character_id].currentY}
-      </p>
-    );
-  }
-
-  provideCurrentRoom() {
-    var cx = this.state.locations[this.props.character_id].currentX;
-    var cy = this.state.locations[this.props.character_id].currentY;
-    //console.log("YYHALLWAY: x" + cx + " y" + cy);
-    // console.log(this.state.grid)
-    if (cx == -1 & cy == -1) {
-      return "";
+    let string = ""
+    if (this.props.player_id != 0 ) {
+      let cx = this.state.locations[this.props.character_id].currentX;
+      let cy = this.state.locations[this.props.character_id].currentY
+      let roomName = this.state.grid[cx][cy].roomName;
+      string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Location = " + roomName;
+      //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
     } else {
-      var name = this.state.grid[cx][cy].roomName;
-      //console.log("HALLWAY: " + name);
-      return name;
+      string = "Username = " + window.location.port;
     }
-  }
-
-  provideCurrentLocationId() {
-    var cx = this.state.locations[this.props.character_id].currentX;
-    var cy = this.state.locations[this.props.character_id].currentY;
-    //console.log("YYHALLWAY: x" + cx + " y" + cy);
-    // console.log(this.state.grid)
-    if (cx == -1 & cy == -1) {
-      return "";
-    } else {
-      var locid = this.state.grid[cx][cy].uniqueid;
-      //console.log("HALLWAY: " + locid);
-      return locid;
-    }
+    return string;
   }
 
   render() {
@@ -527,26 +527,82 @@ export class Gameboard extends React.Component {
       );
     });
 
+    if (this.props.player_id != 0) {
+      this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
+      //this.props.changeCurrentRoom(this.provideCurrentRoom())
+      //this.props.changeCurrentLocationId(this.provideCurrentLocationId())
+    }
+
     return (
-      <div style={{ textAlign: "center" }}>
-        {this.props.player_id != 0 && this.displayPlayerInfo()}
-        <Box
-          actions={this.props.actions}
-          currentLocId={this.provideCurrentLocationId()}
-          currentRoom={this.provideCurrentRoom()}
-          cards={this.props.cards}
-          turn={this.props.turn}
-        />
-        <br />
-        <br />
-        <br />
-        <table cellSpacing="0" id="table" style={style}>
-          <tbody>{rows}</tbody>
-        </table>
-        <br />
-        <br />
-        <br />
+      <div>
+        <div class="float-container">
+          <div class="float-child">
+            <div class="green">
+              <h3>Gameboard</h3>
+              <p>
+                {this.displayPlayerInfo()}
+              </p>
+              <table cellSpacing="0" id="table" style={style}>
+                <tbody>{rows}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="float-child">
+            <div class="blue">
+              <Box
+                actions={this.props.actions}
+                currentLocId={this.provideCurrentLocationId()}
+                currentRoom={this.provideCurrentRoom()}
+                cards={this.props.cards}
+                turn={this.props.turn}
+              />
+              <h4>Player Notebook</h4>
+              <NoteBook></NoteBook>
+              <h4>Player Hand</h4>
+              <PlayerHand cards={this.state.cards} />
+              <h4>Message Board</h4>
+              <p>
+                <MessageBoard actions={this.state.actions} />
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
+      // <div class="float-container">
+      //   <div class="float-child">
+      //     <div class="green">
+      //       {this.props.player_id != 0 && this.displayPlayerInfo()}
+      //       <br />
+      //       <br />
+      //       <br />
+      //       <table cellSpacing="0" id="table" style={style}>
+      //         <tbody>{rows}</tbody>
+      //       </table>
+      //       <br />
+      //       <br />
+      //       <br />
+      //     </div>
+      //     <div class="float-child">
+      //       <div class="blue">
+      //         <p>Username = {window.location.port}</p>
+      //         <Box
+      //           actions={this.props.actions}
+      //           currentLocId={this.provideCurrentLocationId()}
+      //           currentRoom={this.provideCurrentRoom()}
+      //           cards={this.props.cards}
+      //           turn={this.props.turn}
+      //         />
+      //         <NoteBook></NoteBook>
+      //         <h4>Player Hand</h4>
+      //         <PlayerHand cards={this.props.cards} />
+      //         <h4>Message Board</h4>
+      //         <p>
+      //           <MessageBoard actions={this.props.actions} />
+      //         </p>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
     );
   }
 }

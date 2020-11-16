@@ -137,10 +137,10 @@ class MessageBoard extends React.Component {
         if (anotherstring != "") {
           newmessages.push(anotherstring)
         }
-        console.log("MESSAGE STRING " + string)
-        console.log("MESSAGE ANOTHERSTRING " + anotherstring)
+        //console.log("MESSAGE STRING " + string)
+        //console.log("MESSAGE ANOTHERSTRING " + anotherstring)
         //newmessages = [newmessages, ...string];
-        console.log("MESSAGE: " + newmessages)
+       // console.log("MESSAGE: " + newmessages)
 
       }
     }
