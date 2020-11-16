@@ -41,7 +41,7 @@ class AccusationManager {
                     }
                     this.communication.send(0, 21, accusation_broadcast);
 
-                    
+
                     var envelope = this.deck.envelope;
                     var envelope_character = envelope[0].Name;
                     var envelope_weapon = envelope[1].Name;

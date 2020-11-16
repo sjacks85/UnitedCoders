@@ -33,6 +33,13 @@ class MovementManager {
                 // return;
             }
 
+            var start_broadcast_string = "User " + player.username + " is starting their turn.";
+            var start_broadcast = {
+                "broadcast_message": start_broadcast_string
+            }
+            this.communication.send(0, 21, start_broadcast);
+
+
             var possible_movement = this.mGameBoard.getPossibleMovement(player.character);
             var valid_move_options = [];
 
