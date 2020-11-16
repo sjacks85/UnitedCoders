@@ -72,7 +72,7 @@ class MessageBoard extends React.Component {
         if (item.message_type == 11) {
           // 11	Player Start
           //string = "11 Player Start"
-          string = "Player " + item.message.player_id + " joined as character " + uniqueIDs[item.message.character_id].name;
+          string = "Player " + item.message.username + " joined as character " + uniqueIDs[item.message.character_id].name;
 
         } else if (item.message_type == 21) {
           // 21	Broadcast Information

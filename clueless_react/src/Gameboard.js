@@ -340,16 +340,16 @@ export class Gameboard extends React.Component {
         }
       }
       if (found) {
-        alert("Valid movement");
+        alert("That's a valid location to movement! Moving to the " + this.state.grid[x][y].roomName);
 
         //Send movement request with requested room
         makeMovement("true", myArray[index].movement_id);
         this.setState({ movementTurn: false, validOptions: [] });
       } else {
-        alert("Not valid movement");
+        alert("That's an invalid location to movement. Try again!");
       }
     } else {
-      alert("Not your movement turn");
+      alert("It's not your turn to move!");
     }
   }
   provideCurrentRoom() {
@@ -487,7 +487,7 @@ export class Gameboard extends React.Component {
       let cx = this.state.locations[this.props.character_id].currentX;
       let cy = this.state.locations[this.props.character_id].currentY
       let roomName = this.state.grid[cx][cy].roomName;
-      string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " Character = " + uniqueIDs[this.props.character_id].name + " | Location = " + roomName;
+      string = "Username = " + window.location.port + " | Character = " + uniqueIDs[this.props.character_id].name + " | Location = " + roomName;
       //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
     } else {
       string = "Username = " + window.location.port;

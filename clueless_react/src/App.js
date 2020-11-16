@@ -65,7 +65,13 @@ class App extends React.Component {
           }
         } else if (message.message_type == 61) {
           newTurn = "End of Game";
-        } else {
+        } else if (message.message_type == 21) {
+          if (message.message.broadcast_message.indexOf("starting their turn") != 0) {
+            console.log("FOUND")
+            newTurn = "Other Players Turn";
+          }
+        } 
+        else {
           newTurn = "Other Players Turn";
         }
       }
@@ -75,7 +81,7 @@ class App extends React.Component {
   }
 
   onselectTest = (string) => {
-    console.log("TESTCALLBACK" + string);
+    //console.log("TESTCALLBACK" + string);
     //this.setState({language: langValue});
   };
 

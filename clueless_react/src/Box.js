@@ -191,10 +191,11 @@ export class Box extends React.Component {
 
     //console.log("LOCATION" + this.props.currentRoom)
     if (this.props.currentRoom == "Hallway" || this.props.currentRoom == "") {
-      alert("You need to be in a room!");
+      alert("You need to be in a room to make an suggestion!");
       return;
     }
-    var playerInput = "Your Suggestion: " + this.props.currentRoom + " " + a + " " + b;
+    var playerInput =
+      "You made the following suggestion: " + this.props.currentRoom + ", " + uniqueIDs[a].name + ", " +  uniqueIDs[b].name;
     alert(playerInput);
     makeSuggestion(this.props.currentLocId, a, b);
   }
@@ -220,9 +221,13 @@ export class Box extends React.Component {
     //alert(b);
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
-    var playerInput = "Your Accusation : " + a + " " + b + " " + c;
+    var playerInput =
+    "You made the following accusation: " + uniqueIDs[a].name + ", " +  uniqueIDs[b].name + ", " + uniqueIDs[c].name;
+    
     alert(playerInput);
     //this.setState({ inputs : [playerInput, ...this.state.inputs]})
+    //this.setState({ accusation: false});
+    console.log("KATHRYN" + this.state.turn);
     makeAccusation("true", Number(c), Number(a), Number(b));
   }
 
@@ -239,6 +244,9 @@ export class Box extends React.Component {
 
   noAccusationClick() {
     console.log("noAccusationClick");
+    this.setState({ turn: "Other Players Turn" });
+    console.log("KATHRYN" + this.state.turn);
+    //this.setState({ accusation: false});
     makeAccusation("false", -1, -1, -1);
   }
 
@@ -313,7 +321,7 @@ export class Box extends React.Component {
         <p>Click gameboard to move!</p>
         <button onClick={this.noMovementClick}>No Movement</button>
       </div>
-    )
+    );
   }
   displaySuggestion() {
     return (
@@ -383,11 +391,11 @@ export class Box extends React.Component {
             }}
           >
             <option value="-1" selected="selected">
-              I don't have any of the suggested cards
+              No cards to disprove
             </option>
-            <option value="0">I have suggested Player card : </option>
-            <option value="1">I have suggested Weapon card : </option>
-            <option value="2">I have suggested Room card : </option>
+            <option value="0">Character Cards</option>
+            <option value="1">Weapon Cards</option>
+            <option value="2">Room Cards</option>
           </select>
           <select
             name="ResponseUser"
@@ -438,11 +446,7 @@ export class Box extends React.Component {
         >
           {this.createSelectItems("weapon")}
         </select>
-        <select
-          name="GuessedRoom"
-          id="GuessedRoom"
-          style={{ margin: "10px" }}
-        >
+        <select name="GuessedRoom" id="GuessedRoom" style={{ margin: "10px" }}>
           {this.createSelectItems("room")}
         </select>
         <br />
@@ -467,37 +471,37 @@ export class Box extends React.Component {
 
   render() {
     return (
- <div
-      style={{
-        textAlign: "center",
-        width: "500px",
-        height: "150px",
-        "border-width": "5px",
-        "border-color": 'rgb(0, 89, 179)',
-        "border-style": "double",
-        margin: "0 auto",
-        position: "relative",
-      }}
-    >
+      <div
+        style={{
+          textAlign: "center",
+          width: "500px",
+          height: "150px",
+          "border-width": "5px",
+          "border-color": "rgb(0, 89, 179)",
+          "border-style": "double",
+          margin: "0 auto",
+          position: "relative",
+        }}
+      >
         <h3>Turn: {this.props.turn}</h3>
         {this.props.turn == "Movement" && this.displayMovement()}
         {this.props.turn == "Suggestion" && this.displaySuggestion()}
         {this.props.turn == "Disprove" && this.displayDisprove()}
         {this.props.turn == "Accusation" && this.displayAccusation()}
-    </div>
+      </div>
     );
   }
 }
 
 export default Box;
 
-    //   textAlign: "center",
-    //   width: "500px",
-    //   height: "150px",
-    //   "border-width": "5px",
-    //   "border-color": rgb(0, 102, 255),
-    //`rgb(${box.color})`
-    //   "border-style": "outset",
-    //   margin: "0 auto",
-    //   position: "relative",
-    // }}>
+//   textAlign: "center",
+//   width: "500px",
+//   height: "150px",
+//   "border-width": "5px",
+//   "border-color": rgb(0, 102, 255),
+//`rgb(${box.color})`
+//   "border-style": "outset",
+//   margin: "0 auto",
+//   position: "relative",
+// }}>
