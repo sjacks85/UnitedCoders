@@ -10,45 +10,50 @@ class GameSpace {
     }
 
     containsCharacter(character) {
-        return this.mCurrentCharacters.includes(character);
+        console.log("CHARACTER " + character);
+        console.log("TO STRING: " + this.mCurrentCharacters.toString());
+        console.log("INCLUDES " + this.mCurrentCharacters.includes(Number(character)));
+        return this.mCurrentCharacters.includes(Number(character));
     }
 
     enterCharacter(character) {
-        if (!this.isAtLimit() && !this.containsCharacter(character)) {
-            this.mCurrentCharacters.push(character);
+        if (!this.isAtLimit() && !this.containsCharacter(Number(character))) {
+            this.mCurrentCharacters.push(Number(character));
             return true;
         }
         return false;
     }
 
     exitCharacter(character) {
-        if (this.containsCharacter(character)) {
+        console.log("EXIT");
+        if (this.containsCharacter(Number(character))) {
+            console.log("CONTAINS");
             //get the index of the character and remove it
-            var ind = this.mCurrentCharacters.indexOf(character);
+            var ind = this.mCurrentCharacters.indexOf(Number(character));
             this.mCurrentCharacters.splice(0, ind);
+            console.log("curr character length " + this.mCurrentCharacters.length);
             return true;
         }
         return false;
     }
 
     containsWeapon(weapon) {
-        return this.mCurrentWeapons.includes(weapon);
+        return this.mCurrentWeapons.includes(Number(weapon));
     }
 
     enterWeapon(weapon) {
         if (!this.containsWeapon) {
-            this.mCurrentWeapons.push(weapon);
+            this.mCurrentWeapons.push(Number(weapon));
             return true; //return true to say the weapon moved
         }
 
         return false; //weapon did not enter
-
     }
 
     exitWeapon(weapon) {
-        if (this.containsWeapon(weapon)) {
+        if (this.containsWeapon(Number(weapon))) {
             //get the index of the weapon and remove it
-            var ind = this.mCurrentWeapons.indexOf(weapon);
+            var ind = this.mCurrentWeapons.indexOf(Number(weapon));
             this.mCurrentWeapons.splice(0, ind);
             return true;
         }
