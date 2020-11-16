@@ -80,11 +80,11 @@ class App extends React.Component {
   };
 
   render() {
-    const imgsrc = "/Picture1.png";
+    const imgsrc = "/Clue-Less-Title.png";
     return (
       <div className="App">
-        <h1>United Coders ClueLess</h1>
-        <img src={imgsrc} height="50" width="100" />
+        <br></br>
+        <img src={imgsrc} height="50" width="300" />
         <Gameboard
                 actions={this.state.actions}
                 player_id={this.state.player_id}

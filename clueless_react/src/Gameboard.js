@@ -487,7 +487,7 @@ export class Gameboard extends React.Component {
       let cx = this.state.locations[this.props.character_id].currentX;
       let cy = this.state.locations[this.props.character_id].currentY
       let roomName = this.state.grid[cx][cy].roomName;
-      string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Location = " + roomName;
+      string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " Character = " + uniqueIDs[this.props.character_id].name + " | Location = " + roomName;
       //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
     } else {
       string = "Username = " + window.location.port;
@@ -562,7 +562,7 @@ export class Gameboard extends React.Component {
               <PlayerHand cards={this.state.cards} />
               <h4>Message Board</h4>
               <p>
-                <MessageBoard actions={this.state.actions} />
+                <MessageBoard actions={this.props.actions} />
               </p>
             </div>
           </div>

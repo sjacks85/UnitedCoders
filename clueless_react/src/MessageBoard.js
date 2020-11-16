@@ -151,7 +151,10 @@ class MessageBoard extends React.Component {
     return (
       <ul>
         {this.state.messages.map((elem) => (
-          <li>{elem}</li>
+          <li style={{
+            textAlign: "left",
+          }}
+          >{elem}</li>
         ))}
       </ul>
     );

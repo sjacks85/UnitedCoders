@@ -345,7 +345,7 @@ export class Box extends React.Component {
         >
           Make Suggestion
         </button>
-        <button onClick={this.noSuggestionClick}>(DELETE FOR DEMO) No Suggestion</button>
+        {/* <button onClick={this.noSuggestionClick}>(DELETE FOR DEMO) No Suggestion</button> */}
       </div>
     );
   }
