@@ -85,14 +85,20 @@ class SuggestionManager {
 
                 this.communication.send(this.suggestingPlayer.id, 51, disprove_result);
 
-                var disprove_result_string = "Player " + player.username + " disproved the suggestion";
+                var disprove_result_string;
+                if (data.can_disprove == "true") {
+                    disprove_result_string = "Player " + player.username + " disproved the suggestion";
+                }
+                else {
+                    disprove_result_string = "Player " + player.username + " did not disprove the suggestion";
+                }
+
                 console.log("Player disprove respones:", disprove_result_string);
                 var disprove_broadcast = {
                     "broadcast_message": disprove_result_string
                 }
                 this.communication.send(0, 21, disprove_broadcast);
                 resolve(data);
-                // return;
             }
 
             var disprove_request = {
