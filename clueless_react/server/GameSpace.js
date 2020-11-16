@@ -14,7 +14,7 @@ class GameSpace {
     }
 
     enterCharacter(character) {
-        if (!this.isAtLimit && !this.containsCharacter(character)) {
+        if (!this.isAtLimit() && !this.containsCharacter(character)) {
             this.mCurrentCharacters.push(character);
             return true;
         }
@@ -59,7 +59,7 @@ class GameSpace {
         if (this.mLimit === -1) {
             return false;
         }
-        return this.mCurrentCharacters >= this.mLimit;
+        return this.mCurrentCharacters.length >= this.mLimit;
     }
 
     getType() {
