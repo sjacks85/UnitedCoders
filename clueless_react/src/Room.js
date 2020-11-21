@@ -13,19 +13,63 @@ export class Room extends React.Component {
         <p>
           {this.props.contents.roomName}
           <br></br>
-          Objects: {JSON.stringify(this.props.contents.roomObjs)}
-          <br></br>
         </p>
         {objects}
       </div>
     );
   }
+//   return (
+//  X={this.props.x} Y={this.props.y}
+//     <div>
+//       <p>
+//         {this.props.contents.roomName}
+//         <br></br>
+//         Objects: {JSON.stringify(this.props.contents.roomObjs)}
+//         <br></br>
+//       </p>
+//       {objects}
+//     </div>
+//   );
+// }
 
+  createStyle (id) {
+    if (id != 0) {
+      return {
+        width: "150px",
+        height: "150px",
+        backgroundColor: "rgb(222, 222, 222)",
+        //backgroundColor: "rgba(0, 89, 179, .3)",
+        //opacity: 0.5,
+        color: "black",
+        border: "1px solid black",
+        tableLayout: "fixed",
+        fontSize: "15px",
+        verticalAlign: "top",
+        textAlign: "center",
+      };
+    } else {
+      return {
+        width: "150px",
+        height: "150px",
+        backgroundColor: 'white',
+        //backgroundColor: "rgba(0, 89, 179, .3)",
+        //opacity: 0.5,
+        color: "black",
+        border: "1px solid black",
+        tableLayout: "fixed",
+        fontSize: "15px",
+        verticalAlign: "top",
+        textAlign: "center",
+      };
+    }
+  }
   render() {
     const style = {
       width: "150px",
       height: "150px",
       backgroundColor: "rgb(222, 222, 222)",
+      //backgroundColor: "rgba(0, 89, 179, .3)",
+      //opacity: 0.5,
       color: "black",
       border: "1px solid black",
       tableLayout: "fixed",
@@ -35,7 +79,7 @@ export class Room extends React.Component {
     };
 
     return (
-      <td style={style} onClick={this.props.onClick}>
+      <td style={this.createStyle(this.props.contents.roomId)} onClick={this.props.onClick}>
         {this.props.contents.roomId != 0 && this.displayIcons()}
       </td>
     );

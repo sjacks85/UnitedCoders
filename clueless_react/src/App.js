@@ -1,9 +1,12 @@
 import React from "react";
 import "./App.css";
+import "./Divider.css";
 import Divider from "./Divider";
 import Gameboard from "./Gameboard";
-import FlavorForm from "./FlavorForm";
+import PlayerHand from "./PlayerHand";
 import { startClient, socket } from "./ClientManager";
+import NoteBook from "./NoteBook";
+import MessageBoard from "./MessageBoard";
 
 class App extends React.Component {
   constructor(props) {
@@ -14,9 +17,11 @@ class App extends React.Component {
     // Store in the App, and passed into children as props
     actions: [],
     player_id: 0,
-    character: 0,
+    character_id: 0,
     cards: [],
-    turn: "Waiting For Other Players Turn",
+    turn: "Other Players Turn",
+    currentLocationId: 0,
+    currentRoom: "",
   };
 
   componentDidMount() {
@@ -36,7 +41,7 @@ class App extends React.Component {
               //console.log("APP: " + message.message.cards)
               this.setState({
                 player_id: message.message.player_id,
-                character: message.message.character,
+                character_id: message.message.character_id,
                 cards: message.message.cards,
               });
             }
@@ -56,11 +61,17 @@ class App extends React.Component {
         } else if (message.message_type == 52) {
           //Does 52 need to be send to everyone? To update their notecard
           if (message.message.accusation_correct === false) {
-            newTurn = "Revoked"
+            newTurn = "Revoked";
           }
         } else if (message.message_type == 61) {
           newTurn = "End of Game";
-        } else {
+        } else if (message.message_type == 21) {
+          if (message.message.broadcast_message.indexOf("starting their turn") != 0) {
+            console.log("FOUND")
+            newTurn = "Other Players Turn";
+          }
+        } 
+        else {
           newTurn = "Other Players Turn";
         }
       }
@@ -69,23 +80,27 @@ class App extends React.Component {
     });
   }
 
+  onselectTest = (string) => {
+    //console.log("TESTCALLBACK" + string);
+    //this.setState({language: langValue});
+  };
+
   render() {
+    const imgsrc = "/Clue-Less-Title.png";
     return (
       <div className="App">
-        <div className="bottom">
-          <h1>Gameboard</h1>
-          <p>Username = {window.location.port}</p>
-          <Gameboard
-            actions={this.state.actions}
-            player_id={this.state.player_id}
-            character={this.state.character}
-            cards={this.state.cards}
-            turn={this.state.turn}
-          />
-        </div>
-        <div className="bottom">
-          <Divider actions={this.state.actions} />
-        </div>
+        <br></br>
+        <img src={imgsrc} height="50" width="300" />
+        <Gameboard
+                actions={this.state.actions}
+                player_id={this.state.player_id}
+                character_id={this.state.character_id}
+                cards={this.state.cards}
+                turn={this.state.turn}
+                changeCurrentLocationId={this.changeCurrentLocationId}
+                changeCurrentRoom={this.changeCurrentRoom}
+                onSelectTest={this.onselectTest}
+              />
       </div>
     );
   }

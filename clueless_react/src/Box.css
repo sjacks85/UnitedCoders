@@ -1,0 +1,11 @@
+
+  .box {
+    width: 500px;
+    height: 150px;
+    text-align: center;
+    margin: "0 auto";
+    position: relative;
+    border-width: "5px";
+    border-color: rgb(0, 102, 255);
+    border-width: "5px";
+  }

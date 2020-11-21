@@ -2,6 +2,10 @@ import React from "react";
 import { Room } from "./Room";
 import { Box } from "./Box";
 import { makeMovement } from "./ClientManager";
+import PlayerHand from "./PlayerHand";
+import NoteBook from "./NoteBook";
+import MessageBoard from "./MessageBoard";
+import "./Divider.css";
 
 var uniqueIDs = [
   //0
@@ -29,70 +33,82 @@ var uniqueIDs = [
   //11
   { type: "weapon", name: "Wrench", image: "W6" },
   //12
-  { type: "room", name: "Study", roomId: 33, gridX: 4, gridY: 4 },
+  { type: "room", name: "Study", roomId: 11 },
   //13
-  { type: "room", name: "Hall", roomId: 32, gridX: 2, gridY: 4 },
+  { type: "room", name: "Hall", roomId: 12 },
   //14
-  { type: "room", name: "Lounge", roomId: 31, gridX: 0, gridY: 4 },
+  { type: "room", name: "Lounge", roomId: 13 },
   //15
-  { type: "room", name: "Dinning", roomId: 21, gridX: 0, gridY: 2 },
+  { type: "room", name: "Dinning Room", roomId: 23 },
   //16
-  { type: "room", name: "Billiard", roomId: 22, gridX: 2, gridY: 2 },
+  { type: "room", name: "Billiard Room", roomId: 22 },
   //17
-  { type: "room", name: "Library", roomId: 23, gridX: 4, gridY: 2 },
+  { type: "room", name: "Library", roomId: 21 },
   //18
-  { type: "room", name: "Conservatory", roomId: 13, gridX: 4, gridY: 0 },
+  { type: "room", name: "Conservatory", roomId: 31 },
   //19
-  { type: "room", name: "Ballroom", roomId: 12, gridX: 2, gridY: 0 },
+  { type: "room", name: "Ballroom", roomId: 32 },
   //20
-  { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0 },
+  { type: "room", name: "Kitchen", roomId: 33 },
 ];
 
 var startLocations = [
+  //0 Miss Scarlet
   {
-    currentX: 3,
+    currentX: 0,
+    currentY: 3,
+  },
+  // 1
+  {
+    currentX: 4,
+    currentY: 1,
+  },
+  // 2
+  {
+    currentX: 1,
     currentY: 4,
   },
+  //3
+  {
+    currentX: 1,
+    currentY: 0,
+  },
+  //4
+  {
+    currentX: 3,
+    currentY: 0,
+  },
+  //5
   {
     currentX: 4,
     currentY: 3,
   },
-  {
-    currentX: 3,
-    currentY: 0,
-  },
-  {
-    currentX: 1,
-    currentY: 0,
-  },
-  {
-    currentX: 0,
-    currentY: 1,
-  },
-  {
-    currentX: 1,
-    currentY: 4,
-  },
+  //Weapons 6
   {
     currentX: 0,
     currentY: 0,
   },
+  //Weapons 7
+  {
+    currentX: 2,
+    currentY: 0,
+  },
+  //Weapons 8
   {
     currentX: 4,
     currentY: 0,
   },
+  //Weapons 9
   {
     currentX: 0,
     currentY: 4,
   },
-  {
-    currentX: 4,
-    currentY: 0,
-  },
+  //Weapons 10
   {
     currentX: 2,
     currentY: 4,
   },
+  //Weapons 11
   {
     currentX: 4,
     currentY: 4,
@@ -102,137 +118,162 @@ var startLocations = [
 var startGrid = [
   [
     {
+      uniqueid: 12,
       roomId: "11",
-      roomName: "Kitchen",
-      roomObjs: ["6"],
+      roomName: "Study",
+      roomObjs: [6],
     },
     {
+      uniqueid: 0,
       roomId: "1112",
       roomName: "Hallway",
-      roomObjs: ["4"],
-    },
-    {
-      roomId: "12",
-      roomName: "Ballroom",
       roomObjs: [],
     },
     {
+      uniqueid: 13,
+      roomId: "12",
+      roomName: "Hall",
+      roomObjs: [],
+    },
+    {
+      uniqueid: 0,
       roomId: "1213",
       roomName: "Hallway",
-      roomObjs: [],
+      roomObjs: [0],
     },
     {
+      uniqueid: 14,
       roomId: "13",
-      roomName: "Conservatory",
-      roomObjs: ["8"],
+      roomName: "Lounge",
+      roomObjs: [9],
     },
   ],
   [
     {
+      uniqueid: 0,
       roomId: "1121",
       roomName: "Hallway",
-      roomObjs: ["3"],
+      roomObjs: [3],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "1222",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "1323",
       roomName: "Hallway",
-      roomObjs: ["5"],
+      roomObjs: [2],
     },
   ],
   [
     {
+      uniqueid: 17,
       roomId: "21",
-      roomName: "Dinning Room",
-      roomObjs: ["9"],
+      roomName: "Library",
+      roomObjs: [7],
     },
     {
+      uniqueid: 0,
       roomId: "2122",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 16,
       roomId: "22",
       roomName: "Billiard Room",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "2223",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 15,
       roomId: "23",
-      roomName: "Library",
-      roomObjs: ["10"],
+      roomName: "Dinning Room",
+      roomObjs: [10],
     },
   ],
   [
     {
+      uniqueid: 0,
       roomId: "2131",
       roomName: "Hallway",
-      roomObjs: ["2"],
+      roomObjs: [4],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "2232",
       roomName: "Hallway",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "0",
       roomName: "Empty",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "2333",
       roomName: "Hallway",
-      roomObjs: ["0"],
+      roomObjs: [],
     },
   ],
   [
     {
+      uniqueid: 18,
       roomId: "31",
-      roomName: "Lounge",
-      roomObjs: ["7"],
+      roomName: "Conservatory",
+      roomObjs: [8],
     },
     {
+      uniqueid: 0,
       roomId: "3132",
       roomName: "Hallway",
-      roomObjs: [],
+      roomObjs: [1],
     },
     {
+      uniqueid: 19,
       roomId: "32",
-      roomName: "Hall",
+      roomName: "Ballroom",
       roomObjs: [],
     },
     {
+      uniqueid: 0,
       roomId: "3233",
       roomName: "Hallway",
-      roomObjs: ["1"],
+      roomObjs: [5],
     },
     {
+      uniqueid: 20,
       roomId: "33",
-      roomName: "Study",
-      roomObjs: ["11"],
+      roomName: "Kitchen",
+      roomObjs: [11],
     },
   ],
 ];
@@ -243,7 +284,7 @@ export class Gameboard extends React.Component {
     this.state = {
       actions: this.props.actions,
       player_id: -1,
-      character: -1,
+      character_id: -1,
       cards: {},
 
       // Gameboard grid
@@ -261,11 +302,27 @@ export class Gameboard extends React.Component {
       movementTurn: false,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
+    this.displayIcons = this.displayIcons.bind(this);
 
     this.dims = [
       parseFloat(500 / this.state.grid.length),
       parseFloat(500 / this.state.grid[0].length),
     ];
+  }
+
+  displayIcons() {
+    const objects = uniqueIDs.map((object, index) => {
+      const imgsrc = "/gameboard/" + index.toString() + ".png";
+      return (
+        <p>
+          {" "}
+          {index.toString()}
+          <img src={imgsrc} height="45" width="30" />
+        </p>
+      );
+    });
+
+    return <div>{objects}</div>;
   }
 
   handleOnClick(x, y) {
@@ -283,16 +340,43 @@ export class Gameboard extends React.Component {
         }
       }
       if (found) {
-        alert("Valid movement");
+        alert("That's a valid location to movement! Moving to the " + this.state.grid[x][y].roomName);
 
         //Send movement request with requested room
         makeMovement("true", myArray[index].movement_id);
         this.setState({ movementTurn: false, validOptions: [] });
       } else {
-        alert("Not valid movement");
+        alert("That's an invalid location to movement. Try again!");
       }
     } else {
-      alert("Not your movement turn");
+      alert("It's not your turn to move!");
+    }
+  }
+  provideCurrentRoom() {
+    var cx = this.state.locations[this.props.character_id].currentX;
+    var cy = this.state.locations[this.props.character_id].currentY;
+    //console.log("YYHALLWAY: x" + cx + " y" + cy);
+    // console.log(this.state.grid)
+    if (cx == -1 & cy == -1) {
+      return "";
+    } else {
+      var name = this.state.grid[cx][cy].roomName;
+      //console.log("HALLWAY: " + name);
+      return name;
+    }
+  }
+
+  provideCurrentLocationId() {
+    var cx = this.state.locations[this.props.character_id].currentX;
+    var cy = this.state.locations[this.props.character_id].currentY;
+    //console.log("YYHALLWAY: x" + cx + " y" + cy);
+    // console.log(this.state.grid)
+    if (cx == -1 & cy == -1) {
+      return "";
+    } else {
+      var locid = this.state.grid[cx][cy].uniqueid;
+      //console.log("HALLWAY: " + locid);
+      return locid;
     }
   }
 
@@ -309,25 +393,33 @@ export class Gameboard extends React.Component {
     var newmovementTurn = state.movementTurn;
     var newvalidOptions = state.validOptions;
 
+    //console.log("CHARACTER " + props.character_id)
     if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {
-      newCurrentX = state.locations.currentX;
-      newCurrentY = state.locations.currentY;
+      //console.log("BMOVEMENT " + newCurrentX)
+      //console.log("BMOVEMENT " + newCurrentY)
+      newCurrentX = state.locations[props.character_id].currentX;
+      newCurrentY = state.locations[props.character_id].currentY;
+      //console.log("AMOVEMENT " + newCurrentX)
+      //console.log("AMOVEMENT " + newCurrentY)
     }
 
     var first = props.actions[0];
     //console.log("getDerivedStateFromProps " + JSON.stringify(first));
     if (first != undefined) {
       if (first.message_type == 22) {
-        console.log("Found movement broadcast");
+        //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
-          console.log("Character move")
+          //console.log("Character move")
           var objId = Number(first.message.moved_character);
+          console.log("Character move: " + objId);
 
           const cx = newLocations[objId].currentX;
           const cy = newLocations[objId].currentY;
+          //console.log("MOVEMENT current" + cx + " " + cy)
 
           const nx = first.message.new_location_x;
           const ny = first.message.new_location_y;
+          //console.log("MOVEMENT new" + nx + " " + ny)
 
           var index = newGrid[cx][cy].roomObjs.indexOf(objId);
           newGrid[cx][cy].roomObjs.splice(index, 1); //Remove obj from old room
@@ -336,15 +428,22 @@ export class Gameboard extends React.Component {
           newLocations[objId].currentX = nx;
           newLocations[objId].currentY = ny;
 
-          if ((objId = props.character)) {
+          if ((objId = props.character_id)) {
             newCurrentX = nx;
             newCurrentY = ny;
           }
+          // console.log("MOVEMENT " + JSON.stringify(newGrid[cx][cy]))
+          // console.log("MOVEMENT " + JSON.stringify(newGrid[nx][ny]))
+          //console.log("MOVEMENT " + newLocations[objId].currentX)
+          // console.log("MOVEMENT " + newLocations[objId].currentY)
+          //console.log("MOVEMENT " + newCurrentX)
+          //console.log("MOVEMENT " + newCurrentY)
         }
 
         if (first.message.weapon_moved === true) {
-          console.log("Weapon move")
+          //console.log("Weapon move")
           var objId = Number(first.message.moved_weapon);
+          console.log("Weapon move: " + objId);
 
           const cx = newLocations[objId].currentX;
           const cy = newLocations[objId].currentY;
@@ -358,11 +457,6 @@ export class Gameboard extends React.Component {
 
           newLocations[objId].currentX = nx;
           newLocations[objId].currentY = ny;
-
-          if ((objId = props.character)) {
-            newCurrentX = nx;
-            newCurrentY = ny;
-          }
         }
       } else if (first.message_type == 31) {
         newmovementTurn = true;
@@ -375,7 +469,7 @@ export class Gameboard extends React.Component {
 
     return {
       player_id: props.player_id,
-      character: props.character,
+      character_id: props.character_id,
       cards: props.cards,
       count: newcount,
       grid: newGrid,
@@ -388,28 +482,17 @@ export class Gameboard extends React.Component {
   }
 
   displayPlayerInfo() {
-    return (
-      <p>
-        Player={this.props.player_id} | Character={uniqueIDs[this.props.character].name} | X={" "}
-        {this.state.locations[this.props.character].currentX} | Y={" "}
-        {this.state.locations[this.props.character].currentY}
-      </p>
-    );
-  }
-
-  provideLocationId() {
-    var cx = this.state.locations[this.props.character].currentX;
-    var cy = this.state.locations[this.props.character].currentY;
-    var result = "0";
-
-    //console.log("PLAYER: " + this.props.player_id);
-    //console.log("PLAYER: x" + cx + " y" + cy);
-
-    if (cx != -1 && cy != -1) {
-      result = this.state.grid[cx][cy].roomId;
+    let string = ""
+    if (this.props.player_id != 0 ) {
+      let cx = this.state.locations[this.props.character_id].currentX;
+      let cy = this.state.locations[this.props.character_id].currentY
+      let roomName = this.state.grid[cx][cy].roomName;
+      string = "Username = " + window.location.port + " | Character = " + uniqueIDs[this.props.character_id].name + " | Location = " + roomName;
+      //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
+    } else {
+      string = "Username = " + window.location.port;
     }
-    //console.log("RESULTS" + result);
-    return result;
+    return string;
   }
 
   render() {
@@ -435,6 +518,8 @@ export class Gameboard extends React.Component {
                   this.handleOnClick(i, j);
                 }}
                 contents={d}
+                x={i}
+                y={j}
               />
             );
           })}
@@ -442,25 +527,82 @@ export class Gameboard extends React.Component {
       );
     });
 
+    if (this.props.player_id != 0) {
+      this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
+      //this.props.changeCurrentRoom(this.provideCurrentRoom())
+      //this.props.changeCurrentLocationId(this.provideCurrentLocationId())
+    }
+
     return (
-      <div style={{ textAlign: "center" }}>
-        {this.props.player_id != 0 && this.displayPlayerInfo()}
-        <Box
-          actions={this.props.actions}
-          locationId={this.provideLocationId()}
-          cards={this.props.cards}
-          turn={this.props.turn}
-        />
-        <br />
-        <br />
-        <br />
-        <table cellSpacing="0" id="table" style={style}>
-          <tbody>{rows}</tbody>
-        </table>
-        <br />
-        <br />
-        <br />
+      <div>
+        <div class="float-container">
+          <div class="float-child">
+            <div class="green">
+              <h3>Gameboard</h3>
+              <p>
+                {this.displayPlayerInfo()}
+              </p>
+              <table cellSpacing="0" id="table" style={style}>
+                <tbody>{rows}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="float-child">
+            <div class="blue">
+              <Box
+                actions={this.props.actions}
+                currentLocId={this.provideCurrentLocationId()}
+                currentRoom={this.provideCurrentRoom()}
+                cards={this.props.cards}
+                turn={this.props.turn}
+              />
+              <h4>Player Notebook</h4>
+              <NoteBook></NoteBook>
+              <h4>Player Hand</h4>
+              <PlayerHand cards={this.state.cards} />
+              <h4>Message Board</h4>
+              <p>
+                <MessageBoard actions={this.props.actions} />
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
+      // <div class="float-container">
+      //   <div class="float-child">
+      //     <div class="green">
+      //       {this.props.player_id != 0 && this.displayPlayerInfo()}
+      //       <br />
+      //       <br />
+      //       <br />
+      //       <table cellSpacing="0" id="table" style={style}>
+      //         <tbody>{rows}</tbody>
+      //       </table>
+      //       <br />
+      //       <br />
+      //       <br />
+      //     </div>
+      //     <div class="float-child">
+      //       <div class="blue">
+      //         <p>Username = {window.location.port}</p>
+      //         <Box
+      //           actions={this.props.actions}
+      //           currentLocId={this.provideCurrentLocationId()}
+      //           currentRoom={this.provideCurrentRoom()}
+      //           cards={this.props.cards}
+      //           turn={this.props.turn}
+      //         />
+      //         <NoteBook></NoteBook>
+      //         <h4>Player Hand</h4>
+      //         <PlayerHand cards={this.props.cards} />
+      //         <h4>Message Board</h4>
+      //         <p>
+      //           <MessageBoard actions={this.props.actions} />
+      //         </p>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
     );
   }
 }

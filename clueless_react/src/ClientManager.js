@@ -27,7 +27,7 @@ function makeMovement(move, room) {
         "movement_made" : move,
         "movement_id": room,
     };
-    console.log('movement request: ' + move + room)    
+    //console.log('movement request: ' + move + room)    
     console.log("makeMovement: " + JSON.stringify(movement));
     socket.emit(41, movement)
 }
@@ -45,7 +45,7 @@ function makeSuggestion(room, person, weapon) {
         "suggested_character": person,
         "suggested_weapon": weapon
     };
-    console.log('suggestion request: ' + person + weapon)
+    console.log('suggestion request: ' + room + person + weapon)
     console.log("makeSuggestion: " + JSON.stringify(suggestion));
     socket.emit(42, suggestion);
 }
@@ -65,7 +65,7 @@ function makeDisprove(disprove, card) {
         "can_disprove" : disprove,
         "disprove_card" : card
     }
-    console.log('disprove request: ' + disprove + card)
+    //console.log('disprove request: ' + disprove + card)
     console.log("makeDisprove: " + JSON.stringify(disprove));
     socket.emit(43, disprove);
 }
@@ -86,7 +86,7 @@ function makeAccusation(accuse, room, person, weapon) {
         "accused_character": person,
         "accused_weapon": weapon
     };
-    console.log('accusation request: ' + accuse + person + weapon + room)
+    //console.log('accusation request: ' + accuse + person + weapon + room)
     console.log("makeAccusation: " + JSON.stringify(accusation));
     socket.emit(44, accusation);
 }

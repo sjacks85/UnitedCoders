@@ -5,29 +5,51 @@ import {
   makeDisprove,
   makeAccusation,
 } from "./ClientManager";
+import "./Box.css";
 
 var uniqueIDs = [
-  { type: "character", name: "Miss Scarlet", image: "P1" },
-  { type: "character", name: "Mr. Green", image: "P2" },
-  { type: "character", name: "Colonel Mustard", image: "P3" },
-  { type: "character", name: "Prof. Plum", image: "P4" },
-  { type: "character", name: "Mrs. Peacock", image: "P5" },
-  { type: "character", name: "Mrs. White", image: "P6" },
+  //0
+  { type: "character", name: "Miss Scarlet", image: "C1" },
+  //1
+  { type: "character", name: "Mr. Green", image: "C2" },
+  //2
+  { type: "character", name: "Colonel Mustard", image: "C3" },
+  //3
+  { type: "character", name: "Prof. Plum", image: "C4" },
+  //4
+  { type: "character", name: "Mrs. Peacock", image: "C5" },
+  //5
+  { type: "character", name: "Mrs. White", image: "C6" },
+  //6
   { type: "weapon", name: "Candlestick", image: "W1" },
+  //7
   { type: "weapon", name: "Revolver", image: "W4" },
+  //8
   { type: "weapon", name: "Knife", image: "W2" },
+  //9
   { type: "weapon", name: "Pipe", image: "W3" },
+  //10
   { type: "weapon", name: "Rope", image: "W5" },
+  //11
   { type: "weapon", name: "Wrench", image: "W6" },
-  { type: "room", name: "Study", roomId: 33, gridX: 4, gridY: 4 },
-  { type: "room", name: "Hall", roomId: 32, gridX: 2, gridY: 4 },
-  { type: "room", name: "Lounge", roomId: 31, gridX: 0, gridY: 4 },
-  { type: "room", name: "Dinning", roomId: 21, gridX: 0, gridY: 2 },
-  { type: "room", name: "Billiard", roomId: 22, gridX: 2, gridY: 2 },
-  { type: "room", name: "Library", roomId: 23, gridX: 4, gridY: 2 },
-  { type: "room", name: "Conservatory", roomId: 13, gridX: 4, gridY: 0 },
-  { type: "room", name: "Ballroom", roomId: 12, gridX: 2, gridY: 0 },
-  { type: "room", name: "Kitchen", roomId: 11, gridX: 0, gridY: 0 },
+  //12
+  { type: "room", name: "Study", roomId: 11 },
+  //13
+  { type: "room", name: "Hall", roomId: 12 },
+  //14
+  { type: "room", name: "Lounge", roomId: 13 },
+  //15
+  { type: "room", name: "Dinning Room", roomId: 23 },
+  //16
+  { type: "room", name: "Billiard Room", roomId: 22 },
+  //17
+  { type: "room", name: "Library", roomId: 21 },
+  //18
+  { type: "room", name: "Conservatory", roomId: 31 },
+  //19
+  { type: "room", name: "Ballroom", roomId: 32 },
+  //20
+  { type: "room", name: "Kitchen", roomId: 33 },
 ];
 
 var startHand = [
@@ -167,43 +189,15 @@ export class Box extends React.Component {
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
 
-    var roomName = "";
-    switch (this.props.locationId) {
-      case "11":
-        roomName = "kitchen";
-        break;
-      case "12":
-        roomName = "ballroom";
-        break;
-      case "13":
-        roomName = "conservatory";
-        break;
-      case "21":
-        roomName = "dinning";
-        break;
-      case "22":
-        roomName = "hall";
-        break;
-      case "23":
-        roomName = "billiard";
-        break;
-      case "31":
-        roomName = "library";
-        break;
-      case "32":
-        roomName = "lounge";
-        break;
-      case "33":
-        roomName = "study";
-        break;
-      default:
-        alert("You need to be in a room!");
-        break;
+    //console.log("LOCATION" + this.props.currentRoom)
+    if (this.props.currentRoom == "Hallway" || this.props.currentRoom == "") {
+      alert("You need to be in a room to make an suggestion!");
+      return;
     }
-    if (roomName == "") return;
-    var playerInput = "Your Suggestion: " + roomName + " " + a + " " + b;
+    var playerInput =
+      "You made the following suggestion: " + this.props.currentRoom + ", " + uniqueIDs[a].name + ", " +  uniqueIDs[b].name;
     alert(playerInput);
-    makeSuggestion("true", roomName, a, b);
+    makeSuggestion(this.props.currentLocId, a, b);
   }
 
   accusationClicked(a, b, c) {
@@ -227,10 +221,14 @@ export class Box extends React.Component {
     //alert(b);
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
-    var playerInput = "Your Accusation : " + a + " " + b + " " + c;
+    var playerInput =
+    "You made the following accusation: " + uniqueIDs[a].name + ", " +  uniqueIDs[b].name + ", " + uniqueIDs[c].name;
+    
     alert(playerInput);
     //this.setState({ inputs : [playerInput, ...this.state.inputs]})
-    makeAccusation("true", c, a, b);
+    //this.setState({ accusation: false});
+    console.log("KATHRYN" + this.state.turn);
+    makeAccusation("true", Number(c), Number(a), Number(b));
   }
 
   noMovementClick() {
@@ -246,6 +244,9 @@ export class Box extends React.Component {
 
   noAccusationClick() {
     console.log("noAccusationClick");
+    this.setState({ turn: "Other Players Turn" });
+    console.log("KATHRYN" + this.state.turn);
+    //this.setState({ accusation: false});
     makeAccusation("false", -1, -1, -1);
   }
 
@@ -294,7 +295,7 @@ export class Box extends React.Component {
     var selectedvalue = -1;
     if (mtVal == "-1") {
       // Send Socket Response that this user doesn't have any of the suggested items.
-      makeDisprove(false, -1);
+      makeDisprove("false", -1);
     } else {
       if (mtVal == "0") {
         selectedvalue = document.getElementById("ResponseUser").value;
@@ -320,7 +321,7 @@ export class Box extends React.Component {
         <p>Click gameboard to move!</p>
         <button onClick={this.noMovementClick}>No Movement</button>
       </div>
-    )
+    );
   }
   displaySuggestion() {
     return (
@@ -352,7 +353,7 @@ export class Box extends React.Component {
         >
           Make Suggestion
         </button>
-        <button onClick={this.noSuggestionClick}>(DELETE FOR DEMO) No Suggestion</button>
+        {/* <button onClick={this.noSuggestionClick}>(DELETE FOR DEMO) No Suggestion</button> */}
       </div>
     );
   }
@@ -390,11 +391,11 @@ export class Box extends React.Component {
             }}
           >
             <option value="-1" selected="selected">
-              I don't have any of the suggested cards
+              No cards to disprove
             </option>
-            <option value="0">I have suggested Player card : </option>
-            <option value="1">I have suggested Weapon card : </option>
-            <option value="2">I have suggested Room card : </option>
+            <option value="0">Character Cards</option>
+            <option value="1">Weapon Cards</option>
+            <option value="2">Room Cards</option>
           </select>
           <select
             name="ResponseUser"
@@ -445,11 +446,7 @@ export class Box extends React.Component {
         >
           {this.createSelectItems("weapon")}
         </select>
-        <select
-          name="GuessedRoom"
-          id="GuessedRoom"
-          style={{ margin: "10px" }}
-        >
+        <select name="GuessedRoom" id="GuessedRoom" style={{ margin: "10px" }}>
           {this.createSelectItems("room")}
         </select>
         <br />
@@ -475,27 +472,36 @@ export class Box extends React.Component {
   render() {
     return (
       <div
-      style={{
-        textAlign: "center",
-        width: "500px",
-        height: "150px",
-        "border-width": "5px",
-        "border-color": "red",
-        "border-style": "outset",
-        margin: "0 auto",
-        position: "relative",
-      }}
-    >
-      <span>
+        style={{
+          textAlign: "center",
+          width: "500px",
+          height: "150px",
+          "border-width": "5px",
+          "border-color": "rgb(0, 89, 179)",
+          "border-style": "double",
+          margin: "0 auto",
+          position: "relative",
+        }}
+      >
         <h3>Turn: {this.props.turn}</h3>
         {this.props.turn == "Movement" && this.displayMovement()}
         {this.props.turn == "Suggestion" && this.displaySuggestion()}
         {this.props.turn == "Disprove" && this.displayDisprove()}
         {this.props.turn == "Accusation" && this.displayAccusation()}
-      </span>
-    </div>
+      </div>
     );
   }
 }
 
 export default Box;
+
+//   textAlign: "center",
+//   width: "500px",
+//   height: "150px",
+//   "border-width": "5px",
+//   "border-color": rgb(0, 102, 255),
+//`rgb(${box.color})`
+//   "border-style": "outset",
+//   margin: "0 auto",
+//   position: "relative",
+// }}>

@@ -1,0 +1,113 @@
+{
+  "Suspects": [
+    {
+      "Id": 0,
+      "Name": "Miss Scarlet",
+      "Type": "Suspect"
+    },
+    {
+      "Id": 1,
+      "Name": "Mr. Green",
+      "Type": "Suspect"
+    },
+    {
+      "Id": 2,
+      "Name": "Colonel Mustard",
+      "Type": "Suspect"
+    },
+    {
+      "Id": 3,
+      "Name": "Proffesor Plum",
+      "Type": "Suspect"
+    },
+    {
+      "Id": 4,
+      "Name": "Mrs. Peacock",
+      "Type": "Suspect"
+    },
+    {
+      "Id": 5,
+      "Name": "Mrs. White",
+      "Type": "Suspect"
+    }
+  ],
+  "Weapons": [
+    {
+      "Id": 6,
+      "Name": "Candlestick",
+      "Type": "Weapon"
+    },
+    {
+      "Id": 7,
+      "Name": "Revolver",
+      "Type": "Weapon"
+    },
+    {
+      "Id": 8,
+      "Name": "Knife",
+      "Type": "Weapon"
+    },
+    {
+      "Id": 9,
+      "Name": "Pipe",
+      "Type": "Weapon"
+    },
+    {
+      "Id": 10,
+      "Name": "Rope",
+      "Type": "Weapon"
+    },
+    {
+      "Id": 11,
+      "Name": "Wrench",
+      "Type": "Weapon"
+    }
+  ],
+  "Rooms": [
+    {
+      "Id": 12,
+      "Name": "Study",
+      "Type": "Room"
+    },
+    {
+      "Id": 13,
+      "Name": "Hall",
+      "Type": "Room"
+    },
+    {
+      "Id": 14,
+      "Name": "Lounge",
+      "Type": "Room"
+    },
+    {
+      "Id": 15,
+      "Name": "Dining Room",
+      "Type": "Room"
+    },
+    {
+      "Id": 16,
+      "Name": "Billiard",
+      "Type": "Room"
+    },
+    {
+      "Id": 17,
+      "Name": "Library",
+      "Type": "Room"
+    },
+    {
+      "Id": 18,
+      "Name": "Conservatory",
+      "Type": "Room"
+    },
+    {
+      "Id": 19,
+      "Name": "Ballroom",
+      "Type": "Room"
+    },
+    {
+      "Id": 20,
+      "Name": "Kitchen",
+      "Type": "Room"
+    }
+  ]
+}

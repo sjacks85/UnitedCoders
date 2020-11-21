@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  width: 100%;
 }
 
 .App-header_old {
@@ -24,4 +25,3 @@
   justify-content: left;
   color: white;
 }
-

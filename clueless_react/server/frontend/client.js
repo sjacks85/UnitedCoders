@@ -13,7 +13,7 @@ var myArgs = process.argv.slice(2);
 var username = myArgs[0];
 var cards;
 
-var url = "http://localhost:3000";
+var url = "http://localhost:5000";
 
 var socket = io.connect(url);
 
@@ -33,15 +33,15 @@ socket.on('game', full_message => {
         console.log(message.broadcast_message);
     }
     if (type == 22) {
-        console.log("player " + message.moved_character + " moved to " + message.new_character_location);
+        console.log("player " + message.moved_character + " moved to [" + message.new_location_x + ", " + message.new_location_y + "].");
     }
     if (type == 31) {
         console.log(message);
 
-        rl.question('New Location: ', (new_room) => {
+        rl.question('New Location: ', (move_id) => {
             var movement = {
-                "movement_made": true,
-                "new_location": [0, 1]
+                "movement_made": "true",
+                "movement_id": move_id
             };
             socket.emit(41, movement);
         });
@@ -66,10 +66,18 @@ socket.on('game', full_message => {
     }
     if (type == 33) {
         rl.question('do you have any of these cards?: ' + JSON.stringify(message) + '\n', (card) => {
-            var disprove = {
-                "can_disprove": true,
-                "disprove_card": card
-            };
+            if (card == "no") {
+                var disprove = {
+                    "can_disprove": "false",
+                    "disprove_card": -1
+                };
+            }
+            else {
+                var disprove = {
+                    "can_disprove": "true",
+                    "disprove_card": card
+                };
+            }
             socket.emit(43, disprove);
         });
     }
@@ -133,10 +141,10 @@ socket.on('disprove', suggestion => {
 socket.on(31, move => {
     console.log(move);
 
-    rl.question('New Location: ', (new_room) => {
+    rl.question('New Location: ', (move_id) => {
         var movement = {
             "movement_made": true,
-            "new_location": [0,1]
+            "movement_id": move_id
         };
         socket.emit(41, movement);
     });
