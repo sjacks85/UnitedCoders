@@ -9,12 +9,12 @@ class PlayerHand extends React.Component {
       //cards: this.props.cards,
       cards: [],
     };
-    this.updatePlayerHand = this.updatePlayerHand.bind(this)
+    this.updatePlayerHand = this.updatePlayerHand.bind(this);
   }
 
   state = {
     cards: [],
-    //[1, 2, 3, 4, 5], // Default. Can remove this once we know the cards are being populated.
+    //cards: [1, 2, 3, 4, 5], // Default. Can remove this once we know the cards are being populated.
   };
 
   updatePlayerHand() {
@@ -28,12 +28,11 @@ class PlayerHand extends React.Component {
           </div>
         </li>
       );
-     }, this);
-     return items;
+    }, this);
+    return items;
   }
 
   static getDerivedStateFromProps(props, state) {
-    
     var newcards = state.cards;
     if (props.cards != undefined) {
       if (props.cards != state.cards) {

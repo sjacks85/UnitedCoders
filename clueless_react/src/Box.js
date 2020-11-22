@@ -195,7 +195,12 @@ export class Box extends React.Component {
       return;
     }
     var playerInput =
-      "You made the following suggestion: " + this.props.currentRoom + ", " + uniqueIDs[a].name + ", " +  uniqueIDs[b].name;
+      "You made the following suggestion: " +
+      this.props.currentRoom +
+      ", " +
+      uniqueIDs[a].name +
+      ", " +
+      uniqueIDs[b].name;
     alert(playerInput);
     makeSuggestion(this.props.currentLocId, a, b);
   }
@@ -222,8 +227,13 @@ export class Box extends React.Component {
     //alert(JSON.stringify(this.state.grid[cx][cy]));
     //alert(this.state.grid[cx][cy].roomName);
     var playerInput =
-    "You made the following accusation: " + uniqueIDs[a].name + ", " +  uniqueIDs[b].name + ", " + uniqueIDs[c].name;
-    
+      "You made the following accusation: " +
+      uniqueIDs[a].name +
+      ", " +
+      uniqueIDs[b].name +
+      ", " +
+      uniqueIDs[c].name;
+
     alert(playerInput);
     //this.setState({ inputs : [playerInput, ...this.state.inputs]})
     //this.setState({ accusation: false});

@@ -1,0 +1,68 @@
+.masthead {
+  padding: 15px;
+  background: #005489;
+  color: white;
+  font-size: 30px;
+}
+
+.logo {
+  left: 0px;
+  max-width: 15%;
+  max-height: 15%;
+}
+
+.logo img {
+  max-width: 12.5%;
+  max-height: 12.5%;
+  margin: 0px;
+}
+
+.dropbtn {
+  background-color: #005489;
+  color: white;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  right: 0px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #005489cb;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content span {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.textButton {
+  background: none;
+  color: white;
+  font-size: 75%;
+  border: none;
+  margin: 0;
+  padding-left: 5px;
+  cursor: pointer;
+}
+
+.dropdown-content span:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #005489;
+}
