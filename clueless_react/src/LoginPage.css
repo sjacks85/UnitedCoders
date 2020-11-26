@@ -1,0 +1,40 @@
+body {
+    padding: 50px
+}
+  
+.btn {
+    background-color: rgba(36, 41, 44, .9);
+    border: none;
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 4px;
+    color: white;
+}
+
+.fb {
+    background-color: rgb(51, 89, 157);
+}
+
+.input {
+    background: rgba(241, 241, 241, .7);
+    width: 100%;
+    padding: 14px;
+    border-radius: 4px;
+    border: 0;
+    color: #3E3E3E;
+}
+
+.loginform {
+    width: 300px;
+    box-sizing: border-box;
+}
+
+.logininput, .loginselect, .logintextarea{
+    width:195px;
+    
+    -ms-box-sizing:content-box;
+    -moz-box-sizing:content-box;
+    box-sizing:content-box;
+    -webkit-box-sizing:content-box; 
+}
