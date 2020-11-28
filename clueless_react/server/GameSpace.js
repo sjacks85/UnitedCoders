@@ -25,15 +25,12 @@ class GameSpace {
         if (this.containsCharacter(Number(character))) {
             //get the index of the character and remove it
             var ind = this.mCurrentCharacters.indexOf(Number(character));
-            console.log("LENGTH BEFORE " + this.mCurrentCharacters.length);
-            console.log("ind " + ind);
             if (ind == 0) {
                 this.mCurrentCharacters.pop();
             }
             else {
                 this.mCurrentCharacters.splice(0, ind);
             }
-            console.log("LENGTH AFTER " + this.mCurrentCharacters.length);
             return true;
         }
         return false;
@@ -67,7 +64,6 @@ class GameSpace {
             return false;
         }
         return this.mCurrentCharacters.length >= this.mLimit;
-        //return false;
     }
 
     getType() {

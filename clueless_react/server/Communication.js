@@ -4,26 +4,22 @@
 var clients = [];
 
 //KPC - Quick fix to avoid re-adding existing players, instead react client will rejoin when reloaded
-var usernames = [];
+var ports = [];
 
 module.exports = {
 
-    startListening: (io, client_callback) => {
+    startListening: (io, connection_callback) => {
         io.on('connection', function (socket) {
             // If a client joins then add them to the list of clients
-            socket.on('join', function (username) {
-                /*need to fix this
-                var exists = false;
-                for (var i = 0; i < clients.length; i++) {
-                    if (clients[i].id == player_id) {
-                        exists = true;
-                    }
-                }*/
-                //if (!exists) {
-                if (usernames.includes(username)) {
+            //TODO get rid of the 'on join' - I think this can all be done with on connection?
+            socket.on('join', function (port) {
+
+                //TODO send message about current state of game
+
+                if (ports.includes(port)) {
                     //console.log(username, "already exists")
                 } else {
-                    console.log(username, "joined")
+                    console.log(port, "joined")
 
                     new_player_id = clients.length + 1;
                     console.log(new_player_id, " new player id")
@@ -33,14 +29,14 @@ module.exports = {
                         "socket": socket
                     };
                     clients.push(clientObj);
-                    usernames.push(username);
+                    ports.push(port);
 
                     playerObj = {
-                        "username": username,
+                        //"username": port,
                         "id": new_player_id
                     };
 
-                    client_callback(playerObj);
+                    connection_callback(playerObj);
                 }
 				//}
                 //do we ever stop listening, or do we always listen but server manager tells us 'no' if too many?
@@ -86,6 +82,14 @@ module.exports = {
         }
 
         console.log("\t\t---Communication Utility done---");
+
+    },
+
+    //removes waiting room players from ports being broadcast to
+    updatePlayers: (players) => {
+        //players is the array of players
+        //for each saved socket, if the player id is in this array keep it
+        //otherwise remove it
 
     }
 }
