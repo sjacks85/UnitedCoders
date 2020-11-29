@@ -129,7 +129,7 @@ class MessageBoard extends React.Component {
           string ="End of the game!"
           // 61	End of Game
         } else {
-          alert("ERROR IN MESSAGEBOARD")
+          //alert("ERROR IN MESSAGEBOARD")
         }
         if (string != "") {
           newmessages.push(string)

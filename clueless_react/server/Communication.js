@@ -40,6 +40,36 @@ module.exports = {
                         "id": new_player_id
                     };
 
+                    // //Join game
+                    // var setup_message = {
+                    //     active_game: true,
+                    //     game_started: false,
+                    //     num_players: 3,
+                    //     players: {},
+                    //     host: 0,
+                    //     available_characters: [1, 2, 3, 4, 5]
+                    // };
+                    //Host game
+                    var setup_message = {
+                        active_game: false,
+                        game_started: false,
+                        num_players: 3,
+                        players: {},
+                        host: 0,
+                        available_characters: [1, 2, 3, 5, 6]
+                    };
+                    var full_message = {
+                        "game_id": 0,
+                        "player_id": new_player_id,
+                        "message_type": 1,
+                        "message": setup_message,
+                    }
+
+                    console.log(JSON.stringify(full_message))
+
+                    clientObj.socket.emit("game", full_message)
+                    //clients[i].socket.emit("game", full_message);
+
                     client_callback(playerObj);
                 }
 				//}

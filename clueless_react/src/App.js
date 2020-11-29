@@ -25,6 +25,7 @@ class App extends React.Component {
     currentRoom: "",
     loggedIn: false,
     username: "",
+    setup_messages: [],
   };
 
   componentDidMount() {
@@ -35,14 +36,19 @@ class App extends React.Component {
       this.setState({ actions: [message, ...this.state.actions] });
       var newTurn = this.state.turn;
 
+      if (message.message_type == 1 || message.message_type == 2 || message.message_type == 3 || message.message_type == 4) {
+        this.setState({ setup_messages: [message, ...this.state.setup_messages] });
+      }
+
       if (message.message_type == 11) {
         if (message.message.username != undefined) {
           if (message.message.username != undefined) {
-            if (message.message.username == window.location.port) {
+            if (message.message.username == this.state.username) {
               //console.log("APP: " + message.message.player_id)
               //console.log("APP: " + message.message.character)
               //console.log("APP: " + message.message.cards)
               this.setState({
+                loggedIn: true,
                 player_id: message.message.player_id,
                 character_id: message.message.character_id,
                 cards: message.message.cards,
@@ -87,7 +93,7 @@ class App extends React.Component {
 
   setUsername = (string) => {
     console.log("LoginPage Callback=" + string);
-    this.setState({ username: string, loggedIn: true });
+    this.setState({ username: string });
     console.log(JSON.stringify(this.state));
   };
 
@@ -105,13 +111,14 @@ class App extends React.Component {
         onSelectTest={this.onselectTest}
       />
     ) : (
-      <LoginPage setUsername={this.setUsername} />
+      <LoginPage setup_messages={this.state.setup_messages} setUsername={this.setUsername} />
     );
 
     return (
       <div className="App">
         <br></br>
         <img src={imgsrc} height="50" width="300" />
+        <p>!{this.state.username}!</p>
         {component}
       </div>
     );

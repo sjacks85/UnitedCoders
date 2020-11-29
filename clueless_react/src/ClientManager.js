@@ -1,3 +1,5 @@
+import { create } from 'object-path';
+
 var io = require('socket.io-client');
 
 // Start socket and export it for others to use
@@ -13,6 +15,41 @@ const startClient = function(port) {
     });
 
 };
+
+// Messages to server from client, called by user input
+function sendJoinGame(create, game, username, char, player) {
+// create_game: (bool; true to start game)
+// game_id: (int; ID of the game to join if joining active game)
+// username: (string; player username)
+// character: (int; ID of chosen character)
+// player_id: (int; ID of player
+  
+var message = {
+    "create_game": create,
+    "game_id": game,
+    "username": username,
+    "character": char,
+    "player_id": player
+};
+//console.log('movement request: ' + move + room)    
+console.log("sendJoinGame: " + JSON.stringify(message));
+socket.emit(2, message)
+}
+
+function sendStartGame() {
+    // create_game: (bool; true to start game)
+    // game_id: (int; ID of the game to join if joining active game)
+    // username: (string; player username)
+    // character: (int; ID of chosen character)
+    // player_id: (int; ID of player
+      
+    var message = {
+        "start_game": true,
+    };
+    //console.log('movement request: ' + move + room)    
+    console.log("sendCreateGame: " + JSON.stringify(message));
+    socket.emit(4, message)
+    }
 
 // Messages to server from client, called by user input
 function makeMovement(move, room) {
@@ -91,4 +128,4 @@ function makeAccusation(accuse, room, person, weapon) {
     socket.emit(44, accusation);
 }
 
-export { startClient, makeMovement, makeSuggestion, makeDisprove, makeAccusation };
+export { startClient, sendJoinGame, sendStartGame, makeMovement, makeSuggestion, makeDisprove, makeAccusation };
