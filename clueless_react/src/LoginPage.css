@@ -29,3 +29,19 @@
     border-color: rgb(0, 89, 179);
     padding: 20px;
 }
+
+.logintext {
+    color: white;
+}
+
+.logo {
+    left: 0px;
+    max-width: 15%;
+    max-height: 15%;
+  }
+  
+.logo img {
+    max-width: 12.5%;
+    max-height: 12.5%;
+    margin: 0px;
+}

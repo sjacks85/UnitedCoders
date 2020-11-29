@@ -154,15 +154,17 @@ class LoginPage extends React.Component {
   displayLoginPage() {
     if (this.state.page == "") {
       return (
-        <div>
+        <div className="logintext">
           <p>Whoops the server isn't started</p>
         </div>
       );
     } else if (this.state.page == "create_game") {
       return (
-        <div>
-          <p>No active games found. Would you like to start a game?</p>
-          <label>
+        <div className="logintext">
+          <p className="logintext">
+            No active games found. Would you like to start a game?
+          </p>
+          <label className="logintext">
             Username
             <input
               className="logininput"
@@ -173,7 +175,7 @@ class LoginPage extends React.Component {
             />
           </label>
           <br></br>
-          <label>
+          <label className="logintext">
             Character
             <select
               className="loginselect"
@@ -336,10 +338,14 @@ class LoginPage extends React.Component {
   }
 
   render() {
+    var logoImage = "./MastheadImages/CluelessLogo.png";
     return (
       <div className="loginbox">
-        <h4>Welcome!</h4>
-        <p>!{JSON.stringify(this.props.setup_messages)}!</p>
+        <span class="logo">
+          <img src={logoImage} />
+        </span>
+        {/* <h4>Welcome!</h4>
+        <p>!{JSON.stringify(this.props.setup_messages)}!</p> */}
         {this.displayLoginPage()}
       </div>
     );
