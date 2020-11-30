@@ -7,7 +7,6 @@ import PlayerHand from "./PlayerHand";
 import { startClient, socket } from "./ClientManager";
 import NoteBook from "./NoteBook";
 import MessageBoard from "./MessageBoard";
-import Masthead from "./Masthead";
 import LoginPage from "./LoginPage";
 
 class App extends React.Component {
@@ -24,7 +23,7 @@ class App extends React.Component {
     turn: "Other Players Turn",
     currentLocationId: 0,
     currentRoom: "",
-    loggedIn: true,
+    loggedIn: false,
     username: "",
     setup_messages: [],
   };
@@ -37,15 +36,8 @@ class App extends React.Component {
       this.setState({ actions: [message, ...this.state.actions] });
       var newTurn = this.state.turn;
 
-      if (
-        message.message_type == 1 ||
-        message.message_type == 2 ||
-        message.message_type == 3 ||
-        message.message_type == 4
-      ) {
-        this.setState({
-          setup_messages: [message, ...this.state.setup_messages],
-        });
+      if (message.message_type == 1 || message.message_type == 2 || message.message_type == 3 || message.message_type == 4) {
+        this.setState({ setup_messages: [message, ...this.state.setup_messages] });
       }
 
       if (message.message_type == 11) {
@@ -87,7 +79,7 @@ class App extends React.Component {
             message.message.broadcast_message.indexOf("starting their turn") !=
             0
           ) {
-            //console.log("FOUND");
+            //console.log("FOUND")
             newTurn = "Other Players Turn";
           }
         } else {
@@ -108,37 +100,25 @@ class App extends React.Component {
   render() {
     const imgsrc = "/Clue-Less-Title.png";
     let component = this.state.loggedIn ? (
-      <div>
-        <Masthead username={this.state.username} />
-        <Gameboard
-          actions={this.state.actions}
-          player_id={this.state.player_id}
-          character_id={this.state.character_id}
-          cards={this.state.cards}
-          turn={this.state.turn}
-          changeCurrentLocationId={this.changeCurrentLocationId}
-          changeCurrentRoom={this.changeCurrentRoom}
-          onSelectTest={this.onselectTest}
-        />
-      </div>
-    ) : (
-      <div>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-      <LoginPage
-        setup_messages={this.state.setup_messages}
-        setUsername={this.setUsername}
+      <Gameboard
+        actions={this.state.actions}
+        player_id={this.state.player_id}
+        character_id={this.state.character_id}
+        cards={this.state.cards}
+        turn={this.state.turn}
+        changeCurrentLocationId={this.changeCurrentLocationId}
+        changeCurrentRoom={this.changeCurrentRoom}
+        onSelectTest={this.onselectTest}
       />
-      </div>
+    ) : (
+      <LoginPage setup_messages={this.state.setup_messages} setUsername={this.setUsername} />
     );
 
     return (
       <div className="App">
-        {/* <img src={imgsrc} height="50" width="300" />
-        <p>!{this.state.username}!</p> */}
+        <br></br>
+        <img src={imgsrc} height="50" width="300" />
+        <p>!{this.state.username}!</p>
         {component}
       </div>
     );
