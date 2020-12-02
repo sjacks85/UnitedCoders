@@ -44,13 +44,13 @@ function setupPlayer(playerInfo) {
         //if there is not an active game but the client is not starting one
         //log that the player cannot join a game 
         if ((active_game && playerInfo.game_id != current_game_id) ||
-            !active_game && playerInfo.create_game != 'true') {
+            !active_game && playerInfo.create_game != true) {
             //todo send message back to client if players can't join?
             console.log("cannot find game to join");
             return;
         }
 
-        if (!active_game && playerInfo.create_game == 'true') {
+        if (!active_game && playerInfo.create_game === true) {
             //arbitrary - should probably do something nicer here
             //def need to do something nicer here for multi game support
             current_game_id = 1;
@@ -95,7 +95,7 @@ function setupPlayer(playerInfo) {
 }
 
 function startGame(startMessage) {
-    if (!game_started && players.length >= 4 && players.length < 7 && startMessage.start_game == 'true') {
+    if (!game_started && players.length >= 4 && players.length < 7 && startMessage.start_game === true) {
         //Run initial setup and kickoff game.
         game_started = true;
         console.log("Starting Game");

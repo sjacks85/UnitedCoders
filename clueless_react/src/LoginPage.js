@@ -89,7 +89,7 @@ class LoginPage extends React.Component {
   handleClick(evt) {
     console.log("CLICKJOIN=" + JSON.stringify(this.state));
     sendJoinGame(
-      true,
+      false,
       this.state.game_id,
       this.state.username,
       this.state.character,
@@ -109,7 +109,7 @@ class LoginPage extends React.Component {
     // player_id: (int; ID of player
     // }
     sendJoinGame(
-      false,
+      true,
       this.state.game_id,
       this.state.username,
       this.state.character,
