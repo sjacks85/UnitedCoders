@@ -73,6 +73,15 @@ function setupPlayer(playerInfo) {
             avail_characters.splice(ind, 1);
         }
 
+        //send message to new player
+        var new_player_message = {
+            "joined": true,
+            "player_id": new_player.id,
+            "character_id": new_player.character,
+            "username": new_player.username
+        };
+        Communication.send(new_player.id, 05, new_player_message);
+
         //send update message to everyone (this includes waiting room)
         //add update of avail characters?
         var can_start = players.length >= 4;
