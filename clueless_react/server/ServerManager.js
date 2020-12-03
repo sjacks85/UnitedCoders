@@ -13,7 +13,8 @@ var waiting_players = [];
 var players = [];
 var active_game = false;
 var game_started = false;
-var current_game_id, host;
+var current_game_id = 0;
+var host;
 var avail_characters = CardDeck.getAllSuspects();
 var host;
 
