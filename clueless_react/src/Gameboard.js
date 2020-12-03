@@ -555,7 +555,7 @@ export class Gameboard extends React.Component {
     });
 
     if (this.props.player_id != 0) {
-      this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
+      //this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
       //this.props.changeCurrentRoom(this.provideCurrentRoom())
       //this.props.changeCurrentLocationId(this.provideCurrentLocationId())
     }

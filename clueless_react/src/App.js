@@ -24,7 +24,7 @@ class App extends React.Component {
     turn: "Other Players Turn",
     currentLocationId: 0,
     currentRoom: "",
-    loggedIn: true,
+    loggedIn: false,
     username: "",
     setup_messages: [],
   };
@@ -118,7 +118,6 @@ class App extends React.Component {
           turn={this.state.turn}
           changeCurrentLocationId={this.changeCurrentLocationId}
           changeCurrentRoom={this.changeCurrentRoom}
-          onSelectTest={this.onselectTest}
         />
       </div>
     ) : (

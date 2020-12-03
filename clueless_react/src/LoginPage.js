@@ -295,7 +295,7 @@ class LoginPage extends React.Component {
         // available_characters: (int []; IDs of characters available)
         // player_id: (int, id of player)
         newAvailChar = first.message.available_characters;
-        //newGameId = first.message.game_id;
+        newGameId = first.message.game_id;
         newPlayerId = first.message.player_id;
         if (first.message.active_game === false) {
           newPage = "create_game";
@@ -326,6 +326,9 @@ class LoginPage extends React.Component {
             newPage = "start_game";
           }
         }
+      // } else if (first.message_type == 5) {
+      //   //Direct message to player who joined from server
+      //   newPage = "waiting";
       }
     }
     return {
