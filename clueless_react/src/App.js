@@ -13,6 +13,7 @@ import LoginPage from "./LoginPage";
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.handleClickShow = this.handleClickShow.bind(this);
   }
 
   state = {
@@ -41,7 +42,8 @@ class App extends React.Component {
         message.message_type == 1 ||
         message.message_type == 2 ||
         message.message_type == 3 ||
-        message.message_type == 4
+        message.message_type == 4 ||
+        message.message_type == 5
       ) {
         this.setState({
           setup_messages: [message, ...this.state.setup_messages],
@@ -105,6 +107,11 @@ class App extends React.Component {
     console.log(JSON.stringify(this.state));
   };
 
+  handleClickShow(evt) {
+    console.log("FAKE LOGIN")
+    this.setState({ loggedIn : true})
+  }
+
   render() {
     const imgsrc = "/Clue-Less-Title.png";
     let component = this.state.loggedIn ? (
@@ -126,7 +133,11 @@ class App extends React.Component {
         <br></br>
         <br></br>
         <br></br>
-        <br></br>
+      <button type="submit" onClick={this.handleClickShow}>
+            Show Gameboard
+      </button>
+      <br></br>
+      <br></br>
       <LoginPage
         setup_messages={this.state.setup_messages}
         setUsername={this.setUsername}

@@ -305,6 +305,10 @@ class LoginPage extends React.Component {
         } else {
           newPage = "join_game";
         }
+      } else if (first.message_type == 5) {
+        //Direct message to player who joined from server
+        console.log("FOUND TARGET")
+        newPage = "waiting";
       } else if (first.message_type == 3) {
         //         MESSAGE ID 03
         // Server -> client update waiting room: {
@@ -317,7 +321,7 @@ class LoginPage extends React.Component {
         // character: (int; character ID)
         // }
         // host: (int; id of host player)
-        newPage = "waiting";
+        //newPage = "waiting";
         if (state.host === true) {
           if (
             first.message.can_start === true ||
@@ -326,9 +330,6 @@ class LoginPage extends React.Component {
             newPage = "start_game";
           }
         }
-      // } else if (first.message_type == 5) {
-      //   //Direct message to player who joined from server
-      //   newPage = "waiting";
       }
     }
     return {
