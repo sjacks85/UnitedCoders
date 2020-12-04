@@ -1,5 +1,5 @@
-var CARDOBJECTS = require("../game_data/cluelessmap.json"); // Might need to change the name for clarity.
-
+var CARDOBJECTS = require("./cluelessmap.json"); // Might need to change the name for clarity.
+// ../game_data/cluelessmap.json
 // **** Thoughts about the Implementation/Improvements ***
 // (1) Should we assign Card Objects to Players/Enevelope (By adding player id to an "Assigned Player" field.)
 // (2) Should the local deck be utilized in anyway? Or does it only really have one purpose (to shuffle/distribute cards)?

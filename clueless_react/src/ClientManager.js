@@ -1,7 +1,7 @@
 var io = require("socket.io-client");
 
 // Start socket and export it for others to use
-var url = "http://localhost:5000";
+var url = "http://localhost:8000"; // This needs to change to the "public" url. | Originally 5000
 const socket = io.connect(url);
 export { socket };
 
