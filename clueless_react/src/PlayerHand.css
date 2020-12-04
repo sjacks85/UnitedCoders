@@ -3,16 +3,16 @@
 }
 
 .hs {
-  display: grid;
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+  row-gap: 10px;
   max-height: 300px;
-  width: 100%;
-  grid-auto-flow: column;
-  overflow: scroll;
+  width: 90%;
 }
 
 .block {
-  height: 250px;
   margin: 0px;
+  padding: 0px;
 }
 
 .center {
@@ -20,12 +20,13 @@
   width: 100%;
 }
 
-img {
-  max-width: 100%;
-  max-height: 100%;
+.playerHand_ul img {
+  max-width: 65%;
+  max-height: 75%;
   margin: 0px;
 }
-img:hover {
+
+.playerHand_ul img:hover {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 20px;
@@ -36,9 +37,9 @@ img:hover {
 
 .playerHand_ul {
   padding: 0px;
+  width: 80%;
 }
 
 .playerHand_li {
   list-style-type: none;
-  width: 225px;
 }

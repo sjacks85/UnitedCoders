@@ -100,16 +100,16 @@ class MessageBoard extends React.Component {
           string ="Accusation Request"
           // 34	Accusation Request
         } else if (item.message_type == 41) {
-          alert("ERROR IN MESSAGEBOARD")
+          //alert("ERROR IN MESSAGEBOARD")
           //41	Movement Response
         } else if (item.message_type == 42) {
-          alert("ERROR IN MESSAGEBOARD")
+          //alert("ERROR IN MESSAGEBOARD")
           // 42	Suggestion Response
         } else if (item.message_type == 43) {
-          alert("ERROR IN MESSAGEBOARD")
+          //alert("ERROR IN MESSAGEBOARD")
           // 43	Disprove Response
         } else if (item.message_type == 44) {
-          alert("ERROR IN MESSAGEBOARD")
+          //alert("ERROR IN MESSAGEBOARD")
           // 44	Accusation Response
         } else if (item.message_type == 51) {
           if (item.message.is_disproven === true) {
@@ -129,7 +129,7 @@ class MessageBoard extends React.Component {
           string ="End of the game!"
           // 61	End of Game
         } else {
-          alert("ERROR IN MESSAGEBOARD")
+          //alert("ERROR IN MESSAGEBOARD")
         }
         if (string != "") {
           newmessages.push(string)

@@ -11,6 +11,7 @@ const rl = readline.createInterface({
 
 var myArgs = process.argv.slice(2);
 var username = myArgs[0];
+var id;
 var cards;
 
 var url = "http://localhost:5000";
@@ -26,11 +27,42 @@ socket.on('connect', function () {
 socket.on('game', full_message => {
     type = full_message.message_type;
     message = full_message.message;
+    if (type == 01) {
+        console.log(message);
+        id = message.player_id;
+        rl.question('Character: ', (char_id) => {
+            var return_message = {
+                "username": username,
+                "character": char_id,
+                "player_id": message.player_id
+            }
+            if (message.active_game == false) {
+                return_message.create_game = "true";
+            }
+            else {
+                return_message.game_id = message.game_id;
+            }
+            socket.emit(02, return_message);
+        });
+    }
+
+    if (type == 03) {
+        console.log(message);
+        if (message.host == id && message.can_start) {
+            var start = {
+                "start_game": "true"
+            };
+            console.log("starting game...");
+            socket.emit(04, start);
+        }
+    }
+
     if (type == 11) {
         console.log("Cards:", message);
     }
     if (type == 21) {
         console.log(message.broadcast_message);
+        
     }
     if (type == 22) {
         console.log("player " + message.moved_character + " moved to [" + message.new_location_x + ", " + message.new_location_y + "].");

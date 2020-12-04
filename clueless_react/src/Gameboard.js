@@ -10,6 +10,7 @@ import './GameBoard.css';
 import './NoteBook.css';
 import Iframe from 'react-iframe'
 
+import EndGamePrompt from "./EndGamePrompt";
 
 var uniqueIDs = [
   //0
@@ -299,6 +300,9 @@ export class Gameboard extends React.Component {
       character_id: -1,
       cards: {},
 
+      final_message: {},
+      show: true,
+
       // Gameboard grid
       grid: startGrid,
 
@@ -367,7 +371,10 @@ export class Gameboard extends React.Component {
         }
       }
       if (found) {
-        alert("That's a valid location to movement! Moving to the " + this.state.grid[x][y].roomName);
+        alert(
+          "That's a valid location to movement! Moving to the " +
+            this.state.grid[x][y].roomName
+        );
 
         //Send movement request with requested room
         makeMovement("true", myArray[index].movement_id);
@@ -388,7 +395,7 @@ export class Gameboard extends React.Component {
     var cy = this.state.locations[this.props.character_id].currentY;
     //console.log("YYHALLWAY: x" + cx + " y" + cy);
     // console.log(this.state.grid)
-    if (cx == -1 & cy == -1) {
+    if ((cx == -1) & (cy == -1)) {
       return "";
     } else {
       var name = this.state.grid[cx][cy].roomName;
@@ -402,7 +409,7 @@ export class Gameboard extends React.Component {
     var cy = this.state.locations[this.props.character_id].currentY;
     //console.log("YYHALLWAY: x" + cx + " y" + cy);
     // console.log(this.state.grid)
-    if (cx == -1 & cy == -1) {
+    if ((cx == -1) & (cy == -1)) {
       return "";
     } else {
       var locid = this.state.grid[cx][cy].uniqueid;
@@ -423,6 +430,8 @@ export class Gameboard extends React.Component {
     var newCurrentY = state.currentY;
     var newmovementTurn = state.movementTurn;
     var newvalidOptions = state.validOptions;
+    var newfinal_message = state.final_message;
+    var newshow = state.show;
 
     //console.log("CHARACTER " + props.character_id)
     if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {
@@ -500,6 +509,16 @@ export class Gameboard extends React.Component {
       } else if (first.message_type == 31) {
         newmovementTurn = true;
         newvalidOptions = first.message.valid_locations;
+      } else if (first.message_type == 61) {
+        // {
+        // “game_over”:
+        // “winning_player”:
+        // “correct_room”:
+        // “correct_character”:
+        // “correct_weapon”:
+        // }
+        newfinal_message = first;
+        newshow = true;
       } else {
         newmovementTurn = false;
         newvalidOptions = [];
@@ -517,18 +536,25 @@ export class Gameboard extends React.Component {
       playerY: newCurrentY,
       movementTurn: newmovementTurn,
       validOptions: newvalidOptions,
+      final_message: newfinal_message,
+      show: newshow,
     };
   }
 
 
   displayPlayerInfo() {
-
-    let string = ""
+    let string = "";
     if (this.props.player_id != 0) {
       let cx = this.state.locations[this.props.character_id].currentX;
-      let cy = this.state.locations[this.props.character_id].currentY
+      let cy = this.state.locations[this.props.character_id].currentY;
       let roomName = this.state.grid[cx][cy].roomName;
-      string = "Username = " + window.location.port + " | Character = " + uniqueIDs[this.props.character_id].name + " | Location = " + roomName;
+      string =
+        "Username = " +
+        window.location.port +
+        " | Character = " +
+        uniqueIDs[this.props.character_id].name +
+        " | Location = " +
+        roomName;
       //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
     } else {
       string = "Username = " + window.location.port;
@@ -564,7 +590,7 @@ export class Gameboard extends React.Component {
     });
 
     if (this.props.player_id != 0) {
-      this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
+      //this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
       //this.props.changeCurrentRoom(this.provideCurrentRoom())
       //this.props.changeCurrentLocationId(this.provideCurrentLocationId())
     }
@@ -607,6 +633,7 @@ export class Gameboard extends React.Component {
               />
               <h4>Player Notebook</h4>
               <NoteBook></NoteBook>
+              <EndGamePrompt final_message={this.state.final_message} show={this.state.show}/>
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
               <h4>Message Board</h4>

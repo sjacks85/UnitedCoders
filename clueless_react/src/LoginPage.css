@@ -1,0 +1,35 @@
+
+
+/* .loginbox {
+    background-color: #282c34;
+    text-align: center;
+    align-items: center;
+    width: 500px;
+    height: 150px;
+    border-radius: 25px;
+    border-color: rgb(0, 89, 179);
+    position: absolute;
+    justify-content: center;
+
+    margin:0 auto;
+
+    width: 60%;
+  
+    border: 5px solid #FFFF00;
+  
+    padding: 20px;
+} */
+
+.loginbox {
+    width: 450px;
+    height: 400px; 
+    background: #005489;
+    margin:0 auto;
+    border-radius: 25px;
+    /*border-color: rgb(0, 89, 179);*/
+    padding: 20px;
+}
+
+.logintext {
+    color: white;
+}
