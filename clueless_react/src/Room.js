@@ -1,6 +1,7 @@
 import React from "react";
 
 export class Room extends React.Component {
+  
   displayIcons() {
 
     const objects = this.props.contents.roomObjs.map((object) => {
@@ -64,19 +65,19 @@ export class Room extends React.Component {
     }
   }
   render() {
-    const style = {
-      width: "150px",
-      height: "150px",
-      backgroundColor: "rgb(222, 222, 222)",
-      //backgroundColor: "rgba(0, 89, 179, .3)",
-      //opacity: 0.5,
-      color: "black",
-      border: "1px solid black",
-      tableLayout: "fixed",
-      fontSize: "15px",
-      verticalAlign: "top",
-      textAlign: "center",
-    };
+    // const style = {
+    //   width: "150px",
+    //   height: "150px",
+    //   backgroundColor: "rgb(222, 222, 222)",
+    //   //backgroundColor: "rgba(0, 89, 179, .3)",
+    //   //opacity: 0.5,
+    //   color: "black",
+    //   border: "1px solid black",
+    //   tableLayout: "fixed",
+    //   fontSize: "15px",
+    //   verticalAlign: "top",
+    //   textAlign: "center",
+    // };
 
     return (
       <td style={this.createStyle(this.props.contents.roomId)} onClick={this.props.onClick}>
