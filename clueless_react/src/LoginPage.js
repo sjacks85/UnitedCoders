@@ -194,13 +194,16 @@ class LoginPage extends React.Component {
       );
     } else if (this.state.page == "unable_to_join") {
       return (
-        <div>
+        <div className="logintext">
           <p>Whoops the game has started! Unable to join.</p>
         </div>
       );
     } else if (this.state.page == "join_game") {
       return (
-        <div>
+        <div className="logintext">
+          <p className="logintext">
+            Please pick your username and character to join the game!
+          </p>
           <label>
             Username
             <input
@@ -232,13 +235,31 @@ class LoginPage extends React.Component {
       );
     } else if (this.state.page == "waiting") {
       return (
-        <div>
+        <div className="logintext">
           <p>Waiting for others to join</p>
         </div>
       );
-    } else if (this.state.page == "start_game") {
+    } else if (this.state.page == "can_start") {
       return (
-        <div>
+        <div className="logintext">
+          <p className="logintext">
+            Min number of players have joined the game. <br></br>
+            Host can start game!
+          </p>
+          <br></br>
+          <button type="submit" onClick={this.handleClickStart}>
+            Start Game
+          </button>
+        </div>
+      );
+    } else if (this.state.page == "must_start") {
+      return (
+        <div className="logintext">
+          <p className="logintext">
+            Max number of players have joined the game. <br></br>
+            Host must start game!
+          </p>
+          <br></br>
           <button type="submit" onClick={this.handleClickStart}>
             Start Game
           </button>
@@ -307,7 +328,7 @@ class LoginPage extends React.Component {
         }
       } else if (first.message_type == 5) {
         //Direct message to player who joined from server
-        console.log("FOUND TARGET")
+        //console.log("FOUND TARGET")
         newPage = "waiting";
       } else if (first.message_type == 3) {
         //         MESSAGE ID 03
@@ -323,11 +344,11 @@ class LoginPage extends React.Component {
         // host: (int; id of host player)
         //newPage = "waiting";
         if (state.host === true) {
-          if (
-            first.message.can_start === true ||
-            first.message.must_start === true
-          ) {
-            newPage = "start_game";
+          if (first.message.can_start === true) {
+            newPage = "can_start";
+          }
+          if (first.message.must_start === true) {
+            newPage = "must_start";
           }
         }
       }
@@ -346,6 +367,7 @@ class LoginPage extends React.Component {
     return (
       <div className="loginbox">
         <img src={logoImage} height="60" width="300" />
+        <br></br>
         <br></br>
         {/* <h4>Welcome!</h4>
         <p>!{JSON.stringify(this.props.setup_messages)}!</p> */}
