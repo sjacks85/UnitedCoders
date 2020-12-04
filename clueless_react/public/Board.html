@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/maphilight/1.4.0/jquery.maphilight.js"></script>
+    <style>
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: grey;
+            opacity: .9;
+            z-index: 1000;
+        }
+
+        .overlay2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: grey;
+            opacity: .9;
+            z-index: 950;
+            display: none;
+            vertical-align: middle;
+            text-align: center
+        }
+
+        .ajax-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -32px;
+            /* -1 * image width / 2 */
+            margin-top: -32px;
+            /* -1 * image height / 2 */
+            display: block;
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 32px;
+        }
+
+        .ajax-loader2 {
+            margin: auto;
+        }
+    </style>
+
+
+</head>
+
+<body onload="initializeBoard();">
+
+    <script>
+
+        //ORIGINAL CODE
+        var myid = 'P1';
+        var started = true;
+        var startLocations = JSON.parse(getParamValue('startLocations'));
+
+
+        function getParamValue(paramName) {
+            var url = window.location.search.substring(1); //get rid of "?" in querystring
+            var qArray = url.split('&'); //get key-value pairs        
+            for (var i = 0; i < qArray.length; i++) {
+                var pArr = qArray[i].split('='); //split key and value
+
+                if (pArr[0] == paramName)
+                    return decodeURIComponent(pArr[1]); //return value
+            }
+        }
+
+
+        //Process the Move for Person or Weapon to new location
+        function MoveObject(PID, TO) {
+            var currentLoc = document.getElementById(PID).getAttribute('data-locId');
+            document.getElementById(PID).setAttribute('data-locId', TO);
+            RenderRoom(currentLoc);
+            RenderRoom(TO);
+        }
+
+
+        //Sets current user Character
+        function SetUser(NUSR) {
+            myid = NUSR;
+        }
+
+        //Organizes Objects in a room/hallway  (Updates Room on Gui)
+        function RenderRoom(RID) {
+            var roomidx = -1;
+            for (roomidx = 0; roomidx < 21; roomidx++) {
+                if (RID == roomCode[roomidx])
+                    break;
+            }
+            //alert(roomidx+','+roomCode[roomidx]);
+            var fromx = roomArra[roomidx][0];
+            var fromy = roomArra[roomidx][1];
+            var tox = roomArra[roomidx][2];
+            var toy = roomArra[roomidx][3];
+            var i = 0;
+            var cx = fromx;
+            var cy = fromy;
+            for (i = 1; i < 7; i++) {
+                if (roomCode[roomidx] == document.getElementById('P' + i).getAttribute('data-locId')) {
+                    $('#P' + i).css({ left: cx + 'px' });
+                    $('#P' + i).css({ top: cy + 'px' });
+                    cy += 45;
+                    if (cy + 40 > toy) {
+                        cx += 45;
+                        cy = fromy;
+                    }
+                }
+            }
+            for (i = 1; i < 7; i++) {
+                if (roomCode[roomidx] == document.getElementById('W' + i).getAttribute('data-locId')) {
+                    $('#W' + i).css({ left: cx + 'px' });
+                    $('#W' + i).css({ top: cy + 'px' });
+                    cy += 45;
+
+                    if (cy + 40 > toy) {
+                        cx += 45;
+                        cy = fromy;
+                    }
+                }
+            }
+            //var rcode=roomCode;
+        }
+
+
+        //Manages Click event on area (Room or Hallway) . Validate the Move and Move the player to new location.
+        function AreaClicked(area) {
+
+            var dataId = area.getAttribute('data-Id');
+            // MoveObject('P1', dataId);
+
+            // // Send movement request
+            window.top.postMessage(dataId);
+
+        }
+
+
+        function updateBoard(locations) {
+            for (var i = 0; i < locations.length; i++) {
+                // alert(JSON.stringify(locations[i]))
+                // alert(locations[i].playerId + " moving to "+ locations[i].roomId)
+                MoveObject(locations[i].playerId, locations[i].roomId);
+            }
+        }
+
+
+        function initializeBoard() {
+            updateBoard(startLocations);
+        }
+
+
+
+        function receivedMessage(message) {
+            updateBoard(message.data)
+        }
+
+        if (window.addEventListener) {
+            // For standards-compliant web browsers
+            window.addEventListener("message", receivedMessage, false);
+        }
+        else {
+            window.attachEvent("onmessage", receivedMessage);
+        }
+
+
+
+        //All rooms and Hallways codes. Sequence is important - Please don't change them.
+        // var roomCode = ['11', '12', '13', '21', '22', '23', '31', '32', '33', '1112', '1213', '1121', '1222', '1323', '2122', '2223', '2131', '2232', '2333', '3132', '3233']
+
+        var roomCode = ['33', '32', '31', '23', '22', '21', '13', '12', '11', '3233', '3132', '2333', '2232', '2131', '2223', '2122', '1323', '1222', '1121', '1213', '1112']
+
+        //All rooms and Hallways locations to put objects. Sequence is important - Please don't change them.
+        // var roomArra = [
+        //     [103, 241, 273, 426],
+        //     [379, 300, 585, 455],
+        //     [691, 235, 853, 394],
+        //     [103, 541, 337, 716],
+        //     [423, 544, 561, 715],
+        //     [674, 510, 828, 660],
+        //     [103, 835, 305, 1011],
+        //     [385, 796, 569, 995],
+        //     [640, 892, 861, 1017],
+        //     [304, 374, 304, 374],
+        //     [625, 374, 625, 374],
+        //     [219, 460, 219, 460],
+        //     [543, 479, 543, 479],
+        //     [735, 440, 735, 440],
+        //     [365, 599, 365, 599],
+        //     [591, 567, 591, 567],
+        //     [284, 753, 284, 753],
+        //     [444, 741, 444, 741],
+        //     [680, 725, 680, 725],
+        //     [335, 924, 335, 924],
+        //     [590, 923, 590, 923]
+        // ]
+
+
+        var roomArra = [
+            [99, 81],
+            [356, 147],
+            [678, 83],
+            [97, 371],
+            [422, 403],
+            [677, 375],
+            [96, 693],
+            [386, 659],
+            [643, 756],
+            [303, 218],
+            [625, 218],
+            [219, 299],
+            [543, 333],
+            [737, 291],
+            [365, 441],
+            [595, 408],
+            [285, 615],
+            [445, 589],
+            [682, 602],
+            [334, 766],
+            [590, 768]
+        ];
+
+        
+
+        //All valid rooms and hallways to move in (based on player's current location). Sequence is important - Please don't change them.
+        // var roomAccess = [
+        //     ['1112', '1121', '33'],
+        //     ['1112', '1222', '1213'],
+        //     ['1213', '1323', '31'],
+        //     ['1121', '2122', '2131'],
+        //     ['2122', '1222', '2223', '2232'],
+        //     ['2223', '1323', '2333'],
+        //     ['2131', '3132', '13'],
+        //     ['3132', '2232', '3233'],
+        //     ['3233', '2333', '11'],
+        //     ['11', '12'],
+        //     ['12', '13'],
+        //     ['11', '21'],
+        //     ['12', '22'],
+        //     ['13', '23'],
+        //     ['21', '22'],
+        //     ['22', '23'],
+        //     ['21', '31'],
+        //     ['22', '32'],
+        //     ['23', '33'],
+        //     ['31', '32'],
+        //     ['32', '33']
+        // ]
+
+    </script>
+
+
+    <script>
+
+        //My development code to find points
+        $(document).ready(function () {
+            $('.map').maphilight();
+            $("area").on("click", function (event) {
+                var x = event.pageX;
+                var y = event.pageY;
+                // alert("X Coordinate: " + x + " Y Coordinate: " + y);
+            });
+        });
+
+    </script>
+
+
+
+    <div>
+        <div id="P1" data-locId="2333"
+            style="z-index: 500;position: absolute;height:45px;width:28px;top: 360px;left: 150px;transition: 1s all;">
+            <img src="./GUI/P1.png" height="45" width="28" title="Miss Scarlet" /></div>
+        <div id="P2" data-locId="3233"
+            style="z-index: 500;position: absolute;height:45px;width:28px;top: 690px;left: 150px;transition: 1s all;">
+            <img src="./GUI/P2.png" height="45" width="28" title="Mr. Green" /></div>
+        <div id="P3" data-locId="2131"
+            style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;">
+            <img src="./GUI/P3.png" height="45" width="28" title="Colonel Mustard" /></div>
+        <div id="P4" data-locId="1121"
+            style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;">
+            <img src="./GUI/P4.png" height="45" width="28" title="Prof. Plum" /></div>
+        <div id="P5" data-locId="1112"
+            style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;">
+            <img src="./GUI/P5.png" height="45" width="28" title="Mrs. Peacock" /></div>
+        <div id="P6" data-locId="1323"
+            style="z-index: 500;position: absolute;height:45px;width:28px;top: 390px;left: 150px;transition: 1s all;">
+            <img src="./GUI/P6.png" height="45" width="28" title="Mrs. White" /></div>
+        <div id="W1" data-locId="11"
+            style="z-index: 500;position: absolute;height:45px;width:45px;top: 675px;left: 270px;background:rgba(25,25,25,0.8);border-color: white;border-width: 1px;border-style: solid;transition: 1s all;">
+            <img src="./GUI/W1.png" height="45" width="45" title="Candlestick" /></div>
+        <div id="W2" data-locId="13"
+            style="z-index: 500;position: absolute;height:45px;width:45px;top: 390px;left: 210px;background:rgba(25,25,25,0.8);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;">
+            <img src="./GUI/W2.png" height="45" width="45" title="Dagger" /></div>
+        <div id="W3" data-locId="22"
+            style="z-index: 500;position: absolute;height:45px;width:45px;top: 520px;left: 510px;background:rgba(25,25,25,0.8);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;">
+            <img src="./GUI/W3.png" height="45" width="45" title="Lead Pipe" /></div>
+        <div id="W4" data-locId="23"
+            style="z-index: 500;position: absolute;height:45px;width:45px;top: 390px;left: 790px;background:rgba(125,125,125,0.6);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;">
+            <img src="./GUI/W4.png" height="45" width="45" title="Revolver" /></div>
+        <div id="W5" data-locId="31"
+            style="z-index: 500;position: absolute;height:45px;width:45px;top: 1010px;left: 240px;background:rgba(25,25,25,0.6);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;">
+            <img src="./GUI/W5.png" height="45" width="45" title="Rope" /></div>
+        <div id="W6" data-locId="32"
+            style="z-index: 500;position: absolute;height:45px;width:45px;top: 1010px;left: 240px;background:rgba(25,25,25,0.6);;border-color: white;border-width: 1px;border-style: solid;transition: 1s all;">
+            <img src="./GUI/W6.png" height="45" width="45" title="Wrench" /></div>
+        <img src="./GUI/GBG.png" usemap="#image-map" class="map" />
+        <map name="image-map">
+            <area data-Id="33" onclick="AreaClicked(this);" target="" alt="Kitchen" title="Kitchen"
+                style="cursor: pointer;" coords="90,72,267,281" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="32" onclick="AreaClicked(this);" target="" alt="Ballroom" title="Ballroom"
+                style="cursor: pointer;" coords="348,137,412,136,412,104,525,104,525,138,590,138,590,315,346,315"
+                shape="poly" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="31" onclick="AreaClicked(this);" target="" alt="Conservatory" title="Conservatory"
+                style="cursor: pointer;" coords="669,74,847,252" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="23" onclick="AreaClicked(this);" target="" alt="Diningroom" title="Diningroom"
+                style="cursor: pointer;" coords="89,362,235,362,235,393,332,393,332,573,89,573" shape="poly"
+                data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="22" onclick="AreaClicked(this);" target="" alt="Billiardroom" title="Billiardroom"
+                style="cursor: pointer;" coords="413,394,558,574" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="21" onclick="AreaClicked(this);" target="" alt="Library" title="Library"
+                style="cursor: pointer;"
+                coords="637,397,668,396,669,364,815,366,815,398,847,398,847,480,815,480,815,512,668,512,668,480,637,480"
+                shape="poly" data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="13" onclick="AreaClicked(this);" target="" alt="Lounge" title="Lounge"
+                style="cursor: pointer;" coords="88,684,298,863" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="12" onclick="AreaClicked(this);" target="" alt="Hall" title="Hall" style="cursor: pointer;"
+                coords="378,650,556,847" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="11" onclick="AreaClicked(this);" target="" alt="Study" title="Study" style="cursor: pointer;"
+                coords="635,747,845,863" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"fcfc03","fillOpacity":0.6}'>
+            <area data-Id="3233" onclick="AreaClicked(this);" target="" alt="3233" title="3233" style="cursor: pointer;"
+                coords="278,224,340,258" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="3132" onclick="AreaClicked(this);" target="" alt="3132" title="3132" style="cursor: pointer;"
+                coords="600,226,662,258" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="2223" onclick="AreaClicked(this);" target="" alt="2223" title="2223" style="cursor: pointer;"
+                coords="340,449,402,482" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="2122" onclick="AreaClicked(this);" target="" alt="2122" title="2122" style="cursor: pointer;"
+                coords="568,416,629,449" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="1213" onclick="AreaClicked(this);" target="" alt="1213" title="1213" style="cursor: pointer;"
+                coords="307,773,369,806" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="1112" onclick="AreaClicked(this);" target="" alt="1112" title="1112" style="cursor: pointer;"
+                coords="565,774,627,807" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="2333" onclick="AreaClicked(this);" target="" alt="2333" title="2333" style="cursor: pointer;"
+                coords="206,291,243,353" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="2232" onclick="AreaClicked(this);" target="" alt="2232" title="2232" style="cursor: pointer;"
+                coords="531,324,567,384" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="2131" onclick="AreaClicked(this);" target="" alt="2131" title="2131" style="cursor: pointer;"
+                coords="724,260,761,357" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="1323" onclick="AreaClicked(this);" target="" alt="1323" title="1323" style="cursor: pointer;"
+                coords="272,582,309,676" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="1222" onclick="AreaClicked(this);" target="" alt="1222" title="1222" style="cursor: pointer;"
+                coords="433,581,469,643" shape="rect"
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+            <area data-Id="1121" onclick="AreaClicked(this);" target="" alt="1121" title="1121" style="cursor: pointer;"
+                coords="669,521,706,741" shape="rect" 
+                data-maphilight='{"stroke":false,"fillColor":"00fff7","fillOpacity":0.6}'>
+        </map>
+    </div>
+
+
+</body>
+
+</html>

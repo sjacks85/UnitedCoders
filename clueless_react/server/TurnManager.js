@@ -1,17 +1,19 @@
 var MovementManager = require('./MovementManager.js');
 var SuggestionManager = require('./SuggestionManager.js');
 var AccusationManager = require('./AccusationManager.js');
+var GameBoard = require('./GameBoard.js');
 const { resolve } = require('path');
 
 class TurnManager {
 
-    constructor(communication, players) {
-        this.communication = communication;
+    constructor(communication, players, deck) {
         this.players = players;
+        this.deck = deck;
 
-        this.movementManager = new MovementManager(communication);
-        this.suggestionManager = new SuggestionManager(communication, players);
-        this.accusationManager = new AccusationManager(communication);
+        this.gameBoard = new GameBoard(communication);
+        this.movementManager = new MovementManager(communication, this.gameBoard, players);
+        this.suggestionManager = new SuggestionManager(communication, this.gameBoard, players);
+        this.accusationManager = new AccusationManager(communication, this.deck);
     }
 
     async startGame() {
@@ -28,6 +30,7 @@ class TurnManager {
             this.movementManager.move(player).then(move_done => {
                 this.suggestionManager.suggest(player).then(suggest_done => {
                     this.accusationManager.accuse(player).then(accuse_done => {
+
                         resolve(accuse_done);
                         resolve(suggest_done);
                         resolve(move_done);
