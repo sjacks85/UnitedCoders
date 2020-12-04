@@ -31,7 +31,7 @@
 }
 
 .dropbtn {
-  background-color: #005489;
+  background: #005489;
   color: white;
   border: none;
 }
@@ -46,7 +46,7 @@
   display: none;
   position: absolute;
   right: 0px;
-  background-color: #005489cb;
+  background: #005489cb;
   min-width: 180px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
@@ -75,8 +75,4 @@
 
 .dropdown:hover .dropdown-content {
   display: block;
-}
-
-.dropdown:hover .dropbtn {
-  background-color: #005489;
 }
