@@ -11,4 +11,9 @@
     height: 150vh;
     text-align: center;
     word-wrap: break-word;
+    padding-left: 0px;
 } 
+
+#divider-right {
+    padding-left: 20px;
+}
