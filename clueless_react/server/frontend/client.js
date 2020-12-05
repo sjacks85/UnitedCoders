@@ -37,7 +37,7 @@ socket.on('game', full_message => {
                 "player_id": message.player_id
             }
             if (message.active_game == false) {
-                return_message.create_game = "true";
+                return_message.create_game = true;
             }
             else {
                 return_message.game_id = message.game_id;
@@ -50,7 +50,7 @@ socket.on('game', full_message => {
         console.log(message);
         if (message.host == id && message.can_start) {
             var start = {
-                "start_game": "true"
+                "start_game": true
             };
             console.log("starting game...");
             socket.emit(04, start);
@@ -117,12 +117,29 @@ socket.on('game', full_message => {
         console.log(message);
 
         rl.question('Accuse?: ', (accuse_res) => {
-            var accuse = {
-                "accused_room": accuse_res,
-                "accused_character": accuse_res,
-                "accused_weapon": accuse_res
-            };
-            socket.emit(44, accuse);
+            if (accuse_res == "yes") {
+                rl.question('Suspect: ', (suspect) => {
+                    rl.question('Weapon: ', (weapon) => {
+                        rl.question('Room: ', (room) => {
+
+                            var accuse = {
+                                "accuse_made": "true",
+                                "accused_room": room,
+                                "accused_character": suspect,
+                                "accused_weapon": weapon
+                            }
+
+                            socket.emit(44, accuse);
+                        });
+                    });
+                });
+            }
+            else {
+                var accuse = {
+                    "accuse_made": false
+                };
+                socket.emit(44, accuse);
+            }
         });
     }
     if (type == 51) {

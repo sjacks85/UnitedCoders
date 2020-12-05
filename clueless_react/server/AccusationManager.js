@@ -23,7 +23,10 @@ class AccusationManager {
         return new Promise((resolve) => {
             const handler = (accusation) => {
 
-                var game_over = false;
+                var return_info = {
+                    "game_over": false,
+                    "revoked_player": false
+                };
 
                 //console.log(accusation)
                 if (accusation.accuse_made == "true") {
@@ -51,6 +54,7 @@ class AccusationManager {
 
                     if (envelope_character === character_string && envelope_weapon === weapon_string && envelope_room === room_string) {
                         //correct accusation
+                        return_info.game_over = true;
                         accusation_result = {
                             "accusation_correct": true,
                             "correct_room": accusation.accused_room,
@@ -77,6 +81,7 @@ class AccusationManager {
                             "correct_character": accusation.accused_character,
                             "correct_weapon": accusation.accused_weapon,
                         }
+                        return_info.revoked_player = true;
                     }
 
                     this.communication.send(player.id, 52, accusation_result);
@@ -90,7 +95,7 @@ class AccusationManager {
                     this.communication.send(0, 21, accusation_result_broadcast);
                 }
 
-                resolve(game_over);
+                resolve(return_info);
                 // return;
             }
 
