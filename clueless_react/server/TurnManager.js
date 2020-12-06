@@ -49,6 +49,7 @@ class TurnManager {
                                 //end of game message
                                 var end = {
                                     "game_over": true,
+                                    "wining_player": "no player",
                                     "correct_room": envelope[2].Name,
                                     "correct_character": envelope[0].Name,
                                     "correct_weapon": envelope[1].Name

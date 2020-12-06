@@ -51,25 +51,28 @@ class AccusationManager {
                     var envelope_room = envelope[2].Name;
 
                     var accusation_result;
+                    var accusation_result_string;
 
                     if (envelope_character === character_string && envelope_weapon === weapon_string && envelope_room === room_string) {
                         //correct accusation
                         return_info.game_over = true;
                         accusation_result = {
                             "accusation_correct": true,
-                            "correct_room": accusation.accused_room,
-                            "correct_character": accusation.accused_character,
-                            "correct_weapon": accusation.accused_weapon,
+                            "correct_room": envelope_room,
+                            "correct_character": envelope_character,
+                            "correct_weapon": envelope_weapon,
                         }
+
+                        accusation_result_string = "Player " + player.username + " has won, their accusation was correct.";
 
                         console.log("SENDING GAME OVER MESSAGE")
                         //end of game message
                         var end = {
                             "game_over": true,
                             "wining_player": player.username,
-                            "correct_room": accusation.accused_room,
-                            "correct_character": accusation.accused_character,
-                            "correct_weapon": accusation.accused_weapon,
+                            "correct_room": envelope_room,
+                            "correct_character": envelope_character,
+                            "correct_weapon": envelope_weapon,
                         }
                         this.communication.send(0, 61, end);
 
@@ -77,17 +80,18 @@ class AccusationManager {
                         //incorrect accusation
                         accusation_result = {
                             "accusation_correct": false,
-                            "correct_room": accusation.accused_room,
-                            "correct_character": accusation.accused_character,
-                            "correct_weapon": accusation.accused_weapon,
+                            "correct_room": envelope_room,
+                            "correct_character": envelope_character,
+                            "correct_weapon": envelope_weapon,
                         }
                         return_info.revoked_player = true;
+
+                        accusation_result_string = "Player " + player.username + " has lost, their accusation was incorrect.";
                     }
 
                     this.communication.send(player.id, 52, accusation_result);
 
                     //broadcast accusation result
-                    var accusation_result_string = "Player " + player.username + " has won, their accusation was correct.";
                     console.log("Player accusation result:", accusation_result_string);
                     var accusation_result_broadcast = {
                         "broadcast_message": accusation_result_string

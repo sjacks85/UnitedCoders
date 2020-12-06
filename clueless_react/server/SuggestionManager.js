@@ -86,7 +86,7 @@ class SuggestionManager {
                 this.communication.send(this.suggestingPlayer.id, 51, disprove_result);
 
                 var disprove_result_string;
-                if (data.can_disprove == "true") {
+                if (data.can_disprove === true) {
                     disprove_result_string = "Player " + player.username + " disproved the suggestion";
                 }
                 else {
