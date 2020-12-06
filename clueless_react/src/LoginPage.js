@@ -53,6 +53,7 @@ class LoginPage extends React.Component {
     super(props);
     this.state = {
       username: "",
+      players: [],
       character: 0,
       page: "",
       available_characters: [],
@@ -66,6 +67,7 @@ class LoginPage extends React.Component {
     this.handleCharacter = this.handleCharacter.bind(this);
     this.handleClickStart = this.handleClickStart.bind(this);
     this.handleClickCreate = this.handleClickCreate.bind(this);
+    this.displayPlayers = this.displayPlayers.bind(this);
   }
 
   // handleChange(event) {
@@ -73,6 +75,7 @@ class LoginPage extends React.Component {
   // }
 
   handleChange(evt) {
+    console.log("HANDLECHANGE=" + evt.target.value);
     const value = evt.target.value;
     this.setState({
       ...this.state,
@@ -84,7 +87,8 @@ class LoginPage extends React.Component {
   handleCharacter(evt) {
     //console.log(evt.target.value);
     //console.log(typeof evt.target.value);
-    this.setState({ character: Number(evt.target.value) });
+    console.log("HANDLECHAR=" + evt.target.value);
+    this.setState({ ...this.state, character: Number(evt.target.value) });
     //console.log(JSON.stringify(this.state));
   }
 
@@ -122,7 +126,7 @@ class LoginPage extends React.Component {
   }
 
   handleClickStart(evt) {
-    console.log("CLICKSTART=" + JSON.stringify(this.state));
+    //console.log("CLICKSTART=" + JSON.stringify(this.state));
     sendStartGame();
   }
 
@@ -150,6 +154,34 @@ class LoginPage extends React.Component {
       return items;
     } else {
       return [];
+    }
+  }
+
+  displayPlayers() {
+    if (this.state.players != []) {
+      //"players":[{"id":1,"username":"aaa","character":0}]
+      let items = this.state.players.map((item, i) => {
+        var elem = JSON.stringify(item);
+        return <li>User "{item.username}" as "{uniqueIDs[Number(item.character)].name}"</li>;
+        // var elem = JSON.stringify(item);
+        // return <li>{elem}</li>;
+      }, this);
+      return (
+        <p>
+          The following players have joined:
+          <ol style={{
+            textAlign: "center",
+            "list-style-position": "inside",
+            //"list-style-type": "none",
+            margin: 0,
+            padding: 0,
+          }}>
+          {items}
+          </ol>
+        </p>
+      );
+    } else {
+      return null;
     }
   }
 
@@ -238,7 +270,10 @@ class LoginPage extends React.Component {
     } else if (this.state.page == "waiting") {
       return (
         <div className="logintext">
-          <p>Waiting for others to join</p>
+          <p>Waiting for more players to join!
+          <br></br>
+          {this.displayPlayers()}
+          </p>
         </div>
       );
     } else if (this.state.page == "can_start") {
@@ -296,7 +331,9 @@ class LoginPage extends React.Component {
 
     var first = props.setup_messages[0];
     var newPage = state.page;
+    var newPlayers = state.players;
     var newAvailChar = state.available_characters;
+    var newChar = state.character;
     var newGameId = state.game_id;
     var newPlayerId = state.player_id;
     var newHost = state.host;
@@ -318,6 +355,7 @@ class LoginPage extends React.Component {
         // available_characters: (int []; IDs of characters available)
         // player_id: (int, id of player)
         newAvailChar = first.message.available_characters;
+        newChar = Number(first.message.available_characters[0]);
         newGameId = first.message.game_id;
         newPlayerId = first.message.player_id;
         if (first.message.active_game === false) {
@@ -345,6 +383,8 @@ class LoginPage extends React.Component {
         // }
         // host: (int; id of host player)
         //newPage = "waiting";
+        newPlayers = first.message.players;
+        //players":[{"id":1,"username":"aaa","character":0}]
         if (state.host === true) {
           if (first.message.can_start === true) {
             newPage = "can_start";
@@ -359,14 +399,16 @@ class LoginPage extends React.Component {
     var newShow = state.show;
     if (first != undefined) {
       if (first.message_type == 1) {
-        console.log("TRYING TO TRIGGER POPUP")
+        //console.log("TRYING TO TRIGGER POPUP")
         newShow = true;
       }
     }
 
     return {
       page: newPage,
+      players: newPlayers,
       available_characters: newAvailChar,
+      character: newChar,
       game_id: newGameId,
       player_id: newPlayerId,
       host: newHost,

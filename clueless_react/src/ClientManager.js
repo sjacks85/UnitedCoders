@@ -19,7 +19,7 @@ function sendJoinGame(create, game, username, char, player) {
   // character: (int; ID of chosen character)
   // player_id: (int; ID of player
 
-  console.log("sendJoin" + game);
+  //console.log("sendJoin" + game);
   var message = {
     create_game: create,
     game_id: game,

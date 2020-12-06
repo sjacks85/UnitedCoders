@@ -13,16 +13,16 @@ class EndGamePrompt extends React.Component {
     this.setState({ show: false });
   };
 
-  static getDerivedStateFromProps(props, state) {
-   // <EndGamePrompt final_message={this.state.final_message} show={this.state.show}/>
-    console.log("ENDGAME")
-    console.log(JSON.stringify(props))
-    console.log(JSON.stringify(state))
-    return null;
-  }
+  // static getDerivedStateFromProps(props, state) {
+  //  // <EndGamePrompt final_message={this.state.final_message} show={this.state.show}/>
+  //   console.log("ENDGAME")
+  //   console.log(JSON.stringify(props))
+  //   console.log(JSON.stringify(state))
+  //   return null;
+  // }
 
   render() {
-    console.log("Showww" + this.props.show);
+    //console.log("Showww" + this.props.show);
     if (this.props.show === false) {
       return null;
     }
@@ -43,7 +43,7 @@ class Modal extends React.Component {
   state = {};
   render() {
     const showHideClassName = this.props.show ? "modal display-block" : "modal display-none";
-    console.log("Show" + this.props.show);
+    //console.log("Show" + this.props.show);
     return (
       <div className={showHideClassName}>
         <section className="modal-main">

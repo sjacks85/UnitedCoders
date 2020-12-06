@@ -87,6 +87,7 @@ export class Box extends React.Component {
       // Tracks current player location
       currentLocation: this.props.currentLocation,
       suggestion: "",
+      suggestion_cards: [],
     };
 
     this.suggestionClicked = this.suggestionClicked.bind(this);
@@ -126,8 +127,8 @@ export class Box extends React.Component {
   }
 
   onDropdownSelected(e) {
-    console.log("THE VAL", e.target.value);
-    console.log("THE VAL" + JSON.stringify(uniqueIDs[e.target.value]));
+    //console.log("THE VAL", e.target.value);
+    //console.log("THE VAL" + JSON.stringify(uniqueIDs[e.target.value]));
     //here you will see the current selected value of the select input
   }
 
@@ -152,8 +153,14 @@ export class Box extends React.Component {
 
     var first = props.actions[0];
     var newSuggestion = state.suggestion;
+    var newsuggestioncards = state.suggestion_cards;
     if (first != undefined) {
       if (first.message_type == 33) {
+        newsuggestioncards = [
+          Number(first.message.suggested_character),
+          Number(first.message.suggested_room),
+          Number(first.message.suggested_weapon),
+        ];
         newSuggestion =
           "Suggestion: " +
           uniqueIDs[first.message.suggested_character].name +
@@ -169,6 +176,7 @@ export class Box extends React.Component {
       assignedCards: newassignedCards,
       playerHand: newplayerHand,
       suggestion: newSuggestion,
+      suggestion_cards: newsuggestioncards,
     };
   }
 
@@ -237,31 +245,31 @@ export class Box extends React.Component {
     alert(playerInput);
     //this.setState({ inputs : [playerInput, ...this.state.inputs]})
     //this.setState({ accusation: false});
-    console.log("KATHRYN" + this.state.turn);
+    //console.log("KATHRYN" + this.state.turn);
     makeAccusation("true", Number(c), Number(a), Number(b));
   }
 
   noMovementClick() {
-    console.log("noMovmentClick");
+    //console.log("noMovmentClick");
     makeMovement("false", -1);
   }
 
   noSuggestionClick() {
-    console.log("noSuggestionClick");
+    //console.log("noSuggestionClick");
     //Random suggestion to keep game going
     makeSuggestion(0, 7, 15);
   }
 
   noAccusationClick() {
-    console.log("noAccusationClick");
+    //console.log("noAccusationClick");
     this.setState({ turn: "Other Players Turn" });
-    console.log("KATHRYN" + this.state.turn);
+    //console.log("KATHRYN" + this.state.turn);
     //this.setState({ accusation: false});
     makeAccusation("false", -1, -1, -1);
   }
 
   sayHello() {
-    console.log("Sayhello");
+    //console.log("Sayhello");
     alert("Hello!");
   }
 
@@ -319,7 +327,16 @@ export class Box extends React.Component {
         selectedvalue = document.getElementById("ResponseRoom").value;
         // Send Socket Response that this user has the suggested Room (Room id is in selectedvalue).
       }
-      makeDisprove(true, selectedvalue);
+      var selected = Number(selectedvalue)
+      // console.log(selected)
+      // console.log(typeof(selected))
+      // console.log(this.state.suggestion_cards.includes(selected))
+      if (this.state.suggestion_cards.includes(selected)) {
+        console.log("VALID DISPROVE")
+        makeDisprove(true, selectedvalue);
+      } else {
+        alert("Whoops the " + uniqueIDs[selected].name + " is not a valid card to disprove. Try again!");
+      }
     }
     document.getElementById("suggestionresponsediv").style.display = "none";
     //alert(selectedvalue);
@@ -390,13 +407,15 @@ export class Box extends React.Component {
             left: "0",
             width: "100%",
             height: "100%",
-            "background-color": "grey",
-            opacity: ".98",
+            "background-color": "rgb(0, 84, 137)",
+            //opacity: ".80",
             "z-index": "1000",
+            color: "white",
             display: "none",
+            "border-radius": "25px",
           }}
         >
-          <h2 name="suggestiondetail" id="suggestiondetail"></h2>
+          <p name="suggestiondetail" id="suggestiondetail"></p>
           <select
             name="MyCardsType"
             id="MyCardsType"

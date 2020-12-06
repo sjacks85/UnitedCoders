@@ -103,13 +103,13 @@ class App extends React.Component {
   }
 
   setUsername = (string) => {
-    console.log("LoginPage Callback=" + string);
+    //console.log("LoginPage Callback=" + string);
     this.setState({ username: string });
-    console.log(JSON.stringify(this.state));
+    //console.log(JSON.stringify(this.state));
   };
 
   handleClickShow(evt) {
-    console.log("FAKE LOGIN")
+    //console.log("FAKE LOGIN")
     this.setState({ loggedIn : true})
   }
 

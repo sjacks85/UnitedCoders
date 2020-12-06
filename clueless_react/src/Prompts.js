@@ -65,7 +65,7 @@ class Prompts extends React.Component {
   }
 
   displayCards() {
-    console.log("displaycards");
+    //.log("displaycards");
     let items = this.state.cards.map((card) => {
       CardMapper.generateIdMap();
       var imgLocation = "./CardImages/" + CardMapper.getCardImgById(card);
@@ -81,7 +81,7 @@ class Prompts extends React.Component {
   }
 
   displayDisprove() {
-    console.log("displaydisprove");
+    //console.log("displaydisprove");
     var card =
       "./CardImages/" +
       CardMapper.getCardImgById(
@@ -161,10 +161,10 @@ class Prompts extends React.Component {
     var newendmessage = state.end_message;
 
     if (props.cards != undefined) {
-      console.log(JSON.stringify(props));
-      console.log(JSON.stringify(state));
+      //console.log(JSON.stringify(props));
+      //console.log(JSON.stringify(state));
       if (props.cards != state.cards) {
-        console.log("PromptCards");
+        //console.log("PromptCards");
         newcards = props.cards;
         newshowcards = true;
       }
@@ -176,7 +176,7 @@ class Prompts extends React.Component {
         // “is_disproven”:
         // “disprove_card”:
         if (first.message.is_disproven === true) {
-          console.log("PromptDisprove");
+          //console.log("PromptDisprove");
           newshowdisprove = true;
           newdisprovemessage = first;
         }
@@ -186,7 +186,7 @@ class Prompts extends React.Component {
         // “correct_character”:
         // “correct_weapon”:
         if (first.message.accusation_correct === false) {
-          console.log("PromptRevoked");
+          //console.log("PromptRevoked");
           newshowrevoked = true;
           newrevokedmessage = first;
         }
@@ -196,7 +196,7 @@ class Prompts extends React.Component {
         //   “correct_room”:
         //   “correct_character”:
         //   “correct_weapon”:
-        console.log("PromptEnd");
+        //console.log("PromptEnd");
         newshowend = true;
         newendmessage = first;
       }
