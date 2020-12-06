@@ -10,8 +10,6 @@ import './GameBoard.css';
 import './NoteBook.css';
 import Iframe from 'react-iframe'
 
-import EndGamePrompt from "./EndGamePrompt";
-
 var uniqueIDs = [
   //0
   { type: "character", name: "Miss Scarlet", image: "C1" },
@@ -316,6 +314,7 @@ export class Gameboard extends React.Component {
       // Used for movement turn
       validOptions: [],
       movementTurn: false,
+      show_nomove: false,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.displayIcons = this.displayIcons.bind(this);
@@ -430,6 +429,7 @@ export class Gameboard extends React.Component {
     var newCurrentY = state.currentY;
     var newmovementTurn = state.movementTurn;
     var newvalidOptions = state.validOptions;
+    var newshow_nomove = state.show_nomove;
     var newfinal_message = state.final_message;
     var newshow = state.show;
 
@@ -505,10 +505,18 @@ export class Gameboard extends React.Component {
 
           newLocations[objId].currentX = nx;
           newLocations[objId].currentY = ny;
+
+          var iframeWin = document.getElementById("board-iframe").contentWindow;
+          var boardLocations = convertLocations(newLocations);
+          iframeWin.postMessage(boardLocations);
+
         }
       } else if (first.message_type == 31) {
         newmovementTurn = true;
         newvalidOptions = first.message.valid_locations;
+        if (first.message.movement_required === false || first.message.message_possible === false) {
+          newshow_nomove = true;
+        }
       } else if (first.message_type == 61) {
         // {
         // “game_over”:
@@ -536,6 +544,7 @@ export class Gameboard extends React.Component {
       playerY: newCurrentY,
       movementTurn: newmovementTurn,
       validOptions: newvalidOptions,
+      show_nomove: newshow_nomove,
       final_message: newfinal_message,
       show: newshow,
     };
@@ -550,14 +559,15 @@ export class Gameboard extends React.Component {
       let roomName = this.state.grid[cx][cy].roomName;
       string =
         "Username = " +
-        window.location.port +
+        this.props.username +
         " | Character = " +
         uniqueIDs[this.props.character_id].name +
         " | Location = " +
         roomName;
       //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
     } else {
-      string = "Username = " + window.location.port;
+      string = "";
+      //"Username = " + window.location.port;
     }
     return string;
   }
@@ -630,10 +640,10 @@ export class Gameboard extends React.Component {
                 currentRoom={this.provideCurrentRoom()}
                 cards={this.props.cards}
                 turn={this.props.turn}
+                show_nomove={this.state.show_nomove}
               />
               <h4>Player Notebook</h4>
               <NoteBook></NoteBook>
-              <EndGamePrompt final_message={this.state.final_message} show={this.state.show}/>
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
               <h4>Message Board</h4>

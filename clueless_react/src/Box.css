@@ -5,7 +5,7 @@
     text-align: center;
     margin: "0 auto";
     position: relative;
-    border-width: "5px";
+    border-width: "10px";
     border-color: #005489;
-    border-width: "5px";
+    border-radius: 25px;
   }

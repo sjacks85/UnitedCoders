@@ -9,6 +9,7 @@ import NoteBook from "./NoteBook";
 import MessageBoard from "./MessageBoard";
 import Masthead from "./Masthead";
 import LoginPage from "./LoginPage";
+import Prompts from "./Prompts";
 
 class App extends React.Component {
   constructor(props) {
@@ -117,10 +118,12 @@ class App extends React.Component {
     let component = this.state.loggedIn ? (
       <div>
         <Masthead username={this.state.username} />
+        <Prompts actions={this.state.actions} cards={this.state.cards} />
         <Gameboard
           actions={this.state.actions}
           player_id={this.state.player_id}
           character_id={this.state.character_id}
+          username={this.state.username}
           cards={this.state.cards}
           turn={this.state.turn}
           changeCurrentLocationId={this.changeCurrentLocationId}

@@ -329,7 +329,12 @@ export class Box extends React.Component {
     return (
       <div>
         <p>Click gameboard to move!</p>
-        <button onClick={this.noMovementClick}>No Movement</button>
+        {this.props.show_nomove ? (
+          <div>
+            No movement needed:{" "}
+            <button onClick={this.noMovementClick}>No Movement</button>{" "}
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -487,10 +492,12 @@ export class Box extends React.Component {
           width: "500px",
           height: "150px",
           "border-width": "5px",
-          "border-color": "rgb(0, 89, 179)",
-          "border-style": "double",
+          "border-color": "rgb(0,84,137)",
+          "border-style": "solid",
           margin: "0 auto",
           position: "relative",
+          "border-radius": "25px",
+          "z-index": 3,
         }}
       >
         <h3>Turn: {this.props.turn}</h3>

@@ -13,13 +13,21 @@ class EndGamePrompt extends React.Component {
     this.setState({ show: false });
   };
 
+  static getDerivedStateFromProps(props, state) {
+   // <EndGamePrompt final_message={this.state.final_message} show={this.state.show}/>
+    console.log("ENDGAME")
+    console.log(JSON.stringify(props))
+    console.log(JSON.stringify(state))
+    return null;
+  }
+
   render() {
     console.log("Showww" + this.props.show);
     if (this.props.show === false) {
       return null;
     }
     return (
-      <main>
+      <div>
         <Modal show={this.state.show} handleClose={this.hideModal}>
           <p>Modal</p>
           <p>Data</p>
@@ -27,7 +35,7 @@ class EndGamePrompt extends React.Component {
         {/* <button type="button" onClick={this.showModal}>
           Open
         </button> */}
-      </main>
+      </div>
     );
   }
 }

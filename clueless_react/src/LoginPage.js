@@ -1,6 +1,7 @@
 import React from "react";
 import { sendJoinGame, sendStartGame } from "./ClientManager";
 import "./LoginPage.css";
+import Prompt from "./Prompt";
 
 var uniqueIDs = [
   //0
@@ -58,6 +59,7 @@ class LoginPage extends React.Component {
       game_id: 0,
       player_id: 0,
       host: false,
+      show: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -353,12 +355,22 @@ class LoginPage extends React.Component {
         }
       }
     }
+
+    var newShow = state.show;
+    if (first != undefined) {
+      if (first.message_type == 1) {
+        console.log("TRYING TO TRIGGER POPUP")
+        newShow = true;
+      }
+    }
+
     return {
       page: newPage,
       available_characters: newAvailChar,
       game_id: newGameId,
       player_id: newPlayerId,
       host: newHost,
+      show: newShow,
     };
   }
 
@@ -366,6 +378,12 @@ class LoginPage extends React.Component {
     var logoImage = "./MastheadImages/CluelessLogo.png";
     return (
       <div className="loginbox">
+        {/* {this.state.show ? (
+          <Prompt >
+          <h4>KATHRYN</h4>
+          </Prompt>
+        ) : null} */}
+        {/* <Test show={this.state.show}/> */}
         <img src={logoImage} height="60" width="300" />
         <br></br>
         <br></br>
