@@ -82,6 +82,9 @@ export class Room extends React.Component {
     return (
       <td style={this.createStyle(this.props.contents.roomId)} onClick={this.props.onClick}>
         {this.props.contents.roomId != 0 && this.displayIcons()}
+        X={this.props.x} Y={this.props.y}
+        <br></br>
+        {JSON.stringify(this.props.contents.roomObjs)}
       </td>
     );
   }

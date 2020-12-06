@@ -25,12 +25,12 @@ var uniqueIDs = [
   { type: "character", name: "Mrs. White", image: "C6" },
   //6
   { type: "weapon", name: "Candlestick", image: "W1" },
-  //7
-  { type: "weapon", name: "Revolver", image: "W4" },
   //8
   { type: "weapon", name: "Knife", image: "W2" },
   //9
   { type: "weapon", name: "Pipe", image: "W3" },
+  //7
+  { type: "weapon", name: "Revolver", image: "W4" },
   //10
   { type: "weapon", name: "Rope", image: "W5" },
   //11
@@ -691,7 +691,6 @@ function convertLocations(locations) {
 
   return convertedLocations;
 }
-
 
 //convert locations to room ID
 function convertCoordsToId(x, y) {
