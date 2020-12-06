@@ -1,15 +1,11 @@
-#Gameboard.js :
-	* New function displayPlayerInfo() 
-		Old one renamed to displayPlayerInfoEx() 
-	* New Array uniqueIDsZB
+# /src/Gameboard.js 
 
+# /public/Board.html
 
-#Box.js :
-	* change in displayMovement() function
-		This change needs the updated Gameboard as well.
+# /src/hbeat.css
 
-# new hbeat.css
+# /src/Notebook.js
 
-# New Notebook  files
+# /src/Notebook.css
 
-# New picture in /Public/gameboard
+# pictures in /public/gameboard/

@@ -6,7 +6,11 @@ import PlayerHand from "./PlayerHand";
 import NoteBook from "./NoteBook";
 import MessageBoard from "./MessageBoard";
 import "./Divider.css";
+import './GameBoard.css';
+import Iframe from 'react-iframe'
 import './hbeat.css';
+
+import EndGamePrompt from "./EndGamePrompt";
 
 var uniqueIDsZB = [
   //0
@@ -38,12 +42,12 @@ var uniqueIDs = [
   { type: "character", name: "Mrs. White", image: "C6" },
   //6
   { type: "weapon", name: "Candlestick", image: "W1" },
-  //7
-  { type: "weapon", name: "Revolver", image: "W4" },
   //8
   { type: "weapon", name: "Knife", image: "W2" },
   //9
   { type: "weapon", name: "Pipe", image: "W3" },
+  //7
+  { type: "weapon", name: "Revolver", image: "W4" },
   //10
   { type: "weapon", name: "Rope", image: "W5" },
   //11
@@ -104,11 +108,6 @@ var startLocations = [
     currentX: 0,
     currentY: 0,
   },
-  //Weapons 7
-  {
-    currentX: 2,
-    currentY: 0,
-  },
   //Weapons 8
   {
     currentX: 4,
@@ -118,6 +117,11 @@ var startLocations = [
   {
     currentX: 0,
     currentY: 4,
+  },
+  //Weapons 7
+  {
+    currentX: 2,
+    currentY: 0,
   },
   //Weapons 10
   {
@@ -130,6 +134,7 @@ var startLocations = [
     currentY: 4,
   },
 ];
+
 
 var startGrid = [
   [
@@ -294,6 +299,13 @@ var startGrid = [
   ],
 ];
 
+
+
+
+var startLocationsIframe = convertLocations(startLocations);
+var iframeUrl = "./Board.html?startLocations=" + JSON.stringify(startLocationsIframe);
+
+
 export class Gameboard extends React.Component {
   constructor(props) {
     super(props);
@@ -302,6 +314,9 @@ export class Gameboard extends React.Component {
       player_id: -1,
       character_id: -1,
       cards: {},
+
+      final_message: {},
+      show: true,
 
       // Gameboard grid
       grid: startGrid,
@@ -326,6 +341,19 @@ export class Gameboard extends React.Component {
     ];
   }
 
+
+  componentDidMount() {
+    window.addEventListener("message", (event) => this.requestMovement(event.data));
+  }
+
+
+
+  requestMovement(roomId) {
+    var requestedCoords = convertIdToCoords(roomId);
+    this.handleOnClick(requestedCoords[0], requestedCoords[1]);
+  }
+
+
   displayIcons() {
     const objects = uniqueIDs.map((object, index) => {
       const imgsrc = "/gameboard/" + index.toString() + ".png";
@@ -341,7 +369,9 @@ export class Gameboard extends React.Component {
     return <div>{objects}</div>;
   }
 
+
   handleOnClick(x, y) {
+
     if (this.state.movementTurn) {
       //Check request against valid options from movement request
       var myArray = this.state.validOptions;
@@ -356,24 +386,31 @@ export class Gameboard extends React.Component {
         }
       }
       if (found) {
-        alert("That's a valid location to movement! Moving to the " + this.state.grid[x][y].roomName);
+        alert(
+          "That's a valid location to movement! Moving to the " +
+            this.state.grid[x][y].roomName
+        );
 
         //Send movement request with requested room
         makeMovement("true", myArray[index].movement_id);
         this.setState({ movementTurn: false, validOptions: [] });
+
       } else {
         alert("That's an invalid location to movement. Try again!");
       }
     } else {
       alert("It's not your turn to move!");
     }
+
   }
+
+
   provideCurrentRoom() {
     var cx = this.state.locations[this.props.character_id].currentX;
     var cy = this.state.locations[this.props.character_id].currentY;
     //console.log("YYHALLWAY: x" + cx + " y" + cy);
     // console.log(this.state.grid)
-    if (cx == -1 & cy == -1) {
+    if ((cx == -1) & (cy == -1)) {
       return "";
     } else {
       var name = this.state.grid[cx][cy].roomName;
@@ -387,7 +424,7 @@ export class Gameboard extends React.Component {
     var cy = this.state.locations[this.props.character_id].currentY;
     //console.log("YYHALLWAY: x" + cx + " y" + cy);
     // console.log(this.state.grid)
-    if (cx == -1 & cy == -1) {
+    if ((cx == -1) & (cy == -1)) {
       return "";
     } else {
       var locid = this.state.grid[cx][cy].uniqueid;
@@ -408,6 +445,8 @@ export class Gameboard extends React.Component {
     var newCurrentY = state.currentY;
     var newmovementTurn = state.movementTurn;
     var newvalidOptions = state.validOptions;
+    var newfinal_message = state.final_message;
+    var newshow = state.show;
 
     //console.log("CHARACTER " + props.character_id)
     if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {
@@ -448,6 +487,14 @@ export class Gameboard extends React.Component {
             newCurrentX = nx;
             newCurrentY = ny;
           }
+
+
+          //Update Iframe with new location
+          var iframeWin = document.getElementById("board-iframe").contentWindow;
+          var boardLocations = convertLocations(newLocations);
+          iframeWin.postMessage(boardLocations);
+
+
           // console.log("MOVEMENT " + JSON.stringify(newGrid[cx][cy]))
           // console.log("MOVEMENT " + JSON.stringify(newGrid[nx][ny]))
           //console.log("MOVEMENT " + newLocations[objId].currentX)
@@ -477,6 +524,16 @@ export class Gameboard extends React.Component {
       } else if (first.message_type == 31) {
         newmovementTurn = true;
         newvalidOptions = first.message.valid_locations;
+      } else if (first.message_type == 61) {
+        // {
+        // “game_over”:
+        // “winning_player”:
+        // “correct_room”:
+        // “correct_character”:
+        // “correct_weapon”:
+        // }
+        newfinal_message = first;
+        newshow = true;
       } else {
         newmovementTurn = false;
         newvalidOptions = [];
@@ -494,9 +551,31 @@ export class Gameboard extends React.Component {
       playerY: newCurrentY,
       movementTurn: newmovementTurn,
       validOptions: newvalidOptions,
+      final_message: newfinal_message,
+      show: newshow,
     };
   }
 
+
+  displayPlayerInfoOrig() {
+    let string = "";
+    if (this.props.player_id != 0) {
+      let cx = this.state.locations[this.props.character_id].currentX;
+      let cy = this.state.locations[this.props.character_id].currentY;
+      let roomName = this.state.grid[cx][cy].roomName;
+      string =
+        "Username = " +
+        window.location.port +
+        " | Character = " +
+        uniqueIDs[this.props.character_id].name +
+        " | Location = " +
+        roomName;
+      //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
+    } else {
+      string = "Username = " + window.location.port;
+    }
+    return string;
+  }
   displayPlayerInfoEx() {
     let string = ""
     if (this.props.player_id != 0 ) {
@@ -510,6 +589,7 @@ export class Gameboard extends React.Component {
     }
     return string;
   }
+
 
   displayPlayerInfo() {
 	if (this.props.player_id != 0 ) {
@@ -531,16 +611,10 @@ export class Gameboard extends React.Component {
 	
   }
 
+
+
+
   render() {
-    const style = {
-      margin: "auto",
-      width: "auto",
-      height: "auto",
-      backgroundColor: "white",
-      color: "white",
-      fontSize: "3em",
-      tableLayout: "fixed",
-    };
 
     const rows = this.state.grid.map((r, i) => {
       return (
@@ -564,13 +638,14 @@ export class Gameboard extends React.Component {
     });
 
     if (this.props.player_id != 0) {
-      this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
+      //this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
       //this.props.changeCurrentRoom(this.provideCurrentRoom())
       //this.props.changeCurrentLocationId(this.provideCurrentLocationId())
     }
 
     return (
-      <div>
+
+      < div >
         <div class="float-container">
           <div class="float-child">
             <div class="green">
@@ -578,9 +653,21 @@ export class Gameboard extends React.Component {
               <p>
                 {this.displayPlayerInfo()}
               </p>
-              <table cellSpacing="0" id="table" style={style}>
+
+              <Iframe id="board-iframe" url={iframeUrl}
+                marginwidth="0"
+                marginheight="0"
+                hspace="0"
+                vspace="0"
+                frameborder="0"
+                scrolling="no"
+              />
+
+              <table cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
               </table>
+
+
             </div>
           </div>
           <div class="float-child">
@@ -594,6 +681,7 @@ export class Gameboard extends React.Component {
               />
               <h4>Player Notebook</h4>
               <NoteBook></NoteBook>
+              <EndGamePrompt final_message={this.state.final_message} show={this.state.show}/>
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
               <h4>Message Board</h4>
@@ -603,44 +691,72 @@ export class Gameboard extends React.Component {
             </div>
           </div>
         </div>
-      </div>
-      // <div class="float-container">
-      //   <div class="float-child">
-      //     <div class="green">
-      //       {this.props.player_id != 0 && this.displayPlayerInfo()}
-      //       <br />
-      //       <br />
-      //       <br />
-      //       <table cellSpacing="0" id="table" style={style}>
-      //         <tbody>{rows}</tbody>
-      //       </table>
-      //       <br />
-      //       <br />
-      //       <br />
-      //     </div>
-      //     <div class="float-child">
-      //       <div class="blue">
-      //         <p>Username = {window.location.port}</p>
-      //         <Box
-      //           actions={this.props.actions}
-      //           currentLocId={this.provideCurrentLocationId()}
-      //           currentRoom={this.provideCurrentRoom()}
-      //           cards={this.props.cards}
-      //           turn={this.props.turn}
-      //         />
-      //         <NoteBook></NoteBook>
-      //         <h4>Player Hand</h4>
-      //         <PlayerHand cards={this.props.cards} />
-      //         <h4>Message Board</h4>
-      //         <p>
-      //           <MessageBoard actions={this.props.actions} />
-      //         </p>
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>
+      </div >
+
     );
   }
 }
+
+
+
+
+
+
+//Iframe Helper Methods
+
+
+function convertLocations(locations) {
+  // var locations = this.state.locations;
+
+
+  var convertedLocations = [];
+
+  for (var i = 0; i < 6; i++) {
+    var locationObject = {
+      playerId: 'P' + (i + 1),
+      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY)
+    };
+    convertedLocations.push(locationObject);
+  }
+
+  for (var i = 6; i < locations.length; i++) {
+    var locationObject = {
+      playerId: 'W' + (i - 5),
+      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY)
+    };
+    convertedLocations.push(locationObject);
+  }
+
+  return convertedLocations;
+}
+
+
+//convert locations to room ID
+function convertCoordsToId(x, y) {
+  return startGrid[x][y].roomId;
+}
+
+//convert locations to room ID
+function convertIdToCoords(id) {
+
+  // startGrid is an array of json objects...iterate through array until you fin matching ID, return coords
+  var coords = [];
+
+  for (var i = 0; i < startGrid.length; i++) {
+    var row = startGrid[i];
+    for (var j = 0; j < row.length; j++) {
+      if (row[j].roomId === id) {
+        coords = [i, j];
+      }
+    }
+  }
+
+  return coords;
+}
+
+
+
+
+
 
 export default Gameboard;
