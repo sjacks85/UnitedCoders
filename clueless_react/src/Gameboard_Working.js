@@ -372,7 +372,7 @@ export class Gameboard extends React.Component {
       if (found) {
         alert(
           "That's a valid location to movement! Moving to the " +
-          this.state.grid[x][y].roomName
+            this.state.grid[x][y].roomName
         );
 
         //Send movement request with requested room
@@ -446,25 +446,7 @@ export class Gameboard extends React.Component {
     var first = props.actions[0];
     //console.log("getDerivedStateFromProps " + JSON.stringify(first));
     if (first != undefined) {
-      if (first.message_type == 11) {
-        //Assign weapons
-        //   "weapon_locations":
-        //  "id": 
-        //  "location": [x,y]
-        var weapons = first.message.weapon_locations;
-        console.log(JSON.stringify(weapons));
-      
-        weapons.forEach(element =>
-          {
-            console.log(element);
-            var x = element.location[0];
-            var y = element.location[1];
-
-            console.log("X=" + x + " Y="+ y)
-            newGrid[x][y].roomObjs.push(Number(element.id))
-          })
-
-      } else if (first.message_type == 22) {
+      if (first.message_type == 22) {
         //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
           //console.log("Character move")
@@ -643,7 +625,7 @@ export class Gameboard extends React.Component {
                 scrolling="no"
               />
 
-              <table cellSpacing="0" id="gameboard_table">
+              <table hidden cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
               </table>
 
