@@ -2,51 +2,6 @@ import React from "react";
 import Prompt from "./Prompt";
 import CardMapper from "./CardMapper";
 
-var uniqueIDs = [
-  //0
-  { type: "character", name: "Miss Scarlet", image: "C1" },
-  //1
-  { type: "character", name: "Mr. Green", image: "C2" },
-  //2
-  { type: "character", name: "Colonel Mustard", image: "C3" },
-  //3
-  { type: "character", name: "Prof. Plum", image: "C4" },
-  //4
-  { type: "character", name: "Mrs. Peacock", image: "C5" },
-  //5
-  { type: "character", name: "Mrs. White", image: "C6" },
-  //6
-  { type: "weapon", name: "Candlestick", image: "W1" },
-  //7
-  { type: "weapon", name: "Revolver", image: "W4" },
-  //8
-  { type: "weapon", name: "Knife", image: "W2" },
-  //9
-  { type: "weapon", name: "Pipe", image: "W3" },
-  //10
-  { type: "weapon", name: "Rope", image: "W5" },
-  //11
-  { type: "weapon", name: "Wrench", image: "W6" },
-  //12
-  { type: "room", name: "Study", roomId: 11 },
-  //13
-  { type: "room", name: "Hall", roomId: 12 },
-  //14
-  { type: "room", name: "Lounge", roomId: 13 },
-  //15
-  { type: "room", name: "Dinning Room", roomId: 23 },
-  //16
-  { type: "room", name: "Billiard Room", roomId: 22 },
-  //17
-  { type: "room", name: "Library", roomId: 21 },
-  //18
-  { type: "room", name: "Conservatory", roomId: 31 },
-  //19
-  { type: "room", name: "Ballroom", roomId: 32 },
-  //20
-  { type: "room", name: "Kitchen", roomId: 33 },
-];
-
 class Prompts extends React.Component {
   constructor() {
     super();
@@ -176,7 +131,7 @@ class Prompts extends React.Component {
         console.log("Prompt 51" + JSON.stringify(first))
         // “is_disproven”:
         // “disprove_card”:
-        if (first.message.is_disproven === true) {
+        if (first.message.is_disproved === true) {
           console.log("Promptdisprove")
           //console.log("PromptDisprove");
           newshowdisprove = true;

@@ -6,9 +6,9 @@ import PlayerHand from "./PlayerHand";
 import NoteBook from "./NoteBook";
 import MessageBoard from "./MessageBoard";
 import "./Divider.css";
-import './GameBoard.css';
-import './NoteBook.css';
-import Iframe from 'react-iframe'
+import "./GameBoard.css";
+import "./NoteBook.css";
+import Iframe from "react-iframe";
 
 var uniqueIDs = [
   //0
@@ -118,14 +118,13 @@ var startLocations = [
   },
 ];
 
-
 var startGrid = [
   [
     {
       uniqueid: 12,
       roomId: "11",
       roomName: "Study",
-      roomObjs: [6],
+      roomObjs: [],
     },
     {
       uniqueid: 0,
@@ -149,7 +148,7 @@ var startGrid = [
       uniqueid: 14,
       roomId: "13",
       roomName: "Lounge",
-      roomObjs: [9],
+      roomObjs: [],
     },
   ],
   [
@@ -189,7 +188,7 @@ var startGrid = [
       uniqueid: 17,
       roomId: "21",
       roomName: "Library",
-      roomObjs: [7],
+      roomObjs: [],
     },
     {
       uniqueid: 0,
@@ -213,7 +212,7 @@ var startGrid = [
       uniqueid: 15,
       roomId: "23",
       roomName: "Dinning Room",
-      roomObjs: [10],
+      roomObjs: [],
     },
   ],
   [
@@ -253,7 +252,7 @@ var startGrid = [
       uniqueid: 18,
       roomId: "31",
       roomName: "Conservatory",
-      roomObjs: [8],
+      roomObjs: [],
     },
     {
       uniqueid: 0,
@@ -277,17 +276,14 @@ var startGrid = [
       uniqueid: 20,
       roomId: "33",
       roomName: "Kitchen",
-      roomObjs: [11],
+      roomObjs: [],
     },
   ],
 ];
 
-
-
-
 var startLocationsIframe = convertLocations(startLocations);
-var iframeUrl = "./Board.html?startLocations=" + JSON.stringify(startLocationsIframe);
-
+var iframeUrl =
+  "./Board.html?startLocations=" + JSON.stringify(startLocationsIframe);
 
 export class Gameboard extends React.Component {
   constructor(props) {
@@ -325,18 +321,16 @@ export class Gameboard extends React.Component {
     ];
   }
 
-
   componentDidMount() {
-    window.addEventListener("message", (event) => this.requestMovement(event.data));
+    window.addEventListener("message", (event) =>
+      this.requestMovement(event.data)
+    );
   }
-
-
 
   requestMovement(roomId) {
     var requestedCoords = convertIdToCoords(roomId);
     this.handleOnClick(requestedCoords[0], requestedCoords[1]);
   }
-
 
   displayIcons() {
     const objects = uniqueIDs.map((object, index) => {
@@ -353,9 +347,7 @@ export class Gameboard extends React.Component {
     return <div>{objects}</div>;
   }
 
-
   handleOnClick(x, y) {
-
     if (this.state.movementTurn) {
       //Check request against valid options from movement request
       var myArray = this.state.validOptions;
@@ -372,22 +364,19 @@ export class Gameboard extends React.Component {
       if (found) {
         alert(
           "That's a valid location to movement! Moving to the " +
-          this.state.grid[x][y].roomName
+            this.state.grid[x][y].roomName
         );
 
         //Send movement request with requested room
         makeMovement("true", myArray[index].movement_id);
         this.setState({ movementTurn: false, validOptions: [] });
-
       } else {
         alert("That's an invalid location to movement. Try again!");
       }
     } else {
       alert("It's not your turn to move!");
     }
-
   }
-
 
   provideCurrentRoom() {
     var cx = this.state.locations[this.props.character_id].currentX;
@@ -449,21 +438,34 @@ export class Gameboard extends React.Component {
       if (first.message_type == 11) {
         //Assign weapons
         //   "weapon_locations":
-        //  "id": 
+        //  "id":
         //  "location": [x,y]
         var weapons = first.message.weapon_locations;
         console.log(JSON.stringify(weapons));
-      
-        weapons.forEach(element =>
-          {
-            console.log(element);
-            var x = element.location[0];
-            var y = element.location[1];
 
-            console.log("X=" + x + " Y="+ y)
-            newGrid[x][y].roomObjs.push(Number(element.id))
-          })
+        weapons.forEach((element) => {
+          console.log(element);
+          var x = element.location[0];
+          var y = element.location[1];
 
+          //console.log("X=" + x + " Y="+ y)
+          var index = newGrid[x][y].roomObjs.indexOf(Number(element.id));
+          //console.log(index)
+          if (index === -1) {
+            //console.log("KATHRYNIF")
+            newGrid[x][y].roomObjs.push(Number(element.id));
+            newLocations[Number(element.id)].currentX = x;
+            newLocations[Number(element.id)].currentY = y;
+          }
+        });
+        console.log("GRID=" + JSON.stringify(newGrid));
+        console.log("LOC=" + JSON.stringify(newLocations));
+
+        //Update Iframe with new location
+        // var iframeWin = document.getElementById("board-iframe").contentWindow;
+        // var boardLocations = convertLocations(newLocations);
+        // iframeWin.postMessage(boardLocations);
+        
       } else if (first.message_type == 22) {
         //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
@@ -491,12 +493,10 @@ export class Gameboard extends React.Component {
             newCurrentY = ny;
           }
 
-
           //Update Iframe with new location
           var iframeWin = document.getElementById("board-iframe").contentWindow;
           var boardLocations = convertLocations(newLocations);
           iframeWin.postMessage(boardLocations);
-
 
           // console.log("MOVEMENT " + JSON.stringify(newGrid[cx][cy]))
           // console.log("MOVEMENT " + JSON.stringify(newGrid[nx][ny]))
@@ -527,12 +527,14 @@ export class Gameboard extends React.Component {
           var iframeWin = document.getElementById("board-iframe").contentWindow;
           var boardLocations = convertLocations(newLocations);
           iframeWin.postMessage(boardLocations);
-
         }
       } else if (first.message_type == 31) {
         newmovementTurn = true;
         newvalidOptions = first.message.valid_locations;
-        if (first.message.movement_required === false || first.message.message_possible === false) {
+        if (
+          first.message.movement_required === false ||
+          first.message.message_possible === false
+        ) {
           newshow_nomove = true;
         }
       } else if (first.message_type == 61) {
@@ -568,7 +570,6 @@ export class Gameboard extends React.Component {
     };
   }
 
-
   displayPlayerInfo() {
     let string = "";
     if (this.props.player_id != 0) {
@@ -590,12 +591,7 @@ export class Gameboard extends React.Component {
     return string;
   }
 
-
-
-
-
   render() {
-
     const rows = this.state.grid.map((r, i) => {
       return (
         <tr key={"row_" + i}>
@@ -624,17 +620,16 @@ export class Gameboard extends React.Component {
     }
 
     return (
-
-      < div >
+      <div>
         <div class="float-container">
           <div class="float-child">
             <div class="green">
               <h3>Gameboard</h3>
-              <p>
-                {this.displayPlayerInfo()}
-              </p>
+              <p>{this.displayPlayerInfo()}</p>
 
-              <Iframe id="board-iframe" url={iframeUrl}
+              <Iframe
+                id="board-iframe"
+                url={iframeUrl}
                 marginwidth="0"
                 marginheight="0"
                 hspace="0"
@@ -646,8 +641,6 @@ export class Gameboard extends React.Component {
               <table cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
               </table>
-
-
             </div>
           </div>
           <div class="float-child">
@@ -671,45 +664,36 @@ export class Gameboard extends React.Component {
             </div>
           </div>
         </div>
-      </div >
-
+      </div>
     );
   }
 }
 
-
-
-
-
-
 //Iframe Helper Methods
-
 
 function convertLocations(locations) {
   // var locations = this.state.locations;
-
 
   var convertedLocations = [];
 
   for (var i = 0; i < 6; i++) {
     var locationObject = {
-      playerId: 'P' + (i + 1),
-      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY)
+      playerId: "P" + (i + 1),
+      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY),
     };
     convertedLocations.push(locationObject);
   }
 
   for (var i = 6; i < locations.length; i++) {
     var locationObject = {
-      playerId: 'W' + (i - 5),
-      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY)
+      playerId: "W" + (i - 5),
+      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY),
     };
     convertedLocations.push(locationObject);
   }
 
   return convertedLocations;
 }
-
 
 //convert locations to room ID
 function convertCoordsToId(x, y) {
@@ -718,7 +702,6 @@ function convertCoordsToId(x, y) {
 
 //convert locations to room ID
 function convertIdToCoords(id) {
-
   // startGrid is an array of json objects...iterate through array until you fin matching ID, return coords
   var coords = [];
 
@@ -733,10 +716,5 @@ function convertIdToCoords(id) {
 
   return coords;
 }
-
-
-
-
-
 
 export default Gameboard;
