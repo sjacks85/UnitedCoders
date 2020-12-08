@@ -76,3 +76,36 @@
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+
+#content {
+  font-size: 16px;
+}
+
+#sub-content {
+  text-align: left;
+  font-size: 15px;
+}
+
+#sub-italic {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+#sub-italic-left {
+  font-size: 16px;
+  font-style: italic;
+  text-align: left;
+}
+
+#sub-header {
+  font-weight: bold;
+  text-align: left;
+  font-size: 18px;
+
+}
+
+
+
+

@@ -27,12 +27,12 @@ var uniqueIDs = [
   { type: "character", name: "Mrs. White", image: "C6" },
   //6
   { type: "weapon", name: "Candlestick", image: "W1" },
+  //7
+  { type: "weapon", name: "Revolver", image: "W4" },
   //8
   { type: "weapon", name: "Knife", image: "W2" },
   //9
   { type: "weapon", name: "Pipe", image: "W3" },
-  //7
-  { type: "weapon", name: "Revolver", image: "W4" },
   //10
   { type: "weapon", name: "Rope", image: "W5" },
   //11
@@ -93,6 +93,11 @@ var startLocations = [
     currentX: 0,
     currentY: 0,
   },
+  //Weapons 7
+  {
+    currentX: 2,
+    currentY: 0,
+  },
   //Weapons 8
   {
     currentX: 4,
@@ -102,11 +107,6 @@ var startLocations = [
   {
     currentX: 0,
     currentY: 4,
-  },
-  //Weapons 7
-  {
-    currentX: 2,
-    currentY: 0,
   },
   //Weapons 10
   {
@@ -373,7 +373,7 @@ export class Gameboard extends React.Component {
       if (found) {
         alert(
           "That's a valid location to movement! Moving to the " +
-            this.state.grid[x][y].roomName
+          this.state.grid[x][y].roomName
         );
 
         //Send movement request with requested room
@@ -615,9 +615,16 @@ export class Gameboard extends React.Component {
                 scrolling="no"
               />
 
+              {/* <table hidden cellSpacing="0" id="gameboard_table">
+                <tbody>{rows}</tbody>
+              </table> */}
+
+
               <table cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
               </table>
+
+
 
 
             </div>
@@ -633,7 +640,7 @@ export class Gameboard extends React.Component {
               />
               <h4>Player Notebook</h4>
               <NoteBook></NoteBook>
-              <EndGamePrompt final_message={this.state.final_message} show={this.state.show}/>
+              <EndGamePrompt final_message={this.state.final_message} show={this.state.show} />
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
               <h4>Message Board</h4>
@@ -662,6 +669,7 @@ function convertLocations(locations) {
 
 
   var convertedLocations = [];
+  var playerId = '';
 
   for (var i = 0; i < 6; i++) {
     var locationObject = {
@@ -672,10 +680,24 @@ function convertLocations(locations) {
   }
 
   for (var i = 6; i < locations.length; i++) {
+
+    if (i === 7) {
+      playerId = 4;
+    } else if (i === 8) {
+      playerId = 2;
+    } else if (i === 9) {
+      playerId = 3;
+    } else {
+      playerId = i - 5;
+    }
+
+
+
     var locationObject = {
-      playerId: 'W' + (i - 5),
+      playerId: 'W' + playerId,
       roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY)
     };
+
     convertedLocations.push(locationObject);
   }
 
