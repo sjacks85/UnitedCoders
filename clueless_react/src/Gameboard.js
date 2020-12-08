@@ -482,6 +482,12 @@ export class Gameboard extends React.Component {
         // var boardLocations = convertLocations(newLocations);
         // iframeWin.postMessage(boardLocations);
         
+        //Update Iframe with new location
+        var boardLocations = convertLocations(newLocations);
+
+        iframeUrl =
+          "./Board.html?startLocations=" + JSON.stringify(boardLocations);
+        
       } else if (first.message_type == 22) {
         //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
