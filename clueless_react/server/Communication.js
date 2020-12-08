@@ -29,6 +29,12 @@ module.exports = {
                         "socket": socket
                     };
                     clients.push(clientObj);
+
+                    //set up clients to always be listening to chat messages and sending them back out as broadcasts
+                    clientObj.socket.on(71, function (chat_msg) {
+                        this.send(0, 72, chat_msg);
+                    });
+
                     ports.push(port);
 
                     playerObj = {

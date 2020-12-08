@@ -6,6 +6,8 @@ var io = require("socket.io")(http);
 var Communication = require("./Communication.js");
 var TurnManager = require("./TurnManager.js");
 var CardDeck = require("./support_classes/Deck.js");
+var GameBoard = require('./GameBoard.js');
+//const GameBoard = require("./GameBoard.js");
 
 //players on waiting room screen
 var waiting_players = [];
@@ -109,13 +111,14 @@ function startGame(startMessage) {
         //Run initial setup and kickoff game.
         game_started = true;
         console.log("Starting Game");
-        var deck = assignCards();
-        var turnManager = new TurnManager(Communication, players, deck);
+        var gameBoard = new GameBoard(Communication);
+        var deck = assignCards(gameBoard);
+        var turnManager = new TurnManager(Communication, players, deck, gameBoard);
         turnManager.startGame();
     }
 }
 
-function assignCards() {
+function assignCards(gameBoard) {
     // Create Deck of Clue-Less Cards.
     var cardDeck = new CardDeck();
     cardDeck.populateLocalDeck();
@@ -131,6 +134,9 @@ function assignCards() {
     // Assign Each Player a Hand.
     var playerHandAssignment = cardDeck.generatePlayerHands(players.length);
 
+    //Assign weapon locations to add to setup message
+    var weapon_assignments = assignWeapons(gameBoard);
+
     //Assign cards to players
     for (var i = 0; i < players.length; i++) {
         var setup_message = {
@@ -139,6 +145,7 @@ function assignCards() {
             character_id: players[i].character,
             character: CardDeck.getCardNameById(players[i].character),
             cards: playerHandAssignment[i],
+            weapon_locations: weapon_assignments
         };
 
         //Broadcast each Setup Message; Have clients look for matching username to get player id for future.
@@ -146,6 +153,22 @@ function assignCards() {
     }
 
     return cardDeck;
+}
+
+function assignWeapons(gameBoard) {
+    var weapon_assignments = [];
+    var weapons = CardDeck.getAllWeapons();
+    for (var i = 0; i < weapons.length; i++) {
+        var room = CardDeck.getRandomRoomId();
+        var location = gameBoard.getCurrentPosition(room);
+        gameBoard.moveWeapon(weapons[i], location);
+        var weapon_assignment = {
+            "id": weapons[i],
+            "location": location
+        };
+        weapon_assignments.push(weapon_assignment);
+    }
+    return weapon_assignments;
 }
 
 http.listen(5000, () => {

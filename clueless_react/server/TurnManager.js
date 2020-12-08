@@ -6,14 +6,14 @@ const { resolve } = require('path');
 
 class TurnManager {
 
-    constructor(communication, players, deck) {
+    constructor(communication, players, deck, gameBoard) {
         this.players = players;
         this.communication = communication;
         this.deck = deck;
         this.revoked_players = [];
         this.game_over = false;
+        this.gameBoard = gameBoard;
 
-        this.gameBoard = new GameBoard(communication);
         this.movementManager = new MovementManager(communication, this.gameBoard, players);
         this.suggestionManager = new SuggestionManager(communication, this.gameBoard, players);
         this.accusationManager = new AccusationManager(communication, this.deck);
