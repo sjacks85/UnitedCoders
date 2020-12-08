@@ -625,7 +625,7 @@ export class Gameboard extends React.Component {
                 scrolling="no"
               />
 
-              <table cellSpacing="0" id="gameboard_table">
+              <table hidden cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
               </table>
 
