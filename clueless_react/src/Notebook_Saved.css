@@ -1,9 +1,9 @@
-.xmodal {
+.modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
-    top: 0px;
+    top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
@@ -11,19 +11,12 @@
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
   
-  .xnotebookContent {
-    background-color: #f5f9fb;
-    margin: 5% auto; /* 15% from the top and centered */
+  .notebookContent {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
     padding: 40px;
     border: 1px solid #888;
     width: 50%; /* Could be more or less, depending on screen size */
-	border-style: outset;
-	position: relative;
-	
-  }
-
-  .hrow {
-    background-color: #81c7f3;
   }
   
   /* The Close Button */
@@ -33,13 +26,7 @@
     font-size: 28px;
     font-weight: bold;
   }
-  .detective {
-	width:60px;
-	height : 100px;
-	position: relative;
-    float: left;
-	
-  }
+  
   .close:hover,
   .close:focus {
     color: black;
@@ -63,23 +50,13 @@
     border: 1px solid black;
   }
   
-  .orow{
-	  background-color: #9dcae8;
-  }
-  
   table {
     width: 100%;
     border-collapse: collapse;
   }
 
-  .notebookCello {
-      width: 15%;
-	  cursor : url(/gameboard/hand.png) 3 10, url(/gameboard/hand.svg) 3 10, pointer;
-  }
-
   .notebookCell {
       width: 15%;
-	  cursor : url(/gameboard/hand.png) 3 10, url(/gameboard/hand.svg) 3 10, pointer;
   }
 
   .notebookHeader {

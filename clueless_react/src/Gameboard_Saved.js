@@ -9,22 +9,6 @@ import "./Divider.css";
 import "./GameBoard.css";
 import "./NoteBook.css";
 import Iframe from "react-iframe";
-import './hbeat.css';
-
-var uniqueIDsZB = [
-  //0
-  { type: "character", name: "Miss Scarlet", image: "C0" },
-  //1
-  { type: "character", name: "Mr. Green", image: "C1" },
-  //2
-  { type: "character", name: "Colonel Mustard", image: "C2" },
-  //3
-  { type: "character", name: "Prof. Plum", image: "C3" },
-  //4
-  { type: "character", name: "Mrs. Peacock", image: "C4" },
-  //5
-  { type: "character", name: "Mrs. White", image: "C5" }
-];
 
 var uniqueIDs = [
   //0

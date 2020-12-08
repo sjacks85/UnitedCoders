@@ -6,18 +6,28 @@ class NoteBook extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+        /*this.state = {
             actions: this.props.actions
-        };
+        };*/
     }
 
     openModal() {
-        var modal = document.getElementById("notebookModal");
+		var all = document.getElementsByClassName("notebookCell");
+		for (var i = 0; i < all.length; i++) {
+		    all[i].onclick = inputClickHandlerx;
+		}
+		
+		var allco = document.getElementsByClassName("notebookCello");
+		
+		for (var i = 0; i < allco.length; i++) {
+	        allco[i].onclick = inputClickHandlerox;
+		}
+        var modal = document.getElementById("xnotebookModal");
         modal.style.display = "block";
     }
 
     closeModal() {
-        var modal = document.getElementById("notebookModal");
+        var modal = document.getElementById("xnotebookModal");
         modal.style.display = "none";
     }
 
@@ -25,188 +35,188 @@ class NoteBook extends React.Component {
         return (
             <div>
                 <button onClick={this.openModal}>NoteBook</button>
-                <div id="notebookModal" class="modal">
-                    <div class="notebookContent">
+                <div id="xnotebookModal" class="xmodal">
+                    <div class="xnotebookContent">
                         <span onClick={this.closeModal} class="close">&times;</span>
-                        <h1>NoteBook</h1>
-
+						<span class="detective"><img src="/gameboard/sh.png" style={{width:"80px",height:"140px"}}></img></span> 
+                        <img src="/gameboard/NoteBook.png"/>
                         <table>
-                            <tr>
-                                <th colspan="6">Suspects</th>
+                            <tr class="hrow">
+                                <th colspan="6"><b>Suspects</b></th>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Colonel Mustard</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' onclick='inputClickHandlerox(this);'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Professor Plum</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Mr. Green</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Ms. Peacock</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Ms. Scarlet</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Mrs. White</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
-                                <th colspan="6">Weapons</th>
+                            <tr class="hrow">
+                                <th colspan="6"><b>Weapons</b></th>
                             </tr>
                             <tr>
                                 <td>Knife</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Candlestick</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Revolver</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Rope</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Lead Pipe</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Wrench</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
-                            <tr>
-                                <th colspan="6">Rooms</th>
+                            <tr class="hrow">
+                                <th colspan="6"><b>Rooms</b></th>
                             </tr>
                             <tr>
                                 <td>Hall</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Lounge</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Dining Room</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Kitchen</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Ballroom</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Conservatory</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Billiard Room</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
-                            <tr>
+                            <tr class="orow">
                                 <td>Library</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
+                                <td class='notebookCello' ></td>
                             </tr>
                             <tr>
                                 <td>Study</td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
-                                <td class='notebookCell'></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
+                                <td class='notebookCell' ></td>
                             </tr>
 
                         </table>
@@ -218,26 +228,35 @@ class NoteBook extends React.Component {
 }
 
 window.onload = function () {
-    //console.log("NOTEBOOKONLOD")
-    // var all = document.getElementsByTagName("td");
-    // for (var i = 0; i < all.length; i++) {
-    //     all[i].onclick = inputClickHandler;
-    // }
-
     var all = document.getElementsByClassName("notebookCell");
     for (var i = 0; i < all.length; i++) {
-        all[i].onclick = inputClickHandler;
+        all[i].onclick = inputClickHandlerx;
+    }
+	
+	var allco = document.getElementsByClassName("notebookCello");
+	
+    for (var i = 0; i < allco.length; i++) {
+        allco[i].onclick = inputClickHandlerox;
     }
 };
 
-function inputClickHandler(e) {
-    //console.log("NOTEBOOOKINPUT")
+function inputClickHandlerx(e) {
     e = e || window.event;
     var tdElm = e.target || e.srcElement;
-    if (tdElm.style.backgroundColor == 'lightblue') {
-        tdElm.style.backgroundColor = 'white';
+    if (tdElm.style.backgroundColor == 'blue') {
+        tdElm.style.backgroundColor = '#f5f9fb';
     } else {
-        tdElm.style.backgroundColor = 'lightblue';
+        tdElm.style.backgroundColor = 'blue';
+    }
+}
+
+function inputClickHandlerox(e) {
+    e = e || window.event;
+    var tdElm = e.target || e.srcElement;
+    if (tdElm.style.backgroundColor == 'blue') {
+        tdElm.style.backgroundColor = '#9dcae8';
+    } else {
+        tdElm.style.backgroundColor = 'blue';
     }
 }
 
