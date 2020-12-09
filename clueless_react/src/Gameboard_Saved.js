@@ -465,7 +465,6 @@ export class Gameboard extends React.Component {
         // var iframeWin = document.getElementById("board-iframe").contentWindow;
         // var boardLocations = convertLocations(newLocations);
         // iframeWin.postMessage(boardLocations);
-        
       } else if (first.message_type == 22) {
         //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
@@ -657,7 +656,7 @@ export class Gameboard extends React.Component {
               <NoteBook></NoteBook>
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
-              <h4>Message Board</h4>
+
               <p>
                 <MessageBoard actions={this.props.actions} />
               </p>

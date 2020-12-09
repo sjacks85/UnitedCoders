@@ -1,4 +1,5 @@
 import React from "react";
+import "./MessageBoard.css";
 
 var uniqueIDs = [
   //0
@@ -56,48 +57,63 @@ class MessageBoard extends React.Component {
   }
   state = {
     actions: [],
-   // broadcast: ["Kathryn", "Austin"]
+    // broadcast: ["Kathryn", "Austin"]
   };
 
   static getDerivedStateFromProps(props, state) {
     var newmessages = [];
     //Filter messages
     if (props.actions != undefined) {
-
-      var i
+      var i;
       for (i = 0; i < props.actions.length; i++) {
-        var item = props.actions[i]
+        var item = props.actions[i];
         let string = "";
         let anotherstring = "";
         if (item.message_type == 11) {
           // 11	Player Start
           //string = "11 Player Start"
-          string = "Player " + item.message.username + " joined as character " + uniqueIDs[item.message.character_id].name;
-
+          string =
+            "Player " +
+            item.message.username +
+            " joined as character " +
+            uniqueIDs[item.message.character_id].name;
         } else if (item.message_type == 21) {
           // 21	Broadcast Information
           //string = "21	Broadcast Information"
           string = item.message.broadcast_message;
-
         } else if (item.message_type == 22) {
-          string ="22	Broadcast Movement"
+          string = "22	Broadcast Movement";
           if (item.message.character_moved === true) {
-            string = "Character " + uniqueIDs[item.message.moved_character].name + " moved"
+            string =
+              "Character " +
+              uniqueIDs[item.message.moved_character].name +
+              " moved";
           }
           if (item.message.weapon_moved === true) {
-            anotherstring = "Weapon " + uniqueIDs[item.message.moved_weapon].name + " moved"
+            anotherstring =
+              "Weapon " + uniqueIDs[item.message.moved_weapon].name + " moved";
           }
         } else if (item.message_type == 31) {
-          string = "Movement request. Movement required: " + item.message.movement_required + ". Movement possible: " + item.message.movement_possible;
+          string =
+            "Movement request. Movement required: " +
+            item.message.movement_required +
+            ". Movement possible: " +
+            item.message.movement_possible;
           //string ="31	Movement Request"
         } else if (item.message_type == 32) {
-          string = "Suggestion request"
+          string = "Suggestion request";
           // 32	Suggestion Request
         } else if (item.message_type == 33) {
-          string = "Disprove request. Suggested room: " + uniqueIDs[item.message.suggested_room].name + " Suggested character: " + uniqueIDs[item.message.suggested_character].name + " Suggested weapon: " + uniqueIDs[item.message.suggested_weapon].name;
+          string =
+            "Disprove request. Suggested room: " +
+            uniqueIDs[item.message.suggested_room].name +
+            " Suggested character: " +
+            uniqueIDs[item.message.suggested_character].name +
+            " Suggested weapon: " +
+            uniqueIDs[item.message.suggested_weapon].name;
           // 33	Disprove Request
         } else if (item.message_type == 34) {
-          string ="Accusation Request"
+          string = "Accusation Request";
           // 34	Accusation Request
         } else if (item.message_type == 41) {
           //alert("ERROR IN MESSAGEBOARD")
@@ -113,35 +129,42 @@ class MessageBoard extends React.Component {
           // 44	Accusation Response
         } else if (item.message_type == 51) {
           if (item.message.is_disproven === true) {
-            string = "Player disproved suggestion with" + uniqueIDs[item.message.disprove_card].name;
+            string =
+              "Player disproved suggestion with" +
+              uniqueIDs[item.message.disprove_card].name;
           }
           // 51	Suggestion Result
         } else if (item.message_type == 52) {
           if (item.message.accusation_correct === true) {
-            string = "Your accusation was correct!"
+            string = "Your accusation was correct!";
           } else {
-            string = "Your accusation was wrong! You're now a REVOKED player. Correct room: " + uniqueIDs[item.message.correct_room].name +
-            " Correct character: " + uniqueIDs[item.message.correct_character].name + " Correct weapon: " + uniqueIDs[item.message.correct_weapon].name;
+            string =
+              "Your accusation was wrong! You're now a REVOKED player. Correct room: " +
+              uniqueIDs[item.message.correct_room].name +
+              " Correct character: " +
+              uniqueIDs[item.message.correct_character].name +
+              " Correct weapon: " +
+              uniqueIDs[item.message.correct_weapon].name;
           }
           //string ="test"
           // 52	Accusation Result
         } else if (item.message_type == 61) {
-          string ="End of the game!"
+          string = "End of the game!";
           // 61	End of Game
         } else {
           //alert("ERROR IN MESSAGEBOARD")
         }
         if (string != "") {
-          newmessages.push(string)
+          string = "Game Notification: " + string;
+          newmessages.push(string); // TODO: Make this more dynamic.
         }
         if (anotherstring != "") {
-          newmessages.push(anotherstring)
+          newmessages.push(anotherstring);
         }
         //console.log("MESSAGE STRING " + string)
         //console.log("MESSAGE ANOTHERSTRING " + anotherstring)
         //newmessages = [newmessages, ...string];
-       // console.log("MESSAGE: " + newmessages)
-
+        // console.log("MESSAGE: " + newmessages)
       }
     }
     return { messages: newmessages };
@@ -149,14 +172,38 @@ class MessageBoard extends React.Component {
 
   render() {
     return (
-      <ul>
-        {this.state.messages.map((elem) => (
-          <li style={{
-            textAlign: "left",
-          }}
-          >{elem}</li>
-        ))}
-      </ul>
+      <div class="messageBoardWrapper">
+        <span class="messageBoardHeader">
+          <span class="title">Player Message Board</span>
+          <span class="liveButtonText">
+            {" "}
+            <span class="circle liveButton"></span> ACTIVE
+          </span>
+        </span>
+        <span class="messageBoardBody">
+          <ul>
+            {this.state.messages.map((elem) => (
+              <li
+                style={{
+                  textAlign: "left",
+                }}
+              >
+                {elem}
+              </li>
+            ))}
+          </ul>
+        </span>
+        <span class="messageBoardFooter">
+          <form>
+            <input
+              type="text"
+              placeholder="Enter Message Here..."
+              class="messageTextField"
+            ></input>
+            <img class="sendButton" src="./MastheadImages/SendIcon.png" />
+          </form>
+        </span>
+      </div>
     );
   }
 }

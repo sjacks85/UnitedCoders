@@ -9,7 +9,7 @@ import "./Divider.css";
 import "./GameBoard.css";
 import "./NoteBook.css";
 import Iframe from "react-iframe";
-import './hbeat.css';
+import "./hbeat.css";
 
 var uniqueIDsZB = [
   //0
@@ -23,7 +23,7 @@ var uniqueIDsZB = [
   //4
   { type: "character", name: "Mrs. Peacock", image: "C4" },
   //5
-  { type: "character", name: "Mrs. White", image: "C5" }
+  { type: "character", name: "Mrs. White", image: "C5" },
 ];
 
 var uniqueIDs = [
@@ -481,13 +481,12 @@ export class Gameboard extends React.Component {
         // var iframeWin = document.getElementById("board-iframe").contentWindow;
         // var boardLocations = convertLocations(newLocations);
         // iframeWin.postMessage(boardLocations);
-        
+
         //Update Iframe with new location
         var boardLocations = convertLocations(newLocations);
 
         iframeUrl =
           "./Board.html?startLocations=" + JSON.stringify(boardLocations);
-        
       } else if (first.message_type == 22) {
         //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
@@ -679,7 +678,7 @@ export class Gameboard extends React.Component {
               <NoteBook></NoteBook>
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
-              <h4>Message Board</h4>
+
               <p>
                 <MessageBoard actions={this.props.actions} />
               </p>
