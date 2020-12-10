@@ -9,7 +9,7 @@ import "./Divider.css";
 import "./GameBoard.css";
 import "./NoteBook.css";
 import Iframe from "react-iframe";
-import './hbeat.css';
+import "./hbeat.css";
 
 var uniqueIDsZB = [
   //0
@@ -23,7 +23,7 @@ var uniqueIDsZB = [
   //4
   { type: "character", name: "Mrs. Peacock", image: "C4" },
   //5
-  { type: "character", name: "Mrs. White", image: "C5" }
+  { type: "character", name: "Mrs. White", image: "C5" },
 ];
 
 var uniqueIDs = [
@@ -308,6 +308,7 @@ export class Gameboard extends React.Component {
       actions: this.props.actions,
       player_id: -1,
       character_id: -1,
+      username: this.props.username,
       cards: {},
 
       final_message: {},
@@ -481,12 +482,12 @@ export class Gameboard extends React.Component {
         // var iframeWin = document.getElementById("board-iframe").contentWindow;
         // var boardLocations = convertLocations(newLocations);
         // iframeWin.postMessage(boardLocations);
-        
+
         //Update Iframe with new location
         var boardLocations = convertLocations(newLocations);
 
-        iframeUrl = "./Board.html?startLocations=" + JSON.stringify(boardLocations);
-        
+        iframeUrl =
+          "./Board.html?startLocations=" + JSON.stringify(boardLocations);
       } else if (first.message_type == 22) {
         //console.log("Found movement broadcast");
         if (first.message.character_moved === true) {
@@ -678,9 +679,12 @@ export class Gameboard extends React.Component {
               <NoteBook></NoteBook>
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
-              <h4>Message Board</h4>
+
               <p>
-                <MessageBoard actions={this.props.actions} />
+                <MessageBoard
+                  actions={this.props.actions}
+                  username={this.state.username}
+                />
               </p>
             </div>
           </div>
@@ -696,7 +700,7 @@ function convertLocations(locations) {
   // var locations = this.state.locations;
 
   var convertedLocations = [];
-  var playerId = '';
+  var playerId = "";
 
   for (var i = 0; i < 6; i++) {
     var locationObject = {
@@ -707,7 +711,6 @@ function convertLocations(locations) {
   }
 
   for (var i = 6; i < locations.length; i++) {
-
     if (i === 7) {
       playerId = 4;
     } else if (i === 8) {
@@ -718,8 +721,8 @@ function convertLocations(locations) {
       playerId = i - 5;
     }
     var locationObject = {
-      playerId: 'W' + playerId,
-      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY)
+      playerId: "W" + playerId,
+      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY),
     };
 
     convertedLocations.push(locationObject);

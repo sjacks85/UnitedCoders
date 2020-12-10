@@ -110,7 +110,7 @@ class App extends React.Component {
 
   handleClickShow(evt) {
     //console.log("FAKE LOGIN")
-    this.setState({ loggedIn : true})
+    this.setState({ loggedIn: true });
   }
 
   render() {
@@ -136,15 +136,15 @@ class App extends React.Component {
         <br></br>
         <br></br>
         <br></br>
-      <button type="submit" onClick={this.handleClickShow}>
-            Show Gameboard
-      </button>
-      <br></br>
-      <br></br>
-      <LoginPage
-        setup_messages={this.state.setup_messages}
-        setUsername={this.setUsername}
-      />
+        <button type="submit" onClick={this.handleClickShow}>
+          Show Gameboard
+        </button>
+        <br></br>
+        <br></br>
+        <LoginPage
+          setup_messages={this.state.setup_messages}
+          setUsername={this.setUsername}
+        />
       </div>
     );
 
