@@ -1,5 +1,14 @@
 import React from "react";
 import "./MessageBoard.css";
+var io = require("socket.io-client");
+
+// Start socket and export it for others to use
+var url = "http://localhost:5000";
+const socket = io.connect(url);
+export { socket };
+
+// Player Message
+var playerMessage = "";
 
 var uniqueIDs = [
   //0
@@ -50,6 +59,7 @@ class MessageBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: this.props.username,
       actions: this.props.actions,
       broadcast: ["Kathryn", "Austin"],
       messages: ["Kathryn", "Austin"],
@@ -171,6 +181,20 @@ class MessageBoard extends React.Component {
   }
 
   render() {
+    // Player Send Message:
+    const sendMessage = () => {
+      // Send Message and clear text.
+      if (document.getElementById("messageText").value) {
+        if (document.getElementById("messageText").value != "") {
+          playerMessage = document.getElementById("messageText").value;
+          playerMessage = this.state.username + " : " + playerMessage; // LATER (2) | User name needs to be passed as param.
+          alert(playerMessage);
+          // socket.emit(22, playerMessage); // LATER (1) | Server Logic Not Yet Implemented for this.
+          document.getElementById("messageText").value = "";
+        }
+      }
+    };
+
     return (
       <div class="messageBoardWrapper">
         <span class="messageBoardHeader">
@@ -196,11 +220,16 @@ class MessageBoard extends React.Component {
         <span class="messageBoardFooter">
           <form>
             <input
+              id="messageText"
               type="text"
               placeholder="Enter Message Here..."
               class="messageTextField"
             ></input>
-            <img class="sendButton" src="./MastheadImages/SendIcon.png" />
+            <img
+              onClick={sendMessage}
+              class="sendButton "
+              src="./MastheadImages/SendIcon.png"
+            />
           </form>
         </span>
       </div>

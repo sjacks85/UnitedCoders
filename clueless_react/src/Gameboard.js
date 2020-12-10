@@ -308,6 +308,7 @@ export class Gameboard extends React.Component {
       actions: this.props.actions,
       player_id: -1,
       character_id: -1,
+      username: this.props.username,
       cards: {},
 
       final_message: {},
@@ -680,7 +681,10 @@ export class Gameboard extends React.Component {
               <PlayerHand cards={this.state.cards} />
 
               <p>
-                <MessageBoard actions={this.props.actions} />
+                <MessageBoard
+                  actions={this.props.actions}
+                  username={this.state.username}
+                />
               </p>
             </div>
           </div>
