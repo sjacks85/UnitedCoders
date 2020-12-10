@@ -485,8 +485,7 @@ export class Gameboard extends React.Component {
         //Update Iframe with new location
         var boardLocations = convertLocations(newLocations);
 
-        iframeUrl =
-          "./Board.html?startLocations=" + JSON.stringify(boardLocations);
+        iframeUrl = "./Board.html?startLocations=" + JSON.stringify(boardLocations);
         
       } else if (first.message_type == 22) {
         //console.log("Found movement broadcast");
@@ -660,7 +659,7 @@ export class Gameboard extends React.Component {
                 scrolling="no"
               />
 
-              <table cellSpacing="0" id="gameboard_table">
+              <table hidden cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
               </table>
             </div>
@@ -697,6 +696,7 @@ function convertLocations(locations) {
   // var locations = this.state.locations;
 
   var convertedLocations = [];
+  var playerId = '';
 
   for (var i = 0; i < 6; i++) {
     var locationObject = {
@@ -707,10 +707,21 @@ function convertLocations(locations) {
   }
 
   for (var i = 6; i < locations.length; i++) {
+
+    if (i === 7) {
+      playerId = 4;
+    } else if (i === 8) {
+      playerId = 2;
+    } else if (i === 9) {
+      playerId = 3;
+    } else {
+      playerId = i - 5;
+    }
     var locationObject = {
-      playerId: "W" + (i - 5),
-      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY),
+      playerId: 'W' + playerId,
+      roomId: convertCoordsToId(locations[i].currentX, locations[i].currentY)
     };
+
     convertedLocations.push(locationObject);
   }
 
