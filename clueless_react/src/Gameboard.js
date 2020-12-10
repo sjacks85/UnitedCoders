@@ -310,6 +310,7 @@ export class Gameboard extends React.Component {
       character_id: -1,
       username: this.props.username,
       cards: {},
+      chatmessage: this.props.chatmessage, // NEW...
 
       final_message: {},
       show: true,
@@ -684,6 +685,7 @@ export class Gameboard extends React.Component {
                 <MessageBoard
                   actions={this.props.actions}
                   username={this.state.username}
+                  chatmessage={this.state.chatmessage}
                 />
               </p>
             </div>

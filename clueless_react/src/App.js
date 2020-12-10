@@ -28,6 +28,7 @@ class App extends React.Component {
     currentRoom: "",
     loggedIn: false,
     username: "",
+    chatmessage: Object,
     setup_messages: [],
   };
 
@@ -100,6 +101,12 @@ class App extends React.Component {
 
       this.setState({ turn: newTurn });
     });
+
+    // Broadcast Player Message/Chat from Server:
+    socket.on("chat", (message) => {
+      this.setState({ chatmessage: message.message });
+      this.setState({ actions: [message, ...this.state.actions] });
+    });
   }
 
   setUsername = (string) => {
@@ -128,6 +135,7 @@ class App extends React.Component {
           turn={this.state.turn}
           changeCurrentLocationId={this.changeCurrentLocationId}
           changeCurrentRoom={this.changeCurrentRoom}
+          chatmessage={this.state.chatmessage}
         />
       </div>
     ) : (

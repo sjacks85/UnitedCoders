@@ -120,6 +120,15 @@ function makeAccusation(accuse, room, person, weapon) {
   socket.emit(44, accusation);
 }
 
+function sendPlayerMessage(username, message) {
+  var playerMessageObj = {
+    playerUsername: username,
+    playerMessage: message,
+  };
+  console.log("Player Message to SERVER: " + JSON.stringify(playerMessageObj));
+  socket.emit("chat_to_server", playerMessageObj);
+}
+
 export {
   startClient,
   sendJoinGame,
@@ -128,4 +137,5 @@ export {
   makeSuggestion,
   makeDisprove,
   makeAccusation,
+  sendPlayerMessage,
 };

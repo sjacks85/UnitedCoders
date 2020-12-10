@@ -1,5 +1,6 @@
 import React from "react";
 import "./MessageBoard.css";
+import { sendPlayerMessage } from "./ClientManager";
 var io = require("socket.io-client");
 
 // Start socket and export it for others to use
@@ -63,6 +64,7 @@ class MessageBoard extends React.Component {
       actions: this.props.actions,
       broadcast: ["Kathryn", "Austin"],
       messages: ["Kathryn", "Austin"],
+      chatmessage: this.props.chatmessage,
     };
   }
   state = {
@@ -72,6 +74,7 @@ class MessageBoard extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     var newmessages = [];
+
     //Filter messages
     if (props.actions != undefined) {
       var i;
@@ -159,14 +162,29 @@ class MessageBoard extends React.Component {
           //string ="test"
           // 52	Accusation Result
         } else if (item.message_type == 61) {
+          // 61	End of Game
           string = "End of the game!";
           // 61	End of Game
+        } else if (item.message_type == 72) {
+          // Broadcast Message from Player.
+          console.log("Player Broadcast detected!");
+          console.log("Player Message: " + item.message.playerMessage);
+          string = item.message.playerMessage;
+          string = item.message.playerUsername + ": " + string;
+          //newmessages.push(string);
         } else {
           //alert("ERROR IN MESSAGEBOARD")
         }
-        if (string != "") {
+        if (string != "" && item.message_type == 72) {
+          // string =
+          //   item.message.playerUsername.charAt(0) +
+          //   item.message.playerUsername.slice(1) +
+          //   ": " +
+          //   string;
+          newmessages.push(string);
+        } else if (string != "") {
           string = "Game Notification: " + string;
-          newmessages.push(string); // TODO: Make this more dynamic.
+          newmessages.push(string);
         }
         if (anotherstring != "") {
           newmessages.push(anotherstring);
@@ -187,9 +205,7 @@ class MessageBoard extends React.Component {
       if (document.getElementById("messageText").value) {
         if (document.getElementById("messageText").value != "") {
           playerMessage = document.getElementById("messageText").value;
-          playerMessage = this.state.username + " : " + playerMessage; // LATER (2) | User name needs to be passed as param.
-          alert(playerMessage);
-          // socket.emit(22, playerMessage); // LATER (1) | Server Logic Not Yet Implemented for this.
+          sendPlayerMessage(this.state.username, playerMessage);
           document.getElementById("messageText").value = "";
         }
       }
