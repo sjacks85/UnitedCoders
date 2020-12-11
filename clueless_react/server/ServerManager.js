@@ -7,7 +7,6 @@ var Communication = require("./Communication.js");
 var TurnManager = require("./TurnManager.js");
 var CardDeck = require("./support_classes/Deck.js");
 var GameBoard = require('./GameBoard.js');
-//const GameBoard = require("./GameBoard.js");
 
 //players on waiting room screen
 var waiting_players = [];
@@ -18,7 +17,6 @@ var game_started = false;
 var current_game_id = 0;
 var host;
 var avail_characters = CardDeck.getAllSuspects();
-var host;
 
 function connectionCallback(playerObj) {
     //right now playerObj only has player id
