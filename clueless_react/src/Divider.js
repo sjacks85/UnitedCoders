@@ -19,7 +19,7 @@ class Divider extends React.Component {
   render() {
     return (
       <div class="float-container">
-        <div id="divider-right" class="float-child">
+        <div id="divider-right" class="float-child-right">
           <div class="green">
             <h4>Players</h4>
             <p>
@@ -35,7 +35,7 @@ class Divider extends React.Component {
             </p>
           </div>
         </div>
-        <div class="float-child">
+        <div class="float-child-left">
           <div class="blue">
             <h4>User Input</h4>
             Characters : plum, scarlet, mustard, white, green, peacock<br></br>

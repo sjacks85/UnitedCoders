@@ -30,23 +30,43 @@ iframe {
   border: none;
 }
 
-.float {
-  position: fixed;
-  width: 60px;
-  height: 60px;
-  bottom: 40px;
-  right: 40px;
-  background-color: #005489;
-  color: #fff;
-  border-radius: 50px;
-  text-align: center;
-  box-shadow: 2px 2px 3px #999;
+.gameBoardHeader {
+  float: left;
+  border-top-left-radius: 35px;
+  border-top-right-radius: 35px;
+  border-bottom-left-radius: 35px;
+  border-bottom-right-radius: 35px;
+  display: block;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: 15px;
+  font-weight: 100px;
+  background: #005489;
+  color: white;
+  font-size: 24px;
+  width: 625px;
 }
 
-.float:hover {
-  box-shadow: 4px 4px 6px rgb(100, 100, 100);
+.gameTitle {
+  width: 80%;
+  font-size: 26px;
 }
 
-.my-float {
-  margin-top: 11px;
+.gameBoardFooter {
+  float: left;
+  border-top-left-radius: 35px;
+  border-top-right-radius: 35px;
+  border-bottom-left-radius: 35px;
+  border-bottom-right-radius: 35px;
+  display: block;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: 12px;
+  font-weight: 100px;
+  background: #0d3d61;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  width: 625px;
+  margin-top: -318px;
 }

@@ -1,19 +1,59 @@
 .float-container {
-    border: 3px solid #fff;
-    padding: 20px;
+  padding-top: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin: auto;
+  overflow: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .float-child {
-    width: 45%;
-    float: left;
-    padding: 20px;
-    border: 1px solid black;
-    height: 150vh;
-    text-align: center;
-    word-wrap: break-word;
-    padding-left: 0px;
-} 
+  width: 45%;
+  float: left;
+  padding-left: 20px;
+  height: 100%;
+  text-align: center;
+  word-wrap: break-word;
+  padding-left: 0px;
+  overflow: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.float-child-left {
+  width: 48%;
+  float: right;
+  padding-top: 20px;
+  padding-left: 40px;
+  marign: auto;
+  height: 100%;
+  text-align: center;
+  word-wrap: break-word;
+  padding-left: 0px;
+  overflow: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.float-child-right {
+  width: 48%;
+  float: right;
+  padding-right: 40px;
+  height: 100%;
+  text-align: center;
+  word-wrap: break-word;
+  padding-left: 0px;
+  overflow: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
 #divider-right {
-    padding-left: 20px;
+  padding-left: 20px;
+}
+
+.vl {
+  border-left: 6px solid #9ea3a79d;
+  height: 750px;
 }

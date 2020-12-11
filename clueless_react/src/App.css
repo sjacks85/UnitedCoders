@@ -1,6 +1,9 @@
 .App {
   text-align: center;
   width: 100%;
+  overflow: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .App-header_old {
@@ -24,4 +27,7 @@
   padding: 30px;
   justify-content: left;
   color: white;
+  overflow: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

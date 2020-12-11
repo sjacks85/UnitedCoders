@@ -600,11 +600,11 @@ export class Gameboard extends React.Component {
       let cy = this.state.locations[this.props.character_id].currentY;
       let roomName = this.state.grid[cx][cy].roomName;
       string =
-        "Username = " +
+        "Username: " +
         this.props.username +
-        " | Character = " +
+        " | Character: " +
         uniqueIDs[this.props.character_id].name +
-        " | Location = " +
+        " | Current Location: " +
         roomName;
       //string = "Username = " + window.location.port + " | Player = " + this.props.player_id + " | Current Location = [" + this.state.locations[this.props.character_id].currentX + ", " + this.state.locations[this.props.character_id].currentY + "]";
     } else {
@@ -645,10 +645,11 @@ export class Gameboard extends React.Component {
     return (
       <div>
         <div class="float-container">
-          <div class="float-child">
+          <div class="float-child-left">
             <div class="green">
-              <h3>Gameboard</h3>
-              <p>{this.displayPlayerInfo()}</p>
+              <span class="gameBoardHeader">
+                <span class="gameTitle">Clue-Less Gameboard</span>
+              </span>
 
               <Iframe
                 id="board-iframe"
@@ -661,12 +662,14 @@ export class Gameboard extends React.Component {
                 scrolling="no"
               />
 
+              <span class="gameBoardFooter">{this.displayPlayerInfo()}</span>
+
               <table hidden cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
               </table>
             </div>
           </div>
-          <div class="float-child">
+          <div class="float-child-right">
             <div>
               <Box
                 actions={this.props.actions}
@@ -677,7 +680,6 @@ export class Gameboard extends React.Component {
                 show_nomove={this.state.show_nomove}
               />
               <NoteBook></NoteBook>
-              <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
 
               <p>
