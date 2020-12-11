@@ -30,6 +30,7 @@ class App extends React.Component {
     username: "",
     chatmessage: Object,
     setup_messages: [],
+    revoked: false,
   };
 
   componentDidMount() {
@@ -39,6 +40,7 @@ class App extends React.Component {
 
       this.setState({ actions: [message, ...this.state.actions] });
       var newTurn = this.state.turn;
+      var newRevoked = this.state.revoked;
 
       if (
         message.message_type == 1 ||
@@ -70,36 +72,72 @@ class App extends React.Component {
         }
       }
 
-      if (newTurn != "Revoked") {
-        if (message.message_type == 31) {
-          newTurn = "Movement";
-        } else if (message.message_type == 32) {
-          newTurn = "Suggestion";
-        } else if (message.message_type == 33) {
-          newTurn = "Disprove";
-        } else if (message.message_type == 34) {
-          newTurn = "Accusation";
-        } else if (message.message_type == 52) {
-          //Does 52 need to be send to everyone? To update their notecard
-          if (message.message.accusation_correct === false) {
-            newTurn = "Revoked";
-          }
-        } else if (message.message_type == 61) {
-          newTurn = "End of Game";
-        } else if (message.message_type == 21) {
-          if (
-            message.message.broadcast_message.indexOf("starting their turn") !=
-            0
-          ) {
-            //console.log("FOUND");
-            newTurn = "Other Players Turn";
-          }
-        } else {
+      if (message.message_type === 31) {
+        newTurn = "Movement";
+      } else if (message.message_type === 32) {
+        newTurn = "Suggestion";
+      } else if (message.message_type === 33) {
+        newTurn = "Disprove";
+      } else if (message.message_type === 34) {
+        newTurn = "Accusation";
+      } else if (message.message_type === 52) {
+        //Does 52 need to be send to everyone? To update their notecard
+        if (message.message.accusation_correct === false) {
+          newTurn = "Revoked";
+          newRevoked = true;
+        }
+      } else if (message.message_type === 61) {
+        newTurn = "End of Game";
+      } else if (message.message_type === 21) {
+        if (
+          message.message.broadcast_message.indexOf("starting their turn") != 0
+        ) {
+          //console.log("FOUND");
           newTurn = "Other Players Turn";
         }
+      } else {
+        newTurn = "Other Players Turn";
+      }
+      console.log("Turn= " + newTurn + ", Revoked=" + newRevoked);
+      console.log(newRevoked === true )
+      console.log(newTurn !== "Disprove")
+
+      if (newRevoked === true && newTurn !== "Disprove") {
+        newTurn = "Revoked";
+        console.log("APPIF");
       }
 
-      this.setState({ turn: newTurn });
+      // if (newTurn != "Revoked") {
+      //   if (message.message_type == 31) {
+      //     newTurn = "Movement";
+      //   } else if (message.message_type == 32) {
+      //     newTurn = "Suggestion";
+      //   } else if (message.message_type == 33) {
+      //     newTurn = "Disprove";
+      //   } else if (message.message_type == 34) {
+      //     newTurn = "Accusation";
+      //   } else if (message.message_type == 52) {
+      //     //Does 52 need to be send to everyone? To update their notecard
+      //     if (message.message.accusation_correct === false) {
+      //       newTurn = "Revoked";
+      //       newRevoked = true;
+      //     }
+      //   } else if (message.message_type == 61) {
+      //     newTurn = "End of Game";
+      //   } else if (message.message_type == 21) {
+      //     if (
+      //       message.message.broadcast_message.indexOf("starting their turn") !=
+      //       0
+      //     ) {
+      //       //console.log("FOUND");
+      //       newTurn = "Other Players Turn";
+      //     }
+      //   } else {
+      //     newTurn = "Other Players Turn";
+      //   }
+      // }
+
+      this.setState({ turn: newTurn, revoked: newRevoked });
     });
 
     // Broadcast Player Message/Chat from Server:
