@@ -1,4 +1,5 @@
 var io = require("socket.io-client");
+var selfIo = require("socket.io-client");
 
 // Start socket and export it for others to use
 var url = "http://localhost:5000"; // Local Server
@@ -130,6 +131,15 @@ function sendPlayerMessage(username, message) {
   socket.emit("chat_to_server", playerMessageObj);
 }
 
+function sendThemeChange(primary, secondary) {
+  var colorPalette = {
+    primaryColor: primary,
+    secondaryColor: secondary,
+  };
+  console.log("Theme Change: " + JSON.stringify(colorPalette));
+  socket.emit("theme_change", colorPalette);
+}
+
 export {
   startClient,
   sendJoinGame,
@@ -139,4 +149,5 @@ export {
   makeDisprove,
   makeAccusation,
   sendPlayerMessage,
+  sendThemeChange,
 };

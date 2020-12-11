@@ -3,12 +3,12 @@
   "DarkBlue": "#0d3d61",
   "Red": "#bf1e1b",
   "DarkRed": "#7f0600",
-  "Green": "#00c23c",
-  "DarkGreen": "#006a08",
-  "Yellow": "#f0d900",
-  "DarkYellow": "#dbc12f",
-  "Pink": "#ff2ac0",
-  "DarkPink": "#9f0074",
-  "Silver": "#bcbec0",
-  "DarkSilver": "#6d6e71"
+  "Green": "#009933",
+  "DarkGreen": "#00802b",
+  "Yellow": "#ffc61a",
+  "DarkYellow": "#e6ac00",
+  "Pink": "#cc0099",
+  "DarkPink": "#a3297a",
+  "Silver": "#c0c0c0",
+  "DarkSilver": "#a9a9a9"
 }

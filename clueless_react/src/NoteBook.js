@@ -4,11 +4,17 @@ import "./NoteBook.css";
 class NoteBook extends React.Component {
   constructor(props) {
     super(props);
-    /*this.state = {
-            actions: this.props.actions
-        };*/
+    this.state = {
+      // Color Settings / Theme:
+      colorPalette: this.props.colorPalette,
+    };
   }
-
+  static getDerivedStateFromProps(props, state) {
+    var newColorPalette = props.colorPalette;
+    return {
+      colorPalette: newColorPalette,
+    };
+  }
   openModal() {
     var all = document.getElementsByClassName("notebookCell");
     for (var i = 0; i < all.length; i++) {
@@ -32,7 +38,11 @@ class NoteBook extends React.Component {
   render() {
     return (
       <div>
-        <span onClick={this.openModal} class="float">
+        <span
+          onClick={this.openModal}
+          class="float"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
+        >
           <img src="./MastheadImages/NotepadIcon.png" class="my-float"></img>
         </span>
         <div id="xnotebookModal" class="xmodal">

@@ -329,6 +329,9 @@ export class Gameboard extends React.Component {
       validOptions: [],
       movementTurn: false,
       show_nomove: false,
+
+      // Color Settings / Theme:
+      colorPalette: this.props.colorPalette,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.displayIcons = this.displayIcons.bind(this);
@@ -340,9 +343,9 @@ export class Gameboard extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener("message", (event) =>
-      this.requestMovement(event.data)
-    );
+    window.addEventListener("message", (event) => {
+      this.requestMovement(event.data);
+    });
   }
 
   requestMovement(roomId) {
@@ -439,6 +442,7 @@ export class Gameboard extends React.Component {
     var newshow_nomove = state.show_nomove;
     var newfinal_message = state.final_message;
     var newshow = state.show;
+    var newColorPalette = props.colorPalette;
 
     //console.log("CHARACTER " + props.character_id)
     if (props.player_id != 0 && state.currentX == -1 && state.currentY == -1) {
@@ -590,6 +594,7 @@ export class Gameboard extends React.Component {
       show_nomove: newshow_nomove,
       final_message: newfinal_message,
       show: newshow,
+      colorPalette: newColorPalette,
     };
   }
 
@@ -614,6 +619,14 @@ export class Gameboard extends React.Component {
     return string;
   }
 
+  /*colorPaletteUpdate() {
+    var gameBoardHeader = document.getElementById("gameBoardHeader");
+    gameBoardHeader.style.backgroundColor = this.state.colorPalette[0];
+    var gameBoardFooter = document.getElementById("gameBoardFooter");
+    gameBoardFooter.style.backgroundColor = this.state.colorPalette[1];
+    console.log("Color Palette Update:" + this.state.colorPalette[0]);
+  }*/
+
   render() {
     const rows = this.state.grid.map((r, i) => {
       return (
@@ -636,6 +649,8 @@ export class Gameboard extends React.Component {
       );
     });
 
+    //this.colorPaletteUpdate();
+
     if (this.props.player_id != 0) {
       //this.props.onSelectTest("KATHRYN FROM GAMEBOARD");
       //this.props.changeCurrentRoom(this.provideCurrentRoom())
@@ -647,7 +662,11 @@ export class Gameboard extends React.Component {
         <div class="float-container">
           <div class="float-child-left">
             <div class="green">
-              <span class="gameBoardHeader">
+              <span
+                id="gameBoardHeader"
+                class="gameBoardHeader"
+                style={{ backgroundColor: this.state.colorPalette[0] }}
+              >
                 <span class="gameTitle">Clue-Less Gameboard</span>
               </span>
 
@@ -662,7 +681,13 @@ export class Gameboard extends React.Component {
                 scrolling="no"
               />
 
-              <span class="gameBoardFooter">{this.displayPlayerInfo()}</span>
+              <span
+                id="gameBoardFooter"
+                class="gameBoardFooter"
+                style={{ backgroundColor: this.state.colorPalette[1] }}
+              >
+                {this.displayPlayerInfo()}
+              </span>
 
               <table hidden cellSpacing="0" id="gameboard_table">
                 <tbody>{rows}</tbody>
@@ -678,8 +703,9 @@ export class Gameboard extends React.Component {
                 cards={this.props.cards}
                 turn={this.props.turn}
                 show_nomove={this.state.show_nomove}
+                colorPalette={this.state.colorPalette}
               />
-              <NoteBook></NoteBook>
+              <NoteBook colorPalette={this.state.colorPalette}></NoteBook>
               <PlayerHand cards={this.state.cards} />
 
               <p>
@@ -687,6 +713,7 @@ export class Gameboard extends React.Component {
                   actions={this.props.actions}
                   username={this.state.username}
                   chatmessage={this.state.chatmessage}
+                  colorPalette={this.state.colorPalette}
                 />
               </p>
             </div>

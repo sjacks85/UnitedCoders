@@ -51,6 +51,11 @@ module.exports = {
         });
       });
 
+      // Send Theme
+      socket.on("theme_change", function (msg) {
+        this.emit("theme_change", msg);
+      });
+
       // handle client disconnect
       socket.on("end", function () {
         console.log("Client disconnected...");

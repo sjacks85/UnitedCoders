@@ -88,6 +88,7 @@ export class Box extends React.Component {
       currentLocation: this.props.currentLocation,
       suggestion: "",
       suggestion_cards: [],
+      colorPalette: this.props.colorPalette,
     };
 
     this.suggestionClicked = this.suggestionClicked.bind(this);
@@ -134,6 +135,7 @@ export class Box extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     //console.log("CARDS " + JSON.stringify(state.playerCards));
+    var newColorPalette = props.colorPalette;
     var newassignedCards = state.assignedCards;
     var newplayerHand = state.playerHand;
 
@@ -177,6 +179,7 @@ export class Box extends React.Component {
       playerHand: newplayerHand,
       suggestion: newSuggestion,
       suggestion_cards: newsuggestioncards,
+      colorPalette: newColorPalette,
     };
   }
 
@@ -334,7 +337,12 @@ export class Box extends React.Component {
         {this.props.show_nomove ? (
           <div>
             No movement needed:{" "}
-            <button onClick={this.noMovementClick}>No Movement</button>{" "}
+            <button
+              style={{ backgroundColor: this.state.colorPalette[0] }}
+              onClick={this.noMovementClick}
+            >
+              No Movement
+            </button>{" "}
           </div>
         ) : null}
       </div>
@@ -357,6 +365,7 @@ export class Box extends React.Component {
         <button
           name="sgbtn"
           id="sgbtn"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
           onClick={() => {
             this.suggestionClicked(
               document.getElementById("GuessedUser").value,
@@ -382,7 +391,11 @@ export class Box extends React.Component {
         >
           &nbsp; (Show Suggestion)
         </span>
-        <div id="suggestionresponsediv" class="box">
+        <div
+          id="suggestionresponsediv"
+          class="box"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
+        >
           <span
             name="suggestiondetail"
             id="suggestiondetail"
@@ -425,6 +438,7 @@ export class Box extends React.Component {
             {this.createSelectAssignItems("room")}
           </select>
           <button
+            style={{ backgroundColor: this.state.colorPalette[0] }}
             onClick={() => {
               this.sendSuggestionResponse();
             }}
@@ -460,6 +474,7 @@ export class Box extends React.Component {
         <button
           name="acbtn"
           id="acbtn"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
           onClick={() => {
             this.accusationClicked(
               document.getElementById("GuessedUser").value,
@@ -470,7 +485,12 @@ export class Box extends React.Component {
         >
           Make Accusation
         </button>
-        <button onClick={this.noAccusationClick}>No Accusation</button>
+        <button
+          style={{ backgroundColor: this.state.colorPalette[0] }}
+          onClick={this.noAccusationClick}
+        >
+          No Accusation
+        </button>
       </div>
     );
   }
@@ -478,10 +498,19 @@ export class Box extends React.Component {
   render() {
     return (
       <div class="boxWrapper">
-        <span class="boxHeader">
+        <span
+          class="boxHeader"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
+        >
           <span class="title">Game Turn Actions</span>
         </span>
-        <div class="boxBody">
+        <div
+          class="boxBody"
+          style={{
+            backgroundColor: this.state.colorPalette[0] + "cb",
+            borderColor: this.state.colorPalette[0],
+          }}
+        >
           <div class="boxInnerBody">
             <b>Turn: </b>
             {this.props.turn}
@@ -491,7 +520,10 @@ export class Box extends React.Component {
             {this.props.turn == "Accusation" && this.displayAccusation()}
           </div>
         </div>
-        <span class="boxFooter"></span>
+        <span
+          class="boxFooter"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
+        ></span>
       </div>
     );
   }

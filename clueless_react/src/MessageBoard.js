@@ -65,6 +65,7 @@ class MessageBoard extends React.Component {
       broadcast: ["Kathryn", "Austin"],
       messages: ["Kathryn", "Austin"],
       chatmessage: this.props.chatmessage,
+      colorPalette: this.props.colorPalette,
     };
   }
   state = {
@@ -74,7 +75,7 @@ class MessageBoard extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     var newmessages = [];
-
+    var newColorPalette = props.colorPalette;
     //Filter messages
     if (props.actions != undefined) {
       var i;
@@ -195,7 +196,7 @@ class MessageBoard extends React.Component {
         // console.log("MESSAGE: " + newmessages)
       }
     }
-    return { messages: newmessages };
+    return { messages: newmessages, colorPalette: newColorPalette };
   }
 
   render() {
@@ -213,14 +214,23 @@ class MessageBoard extends React.Component {
 
     return (
       <div class="messageBoardWrapper">
-        <span class="messageBoardHeader">
+        <span
+          class="messageBoardHeader"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
+        >
           <span class="title">Player Message Board</span>
           <span class="liveButtonText">
             {" "}
             <span class="circle liveButton"></span> ACTIVE
           </span>
         </span>
-        <span class="messageBoardBody">
+        <span
+          class="messageBoardBody"
+          style={{
+            backgroundColor: this.state.colorPalette[0] + "cb",
+            borderColor: this.state.colorPalette[0],
+          }}
+        >
           <ul>
             {this.state.messages.map((elem) => (
               <li
@@ -233,13 +243,17 @@ class MessageBoard extends React.Component {
             ))}
           </ul>
         </span>
-        <span class="messageBoardFooter">
+        <span
+          class="messageBoardFooter"
+          style={{ backgroundColor: this.state.colorPalette[0] }}
+        >
           <form>
             <input
               id="messageText"
               type="text"
               placeholder="Enter Message Here..."
               class="messageTextField"
+              style={{ backgroundColor: this.state.colorPalette[1] }}
             ></input>
             <img
               onClick={sendMessage}

@@ -10,6 +10,7 @@ import MessageBoard from "./MessageBoard";
 import Masthead from "./Masthead";
 import LoginPage from "./LoginPage";
 import Prompts from "./Prompts";
+var COLORS = require("./game_data/colors.json");
 
 class App extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class App extends React.Component {
     username: "",
     chatmessage: Object,
     setup_messages: [],
+    colorPalette: [COLORS.Blue, COLORS.DarkBlue],
   };
 
   componentDidMount() {
@@ -107,6 +109,17 @@ class App extends React.Component {
       this.setState({ chatmessage: message.message });
       this.setState({ actions: [message, ...this.state.actions] });
     });
+
+    // Local Settings Update:
+    socket.on("theme_change", (message) => {
+      var updatedColorPalette = [];
+      updatedColorPalette[0] = message.primaryColor;
+      updatedColorPalette[1] = message.secondaryColor;
+      this.setState({
+        colorPalette: updatedColorPalette,
+      });
+      console.log("Theme Change Recieved: " + JSON.stringify(message));
+    });
   }
 
   setUsername = (string) => {
@@ -124,7 +137,10 @@ class App extends React.Component {
     const imgsrc = "/Clue-Less-Title.png";
     let component = this.state.loggedIn ? (
       <div>
-        <Masthead username={this.state.username} />
+        <Masthead
+          username={this.state.username}
+          colorPalette={this.state.colorPalette}
+        />
         <Prompts actions={this.state.actions} cards={this.state.cards} />
         <Gameboard
           actions={this.state.actions}
@@ -136,6 +152,7 @@ class App extends React.Component {
           changeCurrentLocationId={this.changeCurrentLocationId}
           changeCurrentRoom={this.changeCurrentRoom}
           chatmessage={this.state.chatmessage}
+          colorPalette={this.state.colorPalette}
         />
       </div>
     ) : (
