@@ -161,9 +161,9 @@ class App extends React.Component {
         <br></br>
         <br></br>
         <br></br>
-        <button type="submit" onClick={this.handleClickShow}>
+        {/* <button type="submit" onClick={this.handleClickShow}>
           Show Gameboard
-        </button>
+        </button> */}
         <br></br>
         <br></br>
         <LoginPage
