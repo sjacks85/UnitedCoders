@@ -98,13 +98,13 @@ class App extends React.Component {
       } else {
         newTurn = "Other Players Turn";
       }
-      console.log("Turn= " + newTurn + ", Revoked=" + newRevoked);
-      console.log(newRevoked === true )
-      console.log(newTurn !== "Disprove")
+      // console.log("Turn= " + newTurn + ", Revoked=" + newRevoked);
+      // console.log(newRevoked === true )
+      // console.log(newTurn !== "Disprove")
 
       if (newRevoked === true && newTurn !== "Disprove") {
         newTurn = "Revoked";
-        console.log("APPIF");
+        //console.log("APPIF");
       }
 
       // if (newTurn != "Revoked") {
@@ -182,9 +182,9 @@ class App extends React.Component {
         <br></br>
         <br></br>
         <br></br>
-        <button type="submit" onClick={this.handleClickShow}>
+        {/* <button type="submit" onClick={this.handleClickShow}>
           Show Gameboard
-        </button>
+        </button> */}
         <br></br>
         <br></br>
         <LoginPage

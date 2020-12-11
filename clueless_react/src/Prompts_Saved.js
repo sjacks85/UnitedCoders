@@ -17,10 +17,6 @@ class Prompts extends React.Component {
     this.displayDisprove = this.displayDisprove.bind(this);
     this.displayRevoked = this.displayRevoked.bind(this);
     this.displayEndGame = this.displayEndGame.bind(this);
-    this.handleClickCards = this.handleClickCards.bind(this);
-    this.handleClickDisprove = this.handleClickDisprove.bind(this);
-    this.handleClickRevoked = this.handleClickRevoked.bind(this);
-    this.handleClickEnd = this.handleClickEnd.bind(this);
   }
 
   displayCards() {
@@ -175,37 +171,17 @@ class Prompts extends React.Component {
     };
   }
 
-  handleClickCards(evt) {
-    console.log("CARDS CALLBACK")
-    this.setState({show_cards: false})
-  }
-
-  handleClickDisprove(evt) {
-    console.log("DISPROVE CALLBACK")
-    this.setState({show_disprove: false})
-  }
-
-  handleClickRevoked(evt) {
-    console.log("REVOKED CALLBACK")
-    this.setState({show_revoked: false})
-  }
-
-  handleClickEnd(evt) {
-    console.log("END CALLBACK")
-    this.setState({show_end: false})
-  }
-
   render() {
     return (
       <div>
-        {this.state.show_cards ? <Prompt callback={this.handleClickCards}>{this.displayCards()}</Prompt> : null}
+        {this.state.show_cards ? <Prompt>{this.displayCards()}</Prompt> : null}
         {this.state.show_disprove ? (
-          <Prompt callback={this.handleClickDisprove}>{this.displayDisprove()}</Prompt>
+          <Prompt >{this.displayDisprove()}</Prompt>
         ) : null}
         {this.state.show_revoked ? (
-          <Prompt callback={this.handleClickRevoked}>{this.displayRevoked()}</Prompt>
+          <Prompt >{this.displayRevoked()}</Prompt>
         ) : null}
-        {this.state.show_end ? <Prompt callback={this.handleClickEnd}>{this.displayEndGame()}</Prompt> : null}
+        {this.state.show_end ? <Prompt >{this.displayEndGame()}</Prompt> : null}
       </div>
     );
   }
