@@ -1,6 +1,3 @@
-
-
-
 #table {
   margin: "auto";
   width: "auto";
@@ -11,25 +8,45 @@
   top: 0;
   left: 0;
   background-color: white;
-    /* backgroundColor: "white"; */
+  /* backgroundColor: "white"; */
   color: "white";
-    /* fontSize: "3em"; */
-    /* tableLayout: "fixed"; */
+  /* fontSize: "3em"; */
+  /* tableLayout: "fixed"; */
 }
 
-
 iframe {
-    /* -moz-transform: scale(0.7, 0.7); 
+  /* -moz-transform: scale(0.7, 0.7); 
     -webkit-transform: scale(0.7, 0.7); 
     -o-transform: scale(0.7, 0.7);
     -ms-transform: scale(0.7, 0.7); */
-    transform: scale(0.695, 0.7); 
-    /* -moz-transform-origin: top left;
+  transform: scale(0.695, 0.7);
+  /* -moz-transform-origin: top left;
     -webkit-transform-origin: top left;
     -o-transform-origin: top left;
     -ms-transform-origin: top left; */
-    transform-origin: top left;
-    width: 950px;
-    height: 1000px;
-    border: none;
-  }
+  transform-origin: top left;
+  width: 950px;
+  height: 1000px;
+  border: none;
+}
+
+.float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #005489;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+}
+
+.float:hover {
+  box-shadow: 4px 4px 6px rgb(100, 100, 100);
+}
+
+.my-float {
+  margin-top: 11px;
+}

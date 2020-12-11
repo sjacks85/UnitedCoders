@@ -194,10 +194,6 @@ export class Box extends React.Component {
         JSON.stringify(uniqueIDs[bindex])
     );
 
-    //alert(JSON.stringify(this.state.grid[cx][cy]));
-    //alert(this.state.grid[cx][cy].roomName);
-
-    //console.log("LOCATION" + this.props.currentRoom)
     if (this.props.currentRoom == "Hallway" || this.props.currentRoom == "") {
       alert("You need to be in a room to make an suggestion!");
       return;
@@ -230,10 +226,7 @@ export class Box extends React.Component {
         " " +
         JSON.stringify(uniqueIDs[cindex])
     );
-    //alert(a);
-    //alert(b);
-    //alert(JSON.stringify(this.state.grid[cx][cy]));
-    //alert(this.state.grid[cx][cy].roomName);
+
     var playerInput =
       "You made the following accusation: " +
       uniqueIDs[a].name +
@@ -243,28 +236,20 @@ export class Box extends React.Component {
       uniqueIDs[c].name;
 
     alert(playerInput);
-    //this.setState({ inputs : [playerInput, ...this.state.inputs]})
-    //this.setState({ accusation: false});
-    //console.log("KATHRYN" + this.state.turn);
+
     makeAccusation("true", Number(c), Number(a), Number(b));
   }
 
   noMovementClick() {
-    //console.log("noMovmentClick");
     makeMovement("false", -1);
   }
 
   noSuggestionClick() {
-    //console.log("noSuggestionClick");
-    //Random suggestion to keep game going
     makeSuggestion(0, 7, 15);
   }
 
   noAccusationClick() {
-    //console.log("noAccusationClick");
-    this.setState({ turn: "Other Players Turn" });
-    //console.log("KATHRYN" + this.state.turn);
-    //this.setState({ accusation: false});
+    this.setState({ turn: "Other Player's Turn" });
     makeAccusation("false", -1, -1, -1);
   }
 
@@ -276,10 +261,10 @@ export class Box extends React.Component {
   // Suggestion Response Functions Starts
   ShowSuggestionWindow(suggestionTxt) {
     document.getElementById("MyCardsType").selectedIndex = "0";
-    //document.getElementById("suggestiondetail").innerHTML = suggestionTxt;
     document.getElementById(
       "suggestiondetail"
     ).innerHTML = this.state.suggestion;
+    document.getElementById("showsuggestion").style.display = "none";
     this.updateDisproveUI();
     document.getElementById("suggestionresponsediv").style.display = "";
   }
@@ -327,19 +312,19 @@ export class Box extends React.Component {
         selectedvalue = document.getElementById("ResponseRoom").value;
         // Send Socket Response that this user has the suggested Room (Room id is in selectedvalue).
       }
-      var selected = Number(selectedvalue)
-      // console.log(selected)
-      // console.log(typeof(selected))
-      // console.log(this.state.suggestion_cards.includes(selected))
+      var selected = Number(selectedvalue);
       if (this.state.suggestion_cards.includes(selected)) {
-        console.log("VALID DISPROVE")
+        console.log("VALID DISPROVE");
         makeDisprove(true, selectedvalue);
       } else {
-        alert("Whoops the " + uniqueIDs[selected].name + " is not a valid card to disprove. Try again!");
+        alert(
+          "Whoops the " +
+            uniqueIDs[selected].name +
+            " is not a valid card to disprove. Try again!"
+        );
       }
     }
     document.getElementById("suggestionresponsediv").style.display = "none";
-    //alert(selectedvalue);
   }
 
   displayMovement() {
@@ -357,12 +342,8 @@ export class Box extends React.Component {
   }
   displaySuggestion() {
     return (
-      <div>
-        <select
-          name="GuessedUser"
-          id="GuessedUser"
-          style={{ margin: "10px", marginLeft: "0px" }}
-        >
+      <div class="inlineTurnActions">
+        <select name="GuessedUser" id="GuessedUser">
           {this.createSelectItems("character")}
         </select>
         <select
@@ -391,31 +372,22 @@ export class Box extends React.Component {
   }
   displayDisprove() {
     return (
-      <div>
-        <button
+      <div class="inlineTurnActions">
+        <span
+          id="showsuggestion"
+          style={{ fontSize: "12px" }}
           onClick={() => {
             this.ShowSuggestionWindow("This is the suggestion.");
           }}
         >
-          Disprove
-        </button>{" "}
-        <div
-          id="suggestionresponsediv"
-          style={{
-            position: "absolute",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            "background-color": "rgb(0, 84, 137)",
-            //opacity: ".80",
-            "z-index": "1000",
-            color: "white",
-            display: "none",
-            "border-radius": "25px",
-          }}
-        >
-          <p name="suggestiondetail" id="suggestiondetail"></p>
+          &nbsp; (Show Suggestion)
+        </span>
+        <div id="suggestionresponsediv" class="box">
+          <span
+            name="suggestiondetail"
+            id="suggestiondetail"
+            class="suggestiondetail"
+          ></span>
           <select
             name="MyCardsType"
             id="MyCardsType"
@@ -465,7 +437,7 @@ export class Box extends React.Component {
   }
   displayAccusation() {
     return (
-      <div>
+      <div class="inlineTurnActions">
         <select
           name="GuessedUser"
           id="GuessedUser"
@@ -505,39 +477,24 @@ export class Box extends React.Component {
 
   render() {
     return (
-      <div
-        style={{
-          textAlign: "center",
-          width: "500px",
-          height: "150px",
-          "border-width": "5px",
-          "border-color": "rgb(0,84,137)",
-          "border-style": "solid",
-          margin: "0 auto",
-          position: "relative",
-          "border-radius": "25px",
-          "z-index": 3,
-        }}
-      >
-        <h3>Turn: {this.props.turn}</h3>
-        {this.props.turn == "Movement" && this.displayMovement()}
-        {this.props.turn == "Suggestion" && this.displaySuggestion()}
-        {this.props.turn == "Disprove" && this.displayDisprove()}
-        {this.props.turn == "Accusation" && this.displayAccusation()}
+      <div class="boxWrapper">
+        <span class="boxHeader">
+          <span class="title">Game Turn Actions</span>
+        </span>
+        <div class="boxBody">
+          <div class="boxInnerBody">
+            <b>Turn: </b>
+            {this.props.turn}
+            {this.props.turn == "Movement" && this.displayMovement()}
+            {this.props.turn == "Suggestion" && this.displaySuggestion()}
+            {this.props.turn == "Disprove" && this.displayDisprove()}
+            {this.props.turn == "Accusation" && this.displayAccusation()}
+          </div>
+        </div>
+        <span class="boxFooter"></span>
       </div>
     );
   }
 }
 
 export default Box;
-
-//   textAlign: "center",
-//   width: "500px",
-//   height: "150px",
-//   "border-width": "5px",
-//   "border-color": rgb(0, 102, 255),
-//`rgb(${box.color})`
-//   "border-style": "outset",
-//   margin: "0 auto",
-//   position: "relative",
-// }}>

@@ -1,7 +1,8 @@
 var io = require("socket.io-client");
 
 // Start socket and export it for others to use
-var url = "http://localhost:5000";
+var url = "http://localhost:5000"; // Local Server
+//var url = "https://clueless-server-v1-5to6jzrcka-ue.a.run.app"; // Remote Server
 const socket = io.connect(url);
 export { socket };
 

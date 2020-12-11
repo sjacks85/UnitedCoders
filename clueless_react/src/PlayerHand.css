@@ -6,7 +6,6 @@
   display: inline-grid;
   grid-template-columns: auto auto auto;
   row-gap: 10px;
-  max-height: 300px;
   width: 90%;
 }
 

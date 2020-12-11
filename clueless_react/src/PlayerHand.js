@@ -41,6 +41,9 @@ class PlayerHand extends React.Component {
         //console.log("CARDS " + state.cards);
       }
     }
+    if (state.cards.length == 0) {
+      newcards = [1, 2, 3, 4, 5];
+    }
     return { cards: newcards };
   }
 

@@ -667,7 +667,7 @@ export class Gameboard extends React.Component {
             </div>
           </div>
           <div class="float-child">
-            <div class="blue">
+            <div>
               <Box
                 actions={this.props.actions}
                 currentLocId={this.provideCurrentLocationId()}
@@ -676,7 +676,6 @@ export class Gameboard extends React.Component {
                 turn={this.props.turn}
                 show_nomove={this.state.show_nomove}
               />
-              <h4>Player Notebook</h4>
               <NoteBook></NoteBook>
               <h4>Player Hand</h4>
               <PlayerHand cards={this.state.cards} />
