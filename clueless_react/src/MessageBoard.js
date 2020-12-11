@@ -196,6 +196,7 @@ class MessageBoard extends React.Component {
         // console.log("MESSAGE: " + newmessages)
       }
     }
+    newmessages.reverse();
     return { messages: newmessages, colorPalette: newColorPalette };
   }
 

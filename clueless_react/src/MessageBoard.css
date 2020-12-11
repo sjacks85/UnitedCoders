@@ -47,6 +47,11 @@
   list-style-type: none;
   font-size: 18px;
   font-weight: light;
+  overflow-anchor: auto;
+}
+
+.messageBoardBody li {
+  margin-top: 8px;
 }
 
 .messageBoardFooter {
