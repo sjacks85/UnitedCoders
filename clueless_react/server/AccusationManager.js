@@ -46,9 +46,9 @@ class AccusationManager {
 
 
                     var envelope = this.deck.envelope;
-                    var envelope_character = envelope[0].Name;
-                    var envelope_weapon = envelope[1].Name;
-                    var envelope_room = envelope[2].Name;
+                    var envelope_character = envelope[0].Id;
+                    var envelope_weapon = envelope[1].Id;
+                    var envelope_room = envelope[2].Id;
 
                     var accusation_result;
                     var accusation_result_string;
