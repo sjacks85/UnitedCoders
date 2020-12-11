@@ -26,24 +26,22 @@ class Prompt extends React.Component {
     this.setState({
       show: false,
     });
-    console.log("TOGGLE" + this.state.show)
-    this.props.callback()
   }
-  // static getDerivedStateFromProps(props, state) {
-  //   console.log("getDerivedStateFromProps");
-  //   console.log(props.show)
-  //   return null;
+  static getDerivedStateFromProps(props, state) {
+    //console.log("getDerivedStateFromProps");
+    console.log(props.show)
+    console.log(state.show)
 
-  //   // var newShow = state.show;
+    var newShow = state.show;
 
-  //   // if (props.show === true && state.show === false) {
-  //   //   console.log("FOUND")
-  //   //   newShow = true;
-  //   // }
-  //   // return {
-  //   //   show: newShow
-  //   // }
-  // }
+    if (props.show === true && state.show === false) {
+      console.log("FOUND")
+      newShow = true;
+    }
+    return {
+      show: newShow
+    }
+  }
 
   render() {
     return (
@@ -56,17 +54,5 @@ class Prompt extends React.Component {
       </div>
     );
   }
-
-  // render() {
-  //   return (
-  //     <div>
-  //       {this.state.show ? (
-  //         <Popup closePopup={this.togglePopup.bind(this)} >
-  //           {this.props.children}
-  //         </Popup>
-  //       ) : null}
-  //     </div>
-  //   );
-  // }
 }
 export default Prompt;
