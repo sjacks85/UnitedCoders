@@ -66,7 +66,7 @@ class Deck {
       weaponIdArray.push(element.Id);
     });
     return weaponIdArray;
-    }
+  }
 
   // Get ID Array of All Rooms.
   static getAllRooms() {
@@ -75,13 +75,13 @@ class Deck {
       roomIdArray.push(element.Id);
     });
     return roomIdArray;
-    }
+  }
 
   // Get a random room ID
-    static getRandomRoomId() {
-        var rooms = this.getAllRooms();
-        var room = rooms[Math.floor(Math.random() * rooms.length)];
-        return room;
+  static getRandomRoomId() {
+    var rooms = this.getAllRooms();
+    var room = rooms[Math.floor(Math.random() * rooms.length)];
+    return room;
   }
 
   /* **** FUNCTIONS THAT BELONG TO THE DECK INSTANCE *** */
