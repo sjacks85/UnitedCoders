@@ -332,7 +332,7 @@ export class Box extends React.Component {
 
   displayMovement() {
     return (
-      <div>
+      <div class="inlineTurnActions" style={{ marginBottom: "10px"}}>
         <p>Click gameboard to move!</p>
         {this.props.show_nomove ? (
           <div>
@@ -382,7 +382,7 @@ export class Box extends React.Component {
   displayDisprove() {
     return (
       <div class="inlineTurnActions">
-        <span
+        {/* <span
           id="showsuggestion"
           style={{ fontSize: "12px" }}
           onClick={() => {
@@ -390,13 +390,14 @@ export class Box extends React.Component {
           }}
         >
           &nbsp; (Show Suggestion)
-        </span>
-        <div id="suggestionresponsediv" class="box">
+        </span> */}
+        <div style={{ marginBottom: "10px"}} id="suggestionresponsediv" class="box">
           <span
             name="suggestiondetail"
             id="suggestiondetail"
             class="suggestiondetail"
           ></span>
+          <p style={{ marginBottom: "0px"}}> {this.state.suggestion} </p>
           <select
             name="MyCardsType"
             id="MyCardsType"
@@ -441,6 +442,7 @@ export class Box extends React.Component {
           >
             Disprove
           </button>
+          <br></br>
         </div>
       </div>
     );
