@@ -391,11 +391,7 @@ export class Box extends React.Component {
         >
           &nbsp; (Show Suggestion)
         </span>
-        <div
-          id="suggestionresponsediv"
-          class="box"
-          style={{ backgroundColor: this.state.colorPalette[0] }}
-        >
+        <div id="suggestionresponsediv" class="box">
           <span
             name="suggestiondetail"
             id="suggestiondetail"
