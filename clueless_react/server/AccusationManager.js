@@ -46,9 +46,12 @@ class AccusationManager {
 
 
                     var envelope = this.deck.envelope;
-                    var envelope_character = envelope[0].Id;
-                    var envelope_weapon = envelope[1].Id;
-                    var envelope_room = envelope[2].Id;
+                    var envelope_character = envelope[0].Name;
+                    var envelope_weapon = envelope[1].Name;
+                    var envelope_room = envelope[2].Name;
+                    var envelope_character_id = envelope[0].Id;
+                    var envelope_weapon_id = envelope[1].Id;
+                    var envelope_room_id = envelope[2].Id;
 
                     var accusation_result;
                     var accusation_result_string;
@@ -58,9 +61,9 @@ class AccusationManager {
                         return_info.game_over = true;
                         accusation_result = {
                             "accusation_correct": true,
-                            "correct_room": envelope_room,
-                            "correct_character": envelope_character,
-                            "correct_weapon": envelope_weapon,
+                            "correct_room": envelope_room_id,
+                            "correct_character": envelope_character_id,
+                            "correct_weapon": envelope_weapon_id,
                         }
 
                         accusation_result_string = "Player " + player.username + " has won, their accusation was correct.";
@@ -70,9 +73,9 @@ class AccusationManager {
                         var end = {
                             "game_over": true,
                             "wining_player": player.username,
-                            "correct_room": envelope_room,
-                            "correct_character": envelope_character,
-                            "correct_weapon": envelope_weapon,
+                            "correct_room": envelope_room_id,
+                            "correct_character": envelope_character_id,
+                            "correct_weapon": envelope_weapon_id,
                         }
                         this.communication.send(0, 61, end);
 
@@ -80,9 +83,9 @@ class AccusationManager {
                         //incorrect accusation
                         accusation_result = {
                             "accusation_correct": false,
-                            "correct_room": envelope_room,
-                            "correct_character": envelope_character,
-                            "correct_weapon": envelope_weapon,
+                            "correct_room": envelope_room_id,
+                            "correct_character": envelope_character_id,
+                            "correct_weapon": envelope_weapon_id,
                         }
                         return_info.revoked_player = true;
 
