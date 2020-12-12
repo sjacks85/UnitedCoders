@@ -183,7 +183,7 @@ class GameBoard {
         possible_moves = this.checkNewSpace(row, col - 1, possible_moves);
         possible_moves = this.checkNewSpace(row, col + 1, possible_moves);
 
-        if (possible_moves.length() == 0) {
+        if (possible_moves.length == 0) {
             this.no_suggest.push(character);
         }
 
