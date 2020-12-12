@@ -560,7 +560,8 @@ export class Gameboard extends React.Component {
         newvalidOptions = first.message.valid_locations;
         if (
           first.message.movement_required === false ||
-          first.message.message_possible === false
+          first.message.movement_possible === false ||
+          first.message.valid_locations.length === 0
         ) {
           newshow_nomove = true;
         }
