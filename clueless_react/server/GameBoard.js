@@ -10,6 +10,7 @@ class GameBoard {
         this.communication = communication;
         this.mBoard = [[],[],[],[],[]]
         this.mCardLocations = [];
+        this.no_suggest = [];
         this.createBoard();
     }
 
@@ -155,6 +156,14 @@ class GameBoard {
         return false;
     }
 
+    canSuggest(character) {
+        if (this.no_suggest.includes(character)) {
+            this.no_suggest.pop();
+            return false;
+        }
+        return true;
+    }
+
     isInRoom(character) {
         var pos = this.getCurrentPosition(character);
         return this.mBoard[pos[0]][pos[1]].getType() == TYPE_ROOM;
@@ -173,6 +182,10 @@ class GameBoard {
         possible_moves = this.checkNewSpace(row + 1, col, possible_moves);
         possible_moves = this.checkNewSpace(row, col - 1, possible_moves);
         possible_moves = this.checkNewSpace(row, col + 1, possible_moves);
+
+        if (possible_moves.length() == 0) {
+            this.no_suggest.push(character);
+        }
 
         return possible_moves;
     }

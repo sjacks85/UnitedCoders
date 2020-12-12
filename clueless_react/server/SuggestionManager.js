@@ -16,7 +16,7 @@ class SuggestionManager {
         //only prompt for a suggestion if the player is in a room and can make a suggestion
         this.suggestingPlayer = player;
         return new Promise((resolve) => {
-            if (this.gameboard.isInRoom(player.character)) {
+            if (this.gameboard.isInRoom(player.character) && this.gameboard.canSuggest(player.character)) {
                 this.promptSuggestion(player).then((suggestion) => {
                     resolve(suggestion);
                 });
