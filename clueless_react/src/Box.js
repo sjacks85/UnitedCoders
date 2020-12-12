@@ -302,6 +302,7 @@ export class Box extends React.Component {
     if (mtVal == "-1") {
       // Send Socket Response that this user doesn't have any of the suggested items.
       makeDisprove("false", -1);
+      document.getElementById("suggestionresponsediv").style.display = "none";
     } else {
       if (mtVal == "0") {
         selectedvalue = document.getElementById("ResponseUser").value;
@@ -319,6 +320,7 @@ export class Box extends React.Component {
       if (this.state.suggestion_cards.includes(selected)) {
         console.log("VALID DISPROVE");
         makeDisprove(true, selectedvalue);
+        document.getElementById("suggestionresponsediv").style.display = "none";
       } else {
         alert(
           "Whoops the " +
@@ -327,7 +329,7 @@ export class Box extends React.Component {
         );
       }
     }
-    document.getElementById("suggestionresponsediv").style.display = "none";
+    //document.getElementById("suggestionresponsediv").style.display = "none";
   }
 
   displayMovement() {
